@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Onion Smell Detective Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#140b31; --bg2:#07355d; --gold:#ffd84d; --cyan:#45e7ff; --green:#64f0a2; --purple:#b991ff; --red:#ff7a8a;
+  --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dce9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.16),transparent 25%),
+    radial-gradient(circle at 88% 8%,rgba(69,231,255,.18),transparent 28%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1100px;margin:0 auto;padding:10px 10px 98px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(69,231,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.08rem,5vw,1.52rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.15rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.35s}
+.lab{position:relative;min-height:590px;overflow:hidden;padding:14px;border-radius:24px;background:
+  radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+  linear-gradient(180deg,#143062 0%,#0b173a 47%,#5a3817 47%,#7b4a1d 100%);
+  border:1px solid var(--line);
+}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.1rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px;perspective:1000px}
+.floorGlow{position:absolute;left:0;right:0;bottom:0;height:38%;background:radial-gradient(ellipse at center,rgba(255,255,255,.08),transparent 70%)}
+.stationWrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;position:absolute;left:0;right:0;bottom:22px;top:18px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+.stationBase{position:absolute;left:12px;right:12px;bottom:16px;height:18px;border-radius:20px;background:linear-gradient(180deg,#c6d3e8,#93a6bf);box-shadow:0 12px 22px rgba(0,0,0,.16)}
+/* station 1 onion */
+.onionBowl{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);width:148px;height:86px;border-radius:0 0 70px 70px;background:linear-gradient(180deg,#f2d7b2,#ab6b38);box-shadow:0 10px 20px rgba(0,0,0,.2)}
+.onionBowl::before{content:"";position:absolute;left:12px;right:12px;top:-14px;height:38px;border-radius:50%;background:radial-gradient(circle at 50% 45%,#f4e1ff,#bb8ee9)}
+.knife{position:absolute;left:50%;margin-left:16px;bottom:94px;width:118px;height:16px;border-radius:999px;background:linear-gradient(90deg,#eef3fb,#bcc9db);transform:rotate(-18deg);transform-origin:left center}
+.knife::before{content:"";position:absolute;left:-22px;top:-5px;width:36px;height:26px;border-radius:50% 50% 20% 50%;background:linear-gradient(180deg,#f8fbff,#dbe3ef)}
+.onionPieces{position:absolute;left:50%;bottom:112px;transform:translateX(-50%);width:110px;height:30px;pointer-events:none}
+.onionPieces span{position:absolute;width:13px;height:10px;border-radius:50%;background:#e8c5ff;opacity:0}
+.onionPieces.run span{animation:pieces 1s ease forwards}
+@keyframes pieces{0%{opacity:.95;transform:translate(0,0) scale(.4)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.1)}}
+/* station 2 cotton strips */
+.stripTray{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);width:164px;height:92px;border-radius:24px;background:linear-gradient(180deg,#eef3fb,#bfcbdc);box-shadow:0 10px 22px rgba(0,0,0,.18)}
+.stripTray::after{content:"";position:absolute;left:16px;right:16px;top:18px;bottom:18px;border-radius:18px;background:rgba(255,255,255,.32)}
+.clothStrip{position:absolute;width:110px;height:24px;border-radius:999px;background:#f8fbff;border:2px solid rgba(255,255,255,.6);box-shadow:0 10px 16px rgba(0,0,0,.13)}
+.clothStrip.s1{left:50%;bottom:92px;transform:translateX(-50%) rotate(-8deg)}
+.clothStrip.s2{left:50%;bottom:58px;transform:translateX(-50%) rotate(8deg)}
+.clothStrip.ready{background:#f4e1ff}
+/* station 3 closed jar */
+.jar{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);width:132px;height:172px;border-radius:0 0 32px 32px;border:5px solid rgba(255,255,255,.42);border-top:0;background:rgba(255,255,255,.05);overflow:hidden;box-shadow:0 12px 22px rgba(0,0,0,.18)}
+.jarLid{position:absolute;left:50%;bottom:206px;transform:translateX(-50%);width:146px;height:22px;border-radius:999px;background:linear-gradient(180deg,#eaf1fb,#aab9ce)}
+.jarInside{position:absolute;left:10px;right:10px;bottom:12px;height:82px;border-radius:18px;background:rgba(185,145,255,.45)}
+.smellCloud{position:absolute;left:50%;top:62px;transform:translateX(-50%);width:120px;height:70px;opacity:0}
+.smellCloud.show{opacity:1}
+.smellCloud span{position:absolute;width:38px;height:18px;border-radius:999px;background:rgba(255,255,255,.26);animation:cloud 2s ease-in-out infinite}
+.smellCloud span:nth-child(1){left:8px;top:12px}.smellCloud span:nth-child(2){left:44px;top:26px;animation-delay:.3s}.smellCloud span:nth-child(3){left:70px;top:8px;animation-delay:.6s}
+@keyframes cloud{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(-12px);opacity:.8}}
+/* testing scene */
+.testingScene{display:none;position:absolute;left:0;right:0;bottom:16px;top:18px}
+.scene.testing .stationWrap{display:none}
+.scene.testing .testingScene{display:block}
+.bench3d{position:absolute;left:18px;right:18px;bottom:8px;height:300px;border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 20px 30px rgba(0,0,0,.18)}
+.testCards{position:absolute;left:28px;right:170px;bottom:34px;height:210px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.stripCard{position:relative;border-radius:24px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 22px rgba(0,0,0,.14);overflow:hidden}
+.stripCard h4{margin:12px 12px 0;font-size:.95rem}
+.bigStrip{position:absolute;left:50%;top:78px;transform:translateX(-50%);width:150px;height:34px;border-radius:999px;background:#f7fbff;border:3px solid rgba(255,255,255,.5);box-shadow:0 10px 18px rgba(0,0,0,.15);transition:.45s}
+.bigStrip.faded{background:#dce6f2;opacity:.50}
+.bigStrip.strong{background:#f4e1ff;opacity:1}
+.dropper{position:absolute;right:22px;top:34px;width:142px;height:18px;border-radius:999px;background:linear-gradient(90deg,#b8c9dd,#fff);transform:rotate(-18deg);transition:.35s}
+.dropper::before{content:"";position:absolute;left:-14px;top:4px;width:22px;height:10px;border-radius:0 8px 8px 0;background:#7dd8ff}
+.resultMeter{position:absolute;right:24px;bottom:24px;width:126px;padding:10px;border-radius:18px;background:rgba(255,255,255,.10);border:1px solid var(--line);text-align:center}
+.resultMeter b{display:block;margin-bottom:8px}
+.nose{font-size:2.2rem;filter:drop-shadow(0 10px 12px rgba(0,0,0,.22))}
+.meterText{font-size:.82rem;margin-top:6px}
+.spark{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;opacity:0}
+.spark.go{animation:spark .85s ease forwards}
+@keyframes spark{0%{opacity:1;transform:scale(.5)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.3)}}
+.steps,.samples{display:grid;gap:8px;margin:10px 0}
+.steps{grid-template-columns:repeat(4,1fr)}
+.samples{grid-template-columns:repeat(4,1fr)}
+.step,.sample{min-height:72px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px}
+.step.done{outline:3px solid var(--green)}
+.step.active,.sample.active{outline:3px solid var(--gold)}
+.sample{text-align:left}
+.panel{padding:12px}
+.feedback{margin-top:10px;min-height:76px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.48}
+.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}
+.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}
+th{background:rgba(255,255,255,.10)}
+td:first-child{text-align:left}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}
+.fadedBadge{background:#dce6f233;color:#eaf3ff}
+.sameBadge{background:#b991ff33}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}
+.info b{display:block;color:var(--gold);margin-bottom:4px}
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}
+.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}
+.msg.bot{background:rgba(69,231,255,.12);border:1px solid rgba(69,231,255,.18)}
+.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}
+.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.cert{display:none;margin-top:10px;padding:16px}
+.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+@media(max-width:900px){
+  .stationWrap{grid-template-columns:1fr;top:8px;bottom:8px}
+  .lab{min-height:900px}
+  .scene{top:176px}
+}
+@media(max-width:760px){
+  .app{padding:8px 8px 98px}
+  .top{padding:10px}
+  .top .btn:not(.gold):not(#musicBtn){display:none}
+  .hero{padding:12px}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .samples{grid-template-columns:repeat(2,1fr)}
+  .dr{top:78px}
+  .speech{left:108px;top:82px;font-size:.82rem}
+  .lab{min-height:900px}
+  .scene{top:178px}
+  .testCards{left:12px;right:112px;gap:10px}
+  .bigStrip{width:86px}
+  .dropper{right:10px;top:24px;width:94px}
+  .resultMeter{right:10px;width:92px}
+  .infoGrid{grid-template-columns:1fr}
+  .bottomBar button{font-size:.74rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand">
+      <div class="logo">🧅</div>
+      <div>
+        <h1>Onion Smell Detective Lab 3D</h1>
+        <p>Class 7 • Developed by Dr AI Academy</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="UI.openLearn()">Learn</button>
+      <button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button>
+      <button class="btn gold" onclick="UI.student()">Name</button>
+    </div>
+  </div>
+
+  <div class="hero card">
+    <h2>Become a smell detective and discover olfactory indicators.</h2>
+    <p>This clean 3D lab is based on onion strips as olfactory indicators. Students prepare onion-smell strips, add acidic or basic solutions, and observe whether the smell remains strong or becomes weak.</p>
+  </div>
+
+  <div class="status">
+    <div class="pill" id="stagePill">Stage 1 • Prepare Onion Strips</div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="pill" id="scorePill">Score: 0</div>
+    <div class="pill" id="testedPill">0/4</div>
+  </div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Prepare Onion Smell Strips</div>
+    <div class="missionText" id="missionText">Complete the steps to prepare onion-smell indicator strips.</div>
+
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and let us prepare onion-smell strips together.</div>
+
+    <div class="scene" id="scene">
+      <div class="floorGlow"></div>
+
+      <div class="stationWrap">
+        <div class="station">
+          <div class="stationTitle">1. Chop Onion</div>
+          <div class="onionPieces" id="onionPieces">
+            <span style="--x:-34px;--y:-18px"></span><span style="--x:20px;--y:-24px"></span><span style="--x:-10px;--y:-32px"></span><span style="--x:32px;--y:-16px"></span>
+          </div>
+          <div class="onionBowl"></div>
+          <div class="knife" id="knife"></div>
+          <div class="stationBase"></div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">2. Add Cotton Strips</div>
+          <div class="stripTray"></div>
+          <div class="clothStrip s1" id="strip1"></div>
+          <div class="clothStrip s2" id="strip2"></div>
+          <div class="stationBase"></div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">3. Close Jar Overnight</div>
+          <div class="jarLid" id="jarLid"></div>
+          <div class="jar">
+            <div class="jarInside"></div>
+            <div class="smellCloud" id="smellCloud"><span></span><span></span><span></span></div>
+          </div>
+          <div class="stationBase"></div>
+        </div>
+      </div>
+
+      <div class="testingScene">
+        <div class="bench3d"></div>
+        <div class="testCards">
+          <div class="stripCard">
+            <h4>Strip A</h4>
+            <div class="bigStrip strong" id="stripA"></div>
+          </div>
+          <div class="stripCard">
+            <h4>Strip B</h4>
+            <div class="bigStrip strong" id="stripB"></div>
+          </div>
+        </div>
+        <div class="dropper" id="dropper"></div>
+        <div class="resultMeter">
+          <b>Smell Meter</b>
+          <div class="nose" id="nose">👃</div>
+          <div class="meterText" id="meterText">Waiting</div>
+        </div>
+      </div>
+
+      <div class="spark" id="spark"></div>
+    </div>
+  </div>
+
+  <div class="card panel">
+    <div class="steps" id="steps"></div>
+    <div class="samples" id="samples" style="display:none"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Start with Chop Onion.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard">
+    <div class="tableWrap">
+      <table>
+        <thead><tr><th>Sample</th><th>Smell Observation</th><th>Nature</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="cert card" id="certificate">
+    <div class="certInner">
+      <div style="font-size:52px">🧅📜🏆</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="certName" id="certName">Student Name</div>
+      <p>successfully completed <b>Onion Smell Detective Lab 3D</b>.</p>
+      <p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p>
+      <button class="btn gold" onclick="window.print()">Print / Save Certificate</button>
+    </div>
+  </div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar">
+  <button onclick="Lab.nextAction()">Next<br>Action</button>
+  <button onclick="Lab.runTest()">Run<br>Test</button>
+  <button onclick="Lab.record()">Record<br>Result</button>
+  <button onclick="UI.toggleTable()">Show<br>Table</button>
+  <button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button>
+</div>
+
+<div class="modalOverlay" id="modal">
+  <div class="modal">
+    <div class="head"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div>
+    <div class="infoGrid">
+      <div class="info"><b>Olfactory indicator</b>A substance whose smell changes in acidic or basic medium is called an olfactory indicator.</div>
+      <div class="info"><b>Onion strips</b>Onion smell can change when acidic or basic substances are added.</div>
+      <div class="info"><b>Acidic sample</b>Tamarind water is used here as an acidic sample.</div>
+      <div class="info"><b>Basic sample</b>Baking soda solution is used here as a basic sample.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modalOverlay" id="studentModal">
+  <div class="modal" style="width:min(94vw,520px)">
+    <div class="head"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div>
+    <div class="info">
+      <b>Enter your name</b>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px">
+        <button class="btn gold" onclick="Lab.setStudent()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat" id="chat">
+  <div class="head"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div>
+  <div class="msgs" id="msgs">
+    <div class="msg bot">Hi! I am Dr AI. Ask me about onion strips, olfactory indicators, acids, bases, or how to complete this lab.</div>
+  </div>
+  <div class="chatInput">
+    <input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()">
+    <button onclick="DrAI.ask()">Send</button>
+  </div>
+</div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey && ['u','s','c','x','a','p'].includes(k)) e.preventDefault();
+  if(k==='f12') e.preventDefault();
+});
+
+const STEPS = [
+  {id:'chop', name:'🧅 Chop Onion'},
+  {id:'strips', name:'🧻 Add Cotton Strips'},
+  {id:'close', name:'🫙 Close Jar'},
+  {id:'ready', name:'✅ Strips Ready'}
+];
+
+const SAMPLES = [
+  {id:'tamarind', name:'Tamarind Water', emoji:'🟤', nature:'acidic', result:'Onion smell remains strong', strip:'strong'},
+  {id:'lemon', name:'Lemon Juice', emoji:'🍋', nature:'acidic', result:'Onion smell remains strong', strip:'strong'},
+  {id:'baking', name:'Baking Soda Solution', emoji:'🥤', nature:'basic', result:'Onion smell becomes weak', strip:'faded'},
+  {id:'soap', name:'Soap Solution', emoji:'🧼', nature:'basic', result:'Onion smell becomes weak', strip:'faded'}
+];
+
+let G = {student:'Student', step:0, prepared:false, selected:null, last:null, score:0, results:{}};
+const $ = id => document.getElementById(id);
+
+function initResults(){ SAMPLES.forEach(s=>G.results[s.id]={result:null,nature:null}) }
+function tested(){ return Object.values(G.results).filter(x=>x.result).length }
+function say(text){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang='en-IN'; u.rate=.97; speechSynthesis.speak(u);}catch(e){} }
+function feedback(html, voice){ $('feedback').innerHTML=html; $('speech').innerHTML=html.replace(/<[^>]+>/g,''); if(voice) say(voice); }
+function renderSteps(){
+  $('steps').innerHTML = STEPS.map((s,i)=>`<button class="step ${i<G.step?'done':''} ${i===G.step?'active':''}" onclick="Lab.doStep('${s.id}')">${s.name}</button>`).join('');
+}
+function renderSamples(){
+  $('samples').innerHTML = SAMPLES.map(s=>`<button class="sample ${G.selected===s.id?'active':''}" onclick="Lab.select('${s.id}')">${s.emoji} ${s.name}</button>`).join('');
+}
+function badgeResult(v){
+  if(!v) return '—';
+  const cls = v.includes('weak') ? 'fadedBadge' : 'sameBadge';
+  return `<span class="badge ${cls}">${v}</span>`;
+}
+function renderTable(){
+  $('tableBody').innerHTML = SAMPLES.map(s=>{
+    const r=G.results[s.id];
+    return `<tr><td>${s.name}</td><td>${badgeResult(r.result)}</td><td>${r.nature?badgeResult(r.nature):'—'}</td></tr>`;
+  }).join('');
+}
+function update(){
+  const p = G.prepared ? 50 + (tested()/SAMPLES.length)*50 : (G.step/STEPS.length)*50;
+  $('fill').style.width = p + '%';
+  $('stagePill').textContent = G.prepared ? 'Stage 2 • Test Smell Strips' : 'Stage 1 • Prepare Onion Strips';
+  $('scorePill').textContent = 'Score: ' + G.score;
+  $('testedPill').textContent = tested() + '/4';
+  $('missionTitle').textContent = G.prepared ? 'Test Onion Strips with Samples' : 'Prepare Onion Smell Strips';
+  $('missionText').textContent = G.prepared ? 'Select a sample, run smell test, then record result.' : 'Complete the steps to prepare onion-smell indicator strips.';
+  $('samples').style.display = G.prepared ? 'grid' : 'none';
+  $('scene').classList.toggle('testing', G.prepared);
+  renderSteps(); renderSamples(); renderTable();
+}
+function doStep(id){
+  Music.ensureStarted();
+  const expected = STEPS[G.step]?.id;
+  if(id !== expected){
+    feedback('<b>Wrong order:</b> Follow the steps in sequence.', 'Follow the steps in sequence.');
+    return;
+  }
+  G.step++; G.score += 20;
+  if(id === 'chop'){
+    $('onionPieces').classList.remove('run'); void $('onionPieces').offsetWidth; $('onionPieces').classList.add('run');
+    $('knife').style.transform='rotate(-5deg)';
+    setTimeout(()=>{$('knife').style.transform='rotate(-18deg)'},350);
+    feedback('<b>Good:</b> Onion is finely chopped.', 'Onion is chopped.');
+  } else if(id === 'strips'){
+    $('strip1').classList.add('ready'); $('strip2').classList.add('ready');
+    feedback('<b>Nice:</b> Cotton strips are placed with onion pieces.', 'Cotton strips added.');
+  } else if(id === 'close'){
+    $('smellCloud').classList.add('show');
+    feedback('<b>Excellent:</b> Jar is closed. Onion smell is absorbed by the strips.', 'Jar is closed.');
+  } else if(id === 'ready'){
+    G.prepared = true;
+    G.score += 20;
+    feedback(`<b>Great job ${G.student}!</b> Onion smell strips are ready. Now choose a sample.`, `Great job ${G.student}. Onion strips are ready.`);
+  }
+  update();
+}
+function nextAction(){
+  if(!G.prepared){
+    const next = STEPS[G.step];
+    if(next) doStep(next.id);
+    return;
+  }
+  if(!G.selected){
+    feedback('<b>Select a sample:</b> Tap any sample card first.', 'Select a sample first.');
+    return;
+  }
+  runTest();
+}
+function select(id){
+  G.selected = id; update();
+  const s = SAMPLES.find(x=>x.id===id);
+  feedback(`<b>Selected:</b> ${s.name}. Now run the smell test.`, `${s.name} selected.`);
+  Music.ensureStarted();
+}
+function spark(){
+  const sp = $('spark');
+  sp.classList.remove('go');
+  sp.style.left='66%'; sp.style.top='48%';
+  sp.style.setProperty('--x','-120px'); sp.style.setProperty('--y','90px');
+  void sp.offsetWidth;
+  sp.classList.add('go');
+}
+function setStrips(mode){
+  $('stripA').className = 'bigStrip ' + mode;
+  $('stripB').className = 'bigStrip ' + mode;
+}
+function runTest(){
+  if(!G.prepared){ feedback('<b>Prepare onion strips first.</b>','Prepare onion strips first.'); return; }
+  if(!G.selected){ feedback('<b>Select a sample first.</b>','Select a sample first.'); return; }
+  const s = SAMPLES.find(x=>x.id===G.selected);
+  $('dropper').style.transform='rotate(-4deg)';
+  setTimeout(()=>{$('dropper').style.transform='rotate(-18deg)'},500);
+  setStrips(s.strip); spark();
+  $('nose').textContent = s.strip === 'faded' ? '😐' : '👃';
+  $('meterText').textContent = s.strip === 'faded' ? 'Smell weak' : 'Smell strong';
+  G.last = s.id;
+  feedback(`<b>Observation:</b> ${s.name} makes the strip show: <b>${s.result}</b>. Now record the result.`, `${s.name} test complete.`);
+}
+function record(){
+  if(!G.last){ feedback('<b>Run test first.</b>','Run test first.'); return; }
+  const s = SAMPLES.find(x=>x.id===G.last);
+  G.results[s.id] = {result:s.result, nature:s.nature};
+  G.score += 25;
+  G.last = null;
+  update();
+  feedback(`<b>Recorded:</b> ${s.name} is <b>${s.nature}</b>.`, `${s.name} recorded.`);
+  if(tested()===SAMPLES.length){
+    feedback(`<b>Congratulations ${G.student}!</b> All samples tested. Your certificate is ready.`, `Congratulations ${G.student}.`);
+    finish();
+  }
+}
+function finish(){
+  if(!G.prepared || tested()<SAMPLES.length){
+    feedback('<b>Complete all tests first.</b>','Complete all tests first.');
+    return;
+  }
+  $('certificate').style.display='block';
+  $('certName').textContent = G.student;
+  $('certificate').scrollIntoView({behavior:'smooth'});
+}
+function setStudent(){
+  G.student = ($('studentInput').value || 'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start with Chop Onion.`, `Welcome ${G.student}.`);
+}
+
+/* UI */
+function openLearn(){ $('modal').classList.add('active'); }
+function close(){ $('modal').classList.remove('active'); }
+function student(){ $('studentInput').value = G.student==='Student' ? '' : G.student; $('studentModal').classList.add('active'); }
+function closeStudent(){ $('studentModal').classList.remove('active'); }
+function toggleTable(){ $('tableCard').classList.toggle('show'); }
+
+/* Dr AI */
+function toggleChat(){ $('chat').classList.toggle('active'); }
+function addMsg(t,w){ const d=document.createElement('div'); d.className='msg '+w; d.innerHTML=t; $('msgs').appendChild(d); $('msgs').scrollTop = $('msgs').scrollHeight; }
+function answer(q){
+  q=q.toLowerCase();
+  if(q.includes('olfactory')) return 'An olfactory indicator is a substance whose smell changes in acidic or basic medium.';
+  if(q.includes('onion')) return 'Onion strips can act as olfactory indicators because their smell changes with acidic or basic samples.';
+  if(q.includes('acid')) return 'Acidic samples like tamarind water or lemon juice keep the onion smell strong in this lab.';
+  if(q.includes('base') || q.includes('basic')) return 'Basic samples like baking soda solution or soap solution make the onion smell weak in this lab.';
+  if(q.includes('complete') || q.includes('how')) return 'First prepare onion strips in 4 steps. Then test all 4 samples and record results.';
+  return 'Ask me about olfactory indicators, onion strips, acids, bases, or how to complete this lab.';
+}
+function ask(){
+  const q = $('chatInput').value.trim();
+  if(!q) return;
+  addMsg(q,'user');
+  $('chatInput').value = '';
+  setTimeout(()=>addMsg(answer(q),'bot'),220);
+}
+
+/* OM Music */
+const Music = {
+  ctx:null, master:null, on:false, timer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext||window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = .05;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  ensureStarted(){ this.init(); if(!this.on) this.start(); },
+  tone(f,d,type='sine',vol=.04,when=0){
+    if(!this.ctx || !this.master) return;
+    const t=this.ctx.currentTime+when, o=this.ctx.createOscillator(), g=this.ctx.createGain();
+    o.type=type; o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+.12);
+    g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t+d+.05);
+  },
+  cycle(){
+    this.tone(136.1,2.8,'sine',.045);
+    this.tone(272.2,2.1,'triangle',.018,.15);
+    this.tone(204.15,1.7,'sine',.015,.55);
+  },
+  start(){
+    this.init();
+    if(this.on) return;
+    this.on = true;
+    $('musicBtn').textContent = '⏸ OM';
+    this.cycle();
+    this.timer = setInterval(()=>this.cycle(),2900);
+  },
+  stop(){
+    this.on = false;
+    clearInterval(this.timer); this.timer=null;
+    $('musicBtn').textContent = '▶ OM';
+  },
+  toggle(){ this.on ? this.stop() : this.start(); }
+};
+
+window.Lab = {doStep,nextAction,select,runTest,record,finish,setStudent};
+window.UI = {openLearn,close,student,closeStudent,toggleTable};
+window.DrAI = {toggle:toggleChat,ask};
+window.Music = Music;
+
+initResults();
+update();
+setTimeout(student,250);
+})();
+</script>
+</body>
+</html>
