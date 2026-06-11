@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Natural Indicator Detective Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#111b3d; --bg2:#073b55; --gold:#ffd84d; --cyan:#46e8ff; --green:#67f2a3; --red:#ff7d86; --purple:#b991ff;
+  --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dce9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.16),transparent 25%),
+    radial-gradient(circle at 88% 8%,rgba(70,232,255,.18),transparent 28%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1120px;margin:0 auto;padding:10px 10px 100px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(70,232,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.08rem,5vw,1.52rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.15rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.35s}
+.lab{position:relative;min-height:690px;overflow:hidden;padding:14px;border-radius:24px;background:
+radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+linear-gradient(180deg,#143062 0%,#0b173a 42%,#493168 42%,#533b76 100%);
+border:1px solid var(--line)}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.1rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px}
+.grid{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:14px;position:absolute;left:0;right:0;bottom:16px;top:16px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+.selector{position:absolute;left:14px;right:14px;top:48px;bottom:16px;display:grid;gap:10px;overflow:auto;padding-right:4px}
+.choice{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:58px;padding:10px;text-align:left;font-weight:900}
+.choice.active{outline:3px solid var(--gold)}
+.choice small{display:block;color:var(--muted);font-weight:700;margin-top:4px}
+.labBench{position:absolute;left:18px;right:18px;top:56px;bottom:18px;border-radius:24px;background:linear-gradient(180deg,#243c69 0%,#1d2e55 35%,#8d5b29 35%,#a16632 100%);border:1px solid rgba(255,255,255,.12);overflow:hidden}
+.shelf{position:absolute;left:18px;right:18px;bottom:24px;height:24px;border-radius:999px;background:linear-gradient(180deg,#d8e5f5,#9aadc9)}
+.bigTube{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);width:118px;height:188px;border-radius:0 0 34px 34px;border:5px solid rgba(255,255,255,.45);border-top:0;background:rgba(255,255,255,.06);overflow:hidden;box-shadow:0 16px 28px rgba(0,0,0,.22)}
+.liquid{position:absolute;left:8px;right:8px;bottom:8px;height:82px;border-radius:22px 22px 30px 30px;background:#dbeafe;transition:.55s}
+.strip{position:absolute;left:50%;top:62px;transform:translateX(-50%);width:44px;height:144px;border-radius:12px;background:#fff;border:3px solid rgba(255,255,255,.5);box-shadow:0 12px 18px rgba(0,0,0,.18);transition:.55s}
+.strip.hidden{opacity:0}
+.dropper{position:absolute;right:28px;top:42px;width:138px;height:18px;border-radius:999px;background:linear-gradient(90deg,#b8c9dd,#fff);transform:rotate(-18deg);transition:.35s}
+.dropper::before{content:"";position:absolute;left:-14px;top:4px;width:22px;height:10px;border-radius:0 8px 8px 0;background:#7dd8ff}
+.resultCard{position:absolute;left:18px;right:18px;top:18px;min-height:62px;padding:10px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid var(--line);line-height:1.35;font-size:.88rem}
+.smellCloud{position:absolute;left:50%;top:112px;transform:translateX(-50%);width:150px;height:80px;display:none}
+.smellCloud.show{display:block}
+.smellCloud span{position:absolute;width:42px;height:20px;border-radius:999px;background:rgba(255,255,255,.24);animation:cloud 2s ease-in-out infinite}
+.smellCloud span:nth-child(1){left:8px;top:12px}.smellCloud span:nth-child(2){left:54px;top:28px;animation-delay:.3s}.smellCloud span:nth-child(3){left:94px;top:8px;animation-delay:.6s}
+@keyframes cloud{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(-12px);opacity:.8}}
+.spark{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;opacity:0}
+.spark.go{animation:spark .8s ease forwards}
+@keyframes spark{0%{opacity:1;transform:scale(.5)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.3)}}
+.actionBox{position:absolute;left:14px;right:14px;top:48px;bottom:16px;display:flex;flex-direction:column;gap:10px}
+.actionBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:58px;padding:10px;text-align:left;font-weight:900}
+.actionBtn.active{outline:3px solid var(--gold)}
+.infoBox{padding:10px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid var(--line);line-height:1.45;font-size:.88rem}
+.missionList{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.missionBtn{min-height:74px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px;text-align:left}
+.missionBtn.done{outline:3px solid var(--green)}.missionBtn.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:84px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.5}.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}th{background:rgba(255,255,255,.10)}td:first-child{text-align:left}
+.badgeTag{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}.pass{background:#66f2a333}.fail{background:#ff7d8633}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.headRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}.info b{display:block;color:var(--gold);margin-bottom:4px}
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}.msg.bot{background:rgba(70,232,255,.12);border:1px solid rgba(70,232,255,.18)}.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.cert{display:none;margin-top:10px;padding:16px}.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+@media(max-width:980px){.grid{grid-template-columns:1fr;gap:12px}.lab{min-height:1120px}.scene{top:176px}}
+@media(max-width:760px){.app{padding:8px 8px 98px}.top{padding:10px}.top .btn:not(.gold):not(#musicBtn){display:none}.hero{padding:12px}.dr{top:78px}.speech{left:108px;top:82px;font-size:.82rem}.lab{min-height:1160px}.scene{top:178px}.missionList{grid-template-columns:repeat(2,1fr)}.infoGrid{grid-template-columns:1fr}.bottomBar button{font-size:.74rem}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand"><div class="logo">🧪</div><div><h1>Natural Indicator Detective Lab 3D</h1><p>Class 7 • Developed by Dr AI Academy</p></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="UI.openLearn()">Learn</button><button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button><button class="btn gold" onclick="UI.student()">Name</button></div>
+  </div>
+
+  <div class="hero card">
+    <h2>Compare natural indicators and identify acids, bases and neutral substances.</h2>
+    <p>This 3D detective lab combines litmus, turmeric, rose extract and onion olfactory indicator. Students test samples, observe colour or smell changes, and classify each sample.</p>
+  </div>
+
+  <div class="status"><div class="pill" id="stagePill">Mission 1</div><div class="track"><div class="fill" id="fill"></div></div><div class="pill" id="scorePill">Score: 0</div><div class="pill" id="donePill">0/4</div></div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Indicator Detective Mission</div>
+    <div class="missionText" id="missionText">Choose sample and indicator, run the test, then record the correct classification.</div>
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and start the first indicator mission.</div>
+
+    <div class="scene">
+      <div class="grid">
+        <div class="station">
+          <div class="stationTitle">Sample Shelf</div>
+          <div class="selector" id="sampleShelf"></div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">3D Indicator Test Bench</div>
+          <div class="labBench">
+            <div class="resultCard" id="resultCard"><b>Observation:</b> Select a sample and indicator, then run test.</div>
+            <div class="dropper" id="dropper"></div>
+            <div class="strip hidden" id="strip"></div>
+            <div class="bigTube"><div class="liquid" id="liquid"></div></div>
+            <div class="smellCloud" id="smellCloud"><span></span><span></span><span></span></div>
+            <div class="shelf"></div>
+            <div class="spark" id="spark"></div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Indicator & Answer</div>
+          <div class="actionBox">
+            <div id="indicatorShelf"></div>
+            <div class="infoBox"><b>Classify sample:</b></div>
+            <button class="actionBtn" onclick="Lab.chooseNature('acidic')">Acidic</button>
+            <button class="actionBtn" onclick="Lab.chooseNature('basic')">Basic</button>
+            <button class="actionBtn" onclick="Lab.chooseNature('neutral')">Neutral</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="missionList" id="missionList"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Select sample and indicator, then click Run Test.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard"><div class="tableWrap"><table><thead><tr><th>Mission</th><th>Sample</th><th>Indicator</th><th>Nature</th><th>Status</th></tr></thead><tbody id="tableBody"></tbody></table></div></div>
+
+  <div class="cert card" id="certificate"><div class="certInner"><div style="font-size:52px">🧪📜🏆</div><h2>Certificate of Completion</h2><p>This certifies that</p><div class="certName" id="certName">Student Name</div><p>successfully completed <b>Natural Indicator Detective Lab 3D</b>.</p><p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p><button class="btn gold" onclick="window.print()">Print / Save Certificate</button></div></div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar"><button onclick="Lab.runTest()">Run<br>Test</button><button onclick="Lab.record()">Record<br>Result</button><button onclick="Lab.nextMission()">Next<br>Mission</button><button onclick="UI.toggleTable()">Show<br>Table</button><button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button></div>
+
+<div class="modalOverlay" id="modal"><div class="modal"><div class="headRow"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div><div class="infoGrid">
+<div class="info"><b>Litmus</b>Acids turn blue litmus red; bases turn red litmus blue.</div>
+<div class="info"><b>Turmeric</b>Turmeric turns red-brown with bases and usually remains yellow with acids/neutral substances.</div>
+<div class="info"><b>Rose extract</b>Rose extract shows different colours in acidic and basic solutions.</div>
+<div class="info"><b>Onion</b>Onion works as an olfactory indicator because smell may change in acidic/basic medium.</div>
+</div></div></div>
+
+<div class="modalOverlay" id="studentModal"><div class="modal" style="width:min(94vw,520px)"><div class="headRow"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div><div class="info"><b>Enter your name</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px"><button class="btn gold" onclick="Lab.setStudent()">Save</button></div></div></div></div>
+
+<div class="chat" id="chat"><div class="headRow"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div><div class="msgs" id="msgs"><div class="msg bot">Hi! I am Dr AI. Ask me about litmus, turmeric, rose extract, onion indicator, acids, bases or neutral substances.</div></div><div class="chatInput"><input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()"><button onclick="DrAI.ask()">Send</button></div></div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey&&['u','s','c','x','a','p'].includes(k))e.preventDefault();
+  if(k==='f12')e.preventDefault();
+});
+
+const MISSIONS=[
+  {id:'lemon',name:'Lemon Juice Mission',sample:'Lemon Juice',emoji:'🍋',nature:'acidic',required:'Litmus',note:'Acid turns blue litmus red.'},
+  {id:'soap',name:'Soap Solution Mission',sample:'Soap Solution',emoji:'🧼',nature:'basic',required:'Turmeric',note:'Base turns turmeric red-brown.'},
+  {id:'water',name:'Water Mission',sample:'Tap Water',emoji:'💧',nature:'neutral',required:'Rose Extract',note:'Neutral sample shows no major colour change.'},
+  {id:'onion',name:'Onion Smell Mission',sample:'Baking Soda Solution',emoji:'🥤',nature:'basic',required:'Onion Strip',note:'Basic medium weakens/changes onion smell in this lab.'}
+];
+
+const SAMPLES=[
+  {name:'Lemon Juice',emoji:'🍋',nature:'acidic'},
+  {name:'Soap Solution',emoji:'🧼',nature:'basic'},
+  {name:'Tap Water',emoji:'💧',nature:'neutral'},
+  {name:'Baking Soda Solution',emoji:'🥤',nature:'basic'}
+];
+
+const INDICATORS=['Litmus','Turmeric','Rose Extract','Onion Strip'];
+
+let G={student:'Student',current:0,sample:null,indicator:null,answer:null,last:null,score:0,results:{}};
+const $=id=>document.getElementById(id);
+
+function initResults(){MISSIONS.forEach(m=>G.results[m.id]=false)}
+function doneCount(){return Object.values(G.results).filter(Boolean).length}
+function m(){return MISSIONS[G.current]}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-IN';u.rate=.97;speechSynthesis.speak(u)}catch(e){}}
+function feedback(h,v){$('feedback').innerHTML=h;$('speech').textContent=h.replace(/<[^>]+>/g,'');if(v)say(v)}
+
+function renderShelves(){
+  $('sampleShelf').innerHTML=SAMPLES.map(s=>`<button class="choice ${G.sample===s.name?'active':''}" onclick="Lab.selectSample('${s.name}')">${s.emoji} ${s.name}<small>${s.nature}</small></button>`).join('');
+  $('indicatorShelf').innerHTML=INDICATORS.map(i=>`<button class="actionBtn ${G.indicator===i?'active':''}" onclick="Lab.selectIndicator('${i}')">${i}</button>`).join('');
+}
+function renderMissions(){
+  $('missionList').innerHTML=MISSIONS.map((x,i)=>`<button class="missionBtn ${i===G.current?'active':''} ${G.results[x.id]?'done':''}" onclick="Lab.gotoMission(${i})">${x.emoji} ${x.name}</button>`).join('');
+}
+function renderTable(){
+  $('tableBody').innerHTML=MISSIONS.map(x=>`<tr><td>${x.name}</td><td>${x.sample}</td><td>${x.required}</td><td>${x.nature}</td><td>${G.results[x.id]?'<span class="badgeTag pass">Completed</span>':'<span class="badgeTag fail">Pending</span>'}</td></tr>`).join('');
+}
+function resetVisual(){
+  $('liquid').style.background='#dbeafe';
+  $('strip').className='strip hidden';
+  $('smellCloud').classList.remove('show');
+  $('resultCard').innerHTML='<b>Observation:</b> Select sample and indicator, then run test.';
+}
+function update(){
+  const x=m();
+  $('stagePill').textContent='Mission '+(G.current+1);
+  $('scorePill').textContent='Score: '+G.score;
+  $('donePill').textContent=doneCount()+'/4';
+  $('missionTitle').textContent=x.name;
+  $('missionText').textContent=`Target: test ${x.sample} using ${x.required}.`;
+  $('fill').style.width=(doneCount()/MISSIONS.length*100)+'%';
+  renderShelves(); renderMissions(); renderTable();
+  if(!G.last) resetVisual();
+}
+function selectSample(name){
+  Music.ensureStarted();
+  G.sample=name;
+  renderShelves();
+  feedback(`<b>Sample selected:</b> ${name}. Now select an indicator.`, `${name} selected.`);
+}
+function selectIndicator(name){
+  Music.ensureStarted();
+  G.indicator=name;
+  renderShelves();
+  feedback(`<b>Indicator selected:</b> ${name}. Now click Run Test.`, `${name} selected.`);
+}
+function chooseNature(nature){
+  G.answer=nature;
+  document.querySelectorAll('.actionBox .actionBtn').forEach(b=>b.classList.remove('active'));
+  [...document.querySelectorAll('.actionBox .actionBtn')].find(b=>b.textContent.trim().toLowerCase()===nature)?.classList.add('active');
+  feedback(`<b>Answer selected:</b> ${nature}. Now record result.`, `${nature} selected.`);
+}
+function spark(){
+  const sp=$('spark');
+  sp.classList.remove('go');
+  sp.style.left='60%'; sp.style.top='48%';
+  sp.style.setProperty('--x','-90px');
+  sp.style.setProperty('--y','70px');
+  void sp.offsetWidth;
+  sp.classList.add('go');
+}
+function observation(sampleName, indicator){
+  const s=SAMPLES.find(x=>x.name===sampleName);
+  let color='#dbeafe', stripColor='#fff', text='No clear observation.';
+  $('strip').className='strip hidden';
+  $('smellCloud').classList.remove('show');
+
+  if(indicator==='Litmus'){
+    $('strip').className='strip';
+    if(s.nature==='acidic'){stripColor='#ff4b5c'; text='Blue litmus turns red: acidic sample.';}
+    else if(s.nature==='basic'){stripColor='#377dff'; text='Red litmus turns blue: basic sample.';}
+    else {stripColor='#ffffff'; text='No colour change: neutral sample.';}
+    $('strip').style.background=stripColor;
+    color='#dbeafe';
+  }
+  if(indicator==='Turmeric'){
+    $('strip').className='strip';
+    if(s.nature==='basic'){stripColor='#a34d34'; text='Turmeric turns red-brown: basic sample.';}
+    else {stripColor='#ffd84d'; text='Turmeric remains yellow: acid or neutral sample.';}
+    $('strip').style.background=stripColor;
+    color='#dbeafe';
+  }
+  if(indicator==='Rose Extract'){
+    if(s.nature==='acidic'){color='#ff6fae'; text='Rose extract shows pink/red shade: acidic sample.';}
+    else if(s.nature==='basic'){color='#56d98a'; text='Rose extract shows green shade: basic sample.';}
+    else {color='#d96aa8'; text='No major change: neutral sample.';}
+  }
+  if(indicator==='Onion Strip'){
+    $('strip').className='strip';
+    $('strip').style.background='#f7fbff';
+    $('smellCloud').classList.add('show');
+    if(s.nature==='basic'){text='Onion smell becomes weak/changes: basic sample.';}
+    else if(s.nature==='acidic'){text='Onion smell remains strong/changes differently: acidic sample.';}
+    else {text='No major smell change: neutral sample.';}
+  }
+  $('liquid').style.background=color;
+  return text;
+}
+function runTest(){
+  if(!G.sample || !G.indicator){feedback('<b>Select sample and indicator first.</b>','Select sample and indicator first.');return;}
+  const text=observation(G.sample,G.indicator);
+  $('dropper').style.transform='rotate(-4deg)';
+  setTimeout(()=>$('dropper').style.transform='rotate(-18deg)',500);
+  spark();
+  G.last={sample:G.sample,indicator:G.indicator,observation:text};
+  $('resultCard').innerHTML='<b>Observation:</b> '+text;
+  feedback(`<b>Test complete:</b> ${text}`, 'Test complete.');
+}
+function record(){
+  const x=m();
+  if(!G.last){feedback('<b>Run test first.</b>','Run test first.');return;}
+  if(!G.answer){feedback('<b>Choose acidic/basic/neutral first.</b>','Choose answer first.');return;}
+  const correctSample=G.sample===x.sample;
+  const correctIndicator=G.indicator===x.required;
+  const correctNature=G.answer===x.nature;
+  if(correctSample && correctIndicator && correctNature){
+    if(!G.results[x.id])G.score+=25;
+    G.results[x.id]=true;
+    feedback(`<b>Correct!</b> ${x.note}`, 'Correct result.');
+  }else{
+    let msg='Check again: ';
+    if(!correctSample) msg+='sample should be '+x.sample+'. ';
+    if(!correctIndicator) msg+='indicator should be '+x.required+'. ';
+    if(!correctNature) msg+='nature should be '+x.nature+'. ';
+    feedback('<b>Not correct.</b> '+msg, 'Not correct. Try again.');
+  }
+  update();
+  if(doneCount()===MISSIONS.length){
+    feedback(`<b>Excellent ${G.student}!</b> All indicator detective missions complete. Click Show Result for certificate.`,`Excellent ${G.student}.`);
+  }
+}
+function nextMission(){
+  if(G.current<MISSIONS.length-1){
+    G.current++; G.sample=null; G.indicator=null; G.answer=null; G.last=null; update();
+    feedback('<b>Next mission loaded.</b> Select the correct sample and indicator.','Next mission loaded.');
+  }else feedback('<b>All missions visited.</b> Click Show Result after completing all missions.','All missions visited.');
+}
+function gotoMission(i){
+  G.current=i; G.sample=null; G.indicator=null; G.answer=null; G.last=null; update();
+  feedback('<b>Mission changed.</b> Select sample and indicator.','Mission changed.');
+}
+function showResult(){
+  if(doneCount()===MISSIONS.length){
+    $('certificate').style.display='block';
+    $('certName').textContent=G.student;
+    $('certificate').scrollIntoView({behavior:'smooth'});
+  }else feedback('<b>Complete all four missions first.</b>','Complete all missions first.');
+}
+function setStudent(){
+  G.student=($('studentInput').value||'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start the first indicator mission.`,`Welcome ${G.student}.`);
+}
+
+function openLearn(){$('modal').classList.add('active')}
+function closeLearn(){$('modal').classList.remove('active')}
+function openStudent(){$('studentInput').value=G.student==='Student'?'':G.student;$('studentModal').classList.add('active')}
+function closeStudent(){$('studentModal').classList.remove('active')}
+function toggleTable(){$('tableCard').classList.toggle('show')}
+
+function toggleChat(){$('chat').classList.toggle('active')}
+function addMsg(t,w){const d=document.createElement('div');d.className='msg '+w;d.innerHTML=t;$('msgs').appendChild(d);$('msgs').scrollTop=$('msgs').scrollHeight}
+function answer(q){
+  q=q.toLowerCase();
+  if(q.includes('litmus'))return 'Litmus is an indicator. Acids turn blue litmus red; bases turn red litmus blue.';
+  if(q.includes('turmeric'))return 'Turmeric turns red-brown with bases and remains yellow with acids or neutral substances.';
+  if(q.includes('rose'))return 'Rose extract gives different colours in acidic and basic solutions.';
+  if(q.includes('onion'))return 'Onion is an olfactory indicator because its smell changes in acidic or basic medium.';
+  if(q.includes('neutral'))return 'Neutral substances usually do not show strong indicator change.';
+  return 'Ask me about litmus, turmeric, rose extract, onion indicator, acids, bases or neutral substances.';
+}
+function ask(){
+  const q=$('chatInput').value.trim();
+  if(!q)return;
+  addMsg(q,'user');$('chatInput').value='';
+  setTimeout(()=>addMsg(answer(q),'bot'),220);
+}
+
+const Music={
+  ctx:null,master:null,on:false,timer:null,
+  init(){if(!this.ctx){this.ctx=new (window.AudioContext||window.webkitAudioContext)();this.master=this.ctx.createGain();this.master.gain.value=.05;this.master.connect(this.ctx.destination)}if(this.ctx.state==='suspended')this.ctx.resume()},
+  ensureStarted(){this.init();if(!this.on)this.start()},
+  tone(f,d,type='sine',vol=.04,when=0){if(!this.ctx||!this.master)return;const t=this.ctx.currentTime+when,o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.12);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(this.master);o.start(t);o.stop(t+d+.05)},
+  cycle(){this.tone(136.1,2.8,'sine',.045);this.tone(272.2,2.1,'triangle',.018,.15);this.tone(204.15,1.7,'sine',.015,.55)},
+  start(){this.init();if(this.on)return;this.on=true;$('musicBtn').textContent='⏸ OM';this.cycle();this.timer=setInterval(()=>this.cycle(),2900)},
+  stop(){this.on=false;clearInterval(this.timer);this.timer=null;$('musicBtn').textContent='▶ OM'},
+  toggle(){this.on?this.stop():this.start()}
+};
+
+window.Lab={selectSample,selectIndicator,chooseNature,runTest,record,nextMission,gotoMission,showResult,setStudent};
+window.UI={openLearn,close:closeLearn,student:openStudent,closeStudent,toggleTable};
+window.DrAI={toggle:toggleChat,ask};
+window.Music=Music;
+
+initResults();update();setTimeout(openStudent,250);
+})();
+</script>
+</body>
+</html>

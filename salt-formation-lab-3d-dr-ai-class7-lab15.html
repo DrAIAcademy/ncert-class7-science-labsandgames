@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Salt Formation Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#0f1d44; --bg2:#073e56; --gold:#ffd84d; --cyan:#46e8ff; --green:#67f2a3; --red:#ff7d86; --purple:#b695ff;
+  --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dce9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.18),transparent 24%),
+    radial-gradient(circle at 88% 8%,rgba(70,232,255,.16),transparent 30%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1140px;margin:0 auto;padding:10px 10px 102px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:40}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(70,232,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.05rem,5vw,1.5rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.1rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--red),#ffa94d,var(--gold),var(--green),var(--cyan));transition:.35s}
+
+.lab{position:relative;min-height:780px;overflow:hidden;padding:14px;border-radius:24px;background:
+radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+linear-gradient(180deg,#143062 0%,#0b173a 40%,#304567 40%,#4c316d 100%);
+border:1px solid var(--line)}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.12rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px}
+.grid{display:grid;grid-template-columns:.95fr 1.35fr .95fr;gap:14px;position:absolute;left:0;right:0;top:16px;bottom:16px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+
+.panelScroll{position:absolute;left:14px;right:14px;top:48px;bottom:16px;display:flex;flex-direction:column;gap:10px;overflow:auto;padding-right:4px}
+.optionBtn,.answerBtn,.navBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:58px;padding:10px;text-align:left;font-weight:900}
+.optionBtn.active,.answerBtn.active,.navBtn.active{outline:3px solid var(--gold)}
+.optionBtn small,.answerBtn small,.navBtn small{display:block;color:var(--muted);font-weight:700;margin-top:4px}
+.infoBox{padding:10px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid var(--line);line-height:1.45;font-size:.88rem}
+
+.bench{position:absolute;left:18px;right:18px;top:56px;bottom:18px;border-radius:24px;background:linear-gradient(180deg,#28496e 0%,#203656 33%,#8f5d2e 33%,#a86c36 100%);border:1px solid rgba(255,255,255,.12);overflow:hidden}
+.monitor{position:absolute;left:18px;right:18px;top:18px;min-height:74px;padding:10px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid var(--line);line-height:1.35;font-size:.88rem}
+.phBar{position:absolute;left:18px;right:18px;top:102px;height:56px;padding:10px;border-radius:18px;background:rgba(255,255,255,.10);border:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.meterLabel{font-weight:900;font-size:.86rem;color:#fff}
+.pTrack{flex:1;height:12px;border-radius:999px;background:linear-gradient(90deg,#ff616d,#ffd84d,#69f0a6);overflow:hidden;position:relative}
+.pNeedle{position:absolute;top:-5px;width:10px;height:22px;border-radius:6px;background:#fff;left:50%;transition:.5s}
+.pValue{min-width:76px;text-align:center;font-weight:900;color:#67f2a3;background:#08101d;border-radius:12px;padding:8px 6px}
+
+.flaskRow{position:absolute;left:18px;right:18px;bottom:18px;top:176px;display:grid;grid-template-columns:1fr .8fr 1fr;gap:14px;align-items:end}
+.flaskBlock{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.flaskLabel{margin-top:10px;font-weight:900;text-align:center;font-size:.85rem}
+.beaker{width:110px;height:188px;border:5px solid rgba(255,255,255,.45);border-top:0;border-radius:0 0 24px 24px;background:rgba(255,255,255,.05);position:relative;overflow:hidden;box-shadow:0 14px 22px rgba(0,0,0,.22)}
+.liquid{position:absolute;left:8px;right:8px;bottom:8px;height:96px;border-radius:18px 18px 22px 22px;transition:.55s}
+.acid{background:linear-gradient(180deg,#ff8f7a,#ff5c78)}
+.base{background:linear-gradient(180deg,#7de6ff,#53c0ff)}
+.salt{background:linear-gradient(180deg,#fff2b5,#fff9e2)}
+.mixChamber{width:132px;height:216px;border-radius:30px;border:5px solid rgba(255,255,255,.45);background:rgba(255,255,255,.06);position:relative;overflow:hidden;box-shadow:0 18px 28px rgba(0,0,0,.22)}
+.mixLiquid{position:absolute;left:10px;right:10px;bottom:10px;height:108px;border-radius:18px 18px 26px 26px;background:#dbeafe;transition:.55s}
+.crystalBox{position:absolute;left:0;right:0;top:26px;height:78px;pointer-events:none}
+.crystal{position:absolute;width:18px;height:18px;background:rgba(255,255,255,.92);transform:rotate(45deg);opacity:0}
+.crystal.show{animation:crystal 1.2s ease forwards}
+@keyframes crystal{0%{opacity:0;transform:translateY(18px) rotate(45deg) scale(.4)}30%{opacity:1}100%{opacity:.95;transform:translateY(0) rotate(45deg) scale(1)}}
+.spark{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;opacity:0}
+.spark.go{animation:spark .85s ease forwards}
+@keyframes spark{0%{opacity:1;transform:scale(.5)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.4)}}
+
+.missionList{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.missionBtn{min-height:74px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px;text-align:left}
+.missionBtn.done{outline:3px solid var(--green)} .missionBtn.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:84px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.5}
+.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}th{background:rgba(255,255,255,.10)}td:first-child{text-align:left}
+.badgeTag{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}.pass{background:#66f2a333}.fail{background:#ff7d8633}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.headRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}
+.info b{display:block;color:var(--gold);margin-bottom:4px}
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}
+.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}
+.msg.bot{background:rgba(70,232,255,.12);border:1px solid rgba(70,232,255,.18)}
+.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}
+.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}
+.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.cert{display:none;margin-top:10px;padding:16px}
+.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+
+@media(max-width:980px){
+  .grid{grid-template-columns:1fr;gap:12px}
+  .lab{min-height:1260px}
+  .scene{top:176px}
+}
+@media(max-width:760px){
+  .app{padding:8px 8px 98px}
+  .top{padding:10px}
+  .top .btn:not(.gold):not(#musicBtn){display:none}
+  .hero{padding:12px}
+  .dr{top:78px}
+  .speech{left:108px;top:82px;font-size:.82rem}
+  .lab{min-height:1300px}
+  .scene{top:178px}
+  .missionList{grid-template-columns:repeat(2,1fr)}
+  .infoGrid{grid-template-columns:1fr}
+  .bottomBar button{font-size:.74rem}
+  .flaskRow{grid-template-columns:1fr}
+  .flaskBlock,.mixChamber{justify-self:center}
+  .mixChamber{margin-top:8px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand">
+      <div class="logo">🧂</div>
+      <div><h1>Salt Formation Lab 3D</h1><p>Class 7 • Developed by Dr AI Academy</p></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="UI.openLearn()">Learn</button>
+      <button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button>
+      <button class="btn gold" onclick="UI.student()">Name</button>
+    </div>
+  </div>
+
+  <div class="hero card">
+    <h2>Watch acids and bases react to form salt and water.</h2>
+    <p>This 3D virtual lab helps students understand neutralisation products. Students choose the correct acid, correct base and identify the salt formed after reaction.</p>
+  </div>
+
+  <div class="status">
+    <div class="pill" id="stagePill">Mission 1</div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="pill" id="scorePill">Score: 0</div>
+    <div class="pill" id="donePill">0/5</div>
+  </div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Neutralisation Product Mission</div>
+    <div class="missionText" id="missionText">Select the correct acid, base and salt product for the current mission.</div>
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and start the first salt formation mission.</div>
+
+    <div class="scene">
+      <div class="grid">
+        <div class="station">
+          <div class="stationTitle">Acid & Base Shelf</div>
+          <div class="panelScroll" id="leftPanel"></div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">3D Reaction Bench</div>
+          <div class="bench">
+            <div class="monitor" id="monitor"><b>Observation:</b> Choose an acid and a base, then run the reaction.</div>
+            <div class="phBar">
+              <div class="meterLabel">Reaction Meter</div>
+              <div class="pTrack"><div class="pNeedle" id="pNeedle"></div></div>
+              <div class="pValue" id="pValue">pH ?</div>
+            </div>
+
+            <div class="flaskRow">
+              <div class="flaskBlock">
+                <div class="beaker">
+                  <div class="liquid acid" id="acidLiquid" style="opacity:.18"></div>
+                </div>
+                <div class="flaskLabel" id="acidLabel">Select Acid</div>
+              </div>
+
+              <div class="flaskBlock">
+                <div class="mixChamber">
+                  <div class="mixLiquid" id="mixLiquid"></div>
+                  <div class="crystalBox" id="crystalBox"></div>
+                  <div class="spark" id="spark"></div>
+                </div>
+                <div class="flaskLabel" id="mixLabel">Reaction Chamber</div>
+              </div>
+
+              <div class="flaskBlock">
+                <div class="beaker">
+                  <div class="liquid base" id="baseLiquid" style="opacity:.18"></div>
+                </div>
+                <div class="flaskLabel" id="baseLabel">Select Base</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Salt Answer Console</div>
+          <div class="panelScroll" id="rightPanel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="missionList" id="missionList"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Select the acid, base and final salt. Then click Record Result.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard">
+    <div class="tableWrap">
+      <table>
+        <thead>
+          <tr><th>Mission</th><th>Acid</th><th>Base</th><th>Salt Formed</th><th>Status</th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="cert card" id="certificate">
+    <div class="certInner">
+      <div style="font-size:52px">🧂📜🏆</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="certName" id="certName">Student Name</div>
+      <p>successfully completed <b>Salt Formation Lab 3D</b>.</p>
+      <p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p>
+      <button class="btn gold" onclick="window.print()">Print / Save Certificate</button>
+    </div>
+  </div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar">
+  <button onclick="Lab.runReaction()">Run<br>Reaction</button>
+  <button onclick="Lab.record()">Record<br>Result</button>
+  <button onclick="Lab.nextMission()">Next<br>Mission</button>
+  <button onclick="UI.toggleTable()">Show<br>Table</button>
+  <button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button>
+</div>
+
+<div class="modalOverlay" id="modal">
+  <div class="modal">
+    <div class="headRow"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div>
+    <div class="infoGrid">
+      <div class="info"><b>Neutralisation</b>An acid reacts with a base to form salt and water.</div>
+      <div class="info"><b>Salt name logic</b>The salt name comes from the acid part and the base metal part, such as sodium chloride or potassium nitrate.</div>
+      <div class="info"><b>pH idea</b>When acid and base are mixed correctly in proper balance, the final mixture moves close to neutral.</div>
+      <div class="info"><b>Foundation building</b>This concept is important for school chemistry and later helps in JEE/NEET foundation understanding.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modalOverlay" id="studentModal">
+  <div class="modal" style="width:min(94vw,520px)">
+    <div class="headRow"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div>
+    <div class="info">
+      <b>Enter your name</b>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px" />
+        <button class="btn gold" onclick="Lab.setStudent()">Start Lab</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat" id="chat">
+  <div class="headRow"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div>
+  <div class="msgs" id="msgs">
+    <div class="msg bot">Hi! I am Dr AI. Ask me about neutralisation, salt formation, acids, bases or how sodium chloride is formed.</div>
+  </div>
+  <div class="chatInput">
+    <input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()" />
+    <button onclick="DrAI.ask()">Send</button>
+  </div>
+</div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey && ['u','s','c','x','a','p'].includes(k)) e.preventDefault();
+  if(k==='f12') e.preventDefault();
+});
+
+const ACIDS = ['Hydrochloric Acid','Sulfuric Acid','Nitric Acid','Acetic Acid'];
+const BASES = ['Sodium Hydroxide','Potassium Hydroxide','Calcium Hydroxide'];
+const SALTS = ['Sodium Chloride','Sodium Sulfate','Potassium Nitrate','Sodium Acetate','Calcium Chloride'];
+
+const MISSIONS = [
+  {id:'m1', title:'Mission 1', acid:'Hydrochloric Acid', base:'Sodium Hydroxide', salt:'Sodium Chloride', hint:'Common lab neutralisation: HCl + NaOH.'},
+  {id:'m2', title:'Mission 2', acid:'Sulfuric Acid', base:'Sodium Hydroxide', salt:'Sodium Sulfate', hint:'Think of sulfuric acid with sodium base.'},
+  {id:'m3', title:'Mission 3', acid:'Nitric Acid', base:'Potassium Hydroxide', salt:'Potassium Nitrate', hint:'Nitric acid gives nitrate salt.'},
+  {id:'m4', title:'Mission 4', acid:'Acetic Acid', base:'Sodium Hydroxide', salt:'Sodium Acetate', hint:'This is a vinegar-related acid reaction.'},
+  {id:'m5', title:'Mission 5', acid:'Hydrochloric Acid', base:'Calcium Hydroxide', salt:'Calcium Chloride', hint:'Hydrochloric acid plus calcium base.'}
+];
+
+let G = {
+  student:'Student',
+  current:0,
+  acid:null,
+  base:null,
+  salt:null,
+  score:0,
+  results:{},
+  reacted:false
+};
+
+const $ = id => document.getElementById(id);
+function initResults(){ MISSIONS.forEach(m => G.results[m.id] = false); }
+function doneCount(){ return Object.values(G.results).filter(Boolean).length; }
+function mission(){ return MISSIONS[G.current]; }
+
+function say(text){
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-IN';
+    u.rate = 0.97;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function feedback(html, voice){
+  $('feedback').innerHTML = html;
+  $('speech').textContent = html.replace(/<[^>]+>/g,'');
+  if(voice) say(voice);
+}
+
+function renderLeft(){
+  const acidButtons = ACIDS.map(a => `
+    <button class="optionBtn ${G.acid===a?'active':''}" onclick="Lab.selectAcid('${a.replace(/'/g,"&#39;")}')">${a}<small>Acid option</small></button>
+  `).join('');
+  const baseButtons = BASES.map(b => `
+    <button class="optionBtn ${G.base===b?'active':''}" onclick="Lab.selectBase('${b.replace(/'/g,"&#39;")}')">${b}<small>Base option</small></button>
+  `).join('');
+  $('leftPanel').innerHTML = `
+    <div class="infoBox"><b>Mission Hint:</b> ${mission().hint}</div>
+    <div class="infoBox"><b>Select Acid</b></div>
+    ${acidButtons}
+    <div class="infoBox"><b>Select Base</b></div>
+    ${baseButtons}
+  `;
+}
+
+function renderRight(){
+  const saltButtons = SALTS.map(s => `
+    <button class="answerBtn ${G.salt===s?'active':''}" onclick="Lab.selectSalt('${s.replace(/'/g,"&#39;")}')">${s}<small>Possible salt product</small></button>
+  `).join('');
+  $('rightPanel').innerHTML = `
+    <div class="infoBox"><b>Select Salt Formed</b></div>
+    ${saltButtons}
+    <div class="infoBox"><b>Rule:</b> Acid + Base → Salt + Water</div>
+    <div class="infoBox"><b>Goal:</b> Choose the correct acid, base and final salt.</div>
+  `;
+}
+
+function renderMissions(){
+  $('missionList').innerHTML = MISSIONS.map((m,i)=>
+    `<button class="missionBtn ${i===G.current?'active':''} ${G.results[m.id]?'done':''}" onclick="Lab.gotoMission(${i})">${m.title}<br><small>${m.salt}</small></button>`
+  ).join('');
+}
+function renderTable(){
+  $('tableBody').innerHTML = MISSIONS.map(m=>
+    `<tr><td>${m.title}</td><td>${m.acid}</td><td>${m.base}</td><td>${m.salt}</td><td>${G.results[m.id] ? '<span class="badgeTag pass">Completed</span>' : '<span class="badgeTag fail">Pending</span>'}</td></tr>`
+  ).join('');
+}
+function setNeedle(val){
+  $('pNeedle').style.left = val + '%';
+}
+function setBenchLabels(){
+  $('acidLabel').textContent = G.acid || 'Select Acid';
+  $('baseLabel').textContent = G.base || 'Select Base';
+  $('acidLiquid').style.opacity = G.acid ? '1' : '.18';
+  $('baseLiquid').style.opacity = G.base ? '1' : '.18';
+}
+function clearCrystals(){
+  $('crystalBox').innerHTML = '';
+}
+function crystalBurst(){
+  const box = $('crystalBox');
+  box.innerHTML = '';
+  for(let i=0;i<8;i++){
+    const c = document.createElement('div');
+    c.className = 'crystal show';
+    c.style.left = (18 + Math.random()*84) + 'px';
+    c.style.top = (8 + Math.random()*46) + 'px';
+    c.style.animationDelay = (i*0.06) + 's';
+    box.appendChild(c);
+  }
+}
+function spark(){
+  const sp = $('spark');
+  sp.classList.remove('go');
+  sp.style.left = '54%';
+  sp.style.top = '56%';
+  sp.style.setProperty('--x','-70px');
+  sp.style.setProperty('--y','-60px');
+  void sp.offsetWidth;
+  sp.classList.add('go');
+}
+function updateMixVisual(state){
+  if(state==='idle'){
+    $('mixLiquid').style.background = '#dbeafe';
+    $('pValue').textContent = 'pH ?';
+    setNeedle(50);
+    clearCrystals();
+    $('mixLabel').textContent = 'Reaction Chamber';
+  }else if(state==='react'){
+    $('mixLiquid').style.background = 'linear-gradient(180deg,#e5ffd5,#fff8c4)';
+    $('pValue').textContent = 'pH ~7';
+    setNeedle(49);
+    crystalBurst();
+    $('mixLabel').textContent = 'Salt + Water Formed';
+  }
+}
+function updateAll(){
+  $('stagePill').textContent = 'Mission ' + (G.current + 1);
+  $('scorePill').textContent = 'Score: ' + G.score;
+  $('donePill').textContent = doneCount() + '/5';
+  $('fill').style.width = ((doneCount()/MISSIONS.length) * 100) + '%';
+  $('missionTitle').textContent = mission().title;
+  $('missionText').textContent = `Target: identify the acid, base and salt for ${mission().salt}.`;
+  renderLeft();
+  renderRight();
+  renderMissions();
+  renderTable();
+  setBenchLabels();
+  if(!G.reacted) updateMixVisual('idle');
+}
+function selectAcid(name){
+  Music.ensureStarted();
+  G.acid = name;
+  G.reacted = false;
+  renderLeft();
+  setBenchLabels();
+  updateMixVisual('idle');
+  feedback(`<b>Acid selected:</b> ${name}. Now select the base.`, `${name} selected.`);
+}
+function selectBase(name){
+  Music.ensureStarted();
+  G.base = name;
+  G.reacted = false;
+  renderLeft();
+  setBenchLabels();
+  updateMixVisual('idle');
+  feedback(`<b>Base selected:</b> ${name}. Now choose the salt and run reaction.`, `${name} selected.`);
+}
+function selectSalt(name){
+  G.salt = name;
+  renderRight();
+  feedback(`<b>Salt selected:</b> ${name}. Now run the reaction or record your answer.`, `${name} selected.`);
+}
+function runReaction(){
+  if(!G.acid || !G.base){
+    feedback('<b>Select both acid and base first.</b>', 'Select acid and base first.');
+    return;
+  }
+  G.reacted = true;
+  updateMixVisual('react');
+  spark();
+  $('monitor').innerHTML = `<b>Observation:</b> ${G.acid} reacts with ${G.base}. The mixture moves towards neutral and forms <b>salt + water</b>.`;
+  feedback(`<b>Reaction complete:</b> acid and base reacted in the chamber.`, 'Reaction complete.');
+}
+function record(){
+  const m = mission();
+  if(!G.acid || !G.base || !G.salt){
+    feedback('<b>Complete all three choices first:</b> acid, base and salt.', 'Complete all three choices first.');
+    return;
+  }
+  const acidOk = G.acid === m.acid;
+  const baseOk = G.base === m.base;
+  const saltOk = G.salt === m.salt;
+  if(acidOk && baseOk && saltOk){
+    if(!G.results[m.id]) G.score += 20;
+    G.results[m.id] = true;
+    G.reacted = true;
+    updateMixVisual('react');
+    spark();
+    $('monitor').innerHTML = `<b>Perfect Match!</b> ${m.acid} + ${m.base} → <b>${m.salt}</b> + water`;
+    feedback(`<b>Correct!</b> You identified the correct acid, base and salt product.`, 'Correct answer.');
+  }else{
+    let msg = 'Check again: ';
+    if(!acidOk) msg += `acid should be ${m.acid}. `;
+    if(!baseOk) msg += `base should be ${m.base}. `;
+    if(!saltOk) msg += `salt should be ${m.salt}. `;
+    $('monitor').innerHTML = `<b>Try Again:</b> ${msg}`;
+    feedback('<b>Not correct.</b> ' + msg, 'Not correct. Try again.');
+  }
+  updateAll();
+  if(doneCount()===MISSIONS.length){
+    feedback(`<b>Excellent ${G.student}!</b> You have mastered salt formation. Certificate is ready below.`, `Excellent ${G.student}.`);
+    $('certificate').style.display = 'block';
+    $('certName').textContent = G.student;
+  }
+}
+function nextMission(){
+  if(G.current < MISSIONS.length - 1){
+    G.current++;
+    resetMissionState();
+    updateAll();
+    feedback('<b>Next mission loaded.</b> Solve the next neutralisation challenge.', 'Next mission loaded.');
+  }else{
+    feedback('<b>All missions visited.</b> Finish pending ones or print certificate.', 'All missions visited.');
+  }
+}
+function gotoMission(i){
+  G.current = i;
+  resetMissionState();
+  updateAll();
+  feedback('<b>Mission changed.</b> Start this salt formation challenge.', 'Mission changed.');
+}
+function resetMissionState(){
+  G.acid = null;
+  G.base = null;
+  G.salt = null;
+  G.reacted = false;
+  $('monitor').innerHTML = '<b>Observation:</b> Choose an acid and a base, then run the reaction.';
+}
+function setStudent(){
+  G.student = ($('studentInput').value || 'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start the first salt formation mission.`, `Welcome ${G.student}.`);
+}
+
+function openLearn(){ $('modal').classList.add('active'); }
+function closeLearn(){ $('modal').classList.remove('active'); }
+function openStudent(){ $('studentInput').value = G.student==='Student' ? '' : G.student; $('studentModal').classList.add('active'); }
+function closeStudent(){ $('studentModal').classList.remove('active'); }
+function toggleTable(){ $('tableCard').classList.toggle('show'); }
+
+function toggleChat(){ $('chat').classList.toggle('active'); }
+function addMsg(text, who){
+  const d = document.createElement('div');
+  d.className = 'msg ' + who;
+  d.innerHTML = text;
+  $('msgs').appendChild(d);
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+}
+function answer(q){
+  q = q.toLowerCase();
+  if(q.includes('neutralisation')) return 'Neutralisation is the reaction of an acid with a base to form salt and water.';
+  if(q.includes('salt')) return 'In this chapter, salt is formed when the acid part and the base part combine after neutralisation.';
+  if(q.includes('sodium chloride')) return 'Sodium chloride is formed from hydrochloric acid and sodium hydroxide.';
+  if(q.includes('potassium nitrate')) return 'Potassium nitrate is formed from nitric acid and potassium hydroxide.';
+  if(q.includes('ph')) return 'A correctly balanced neutralisation tends to move closer to pH 7.';
+  return 'Ask me about neutralisation, salt formation, sodium chloride, potassium nitrate or pH after reaction.';
+}
+function ask(){
+  const q = $('chatInput').value.trim();
+  if(!q) return;
+  addMsg(q, 'user');
+  $('chatInput').value = '';
+  setTimeout(()=>addMsg(answer(q), 'bot'), 220);
+}
+
+const Music = {
+  ctx:null, master:null, on:false, timer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.05;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  ensureStarted(){ this.init(); if(!this.on) this.start(); },
+  tone(f,d,type='sine',vol=0.04,when=0){
+    if(!this.ctx || !this.master) return;
+    const t = this.ctx.currentTime + when;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t+d+0.05);
+  },
+  cycle(){
+    this.tone(136.1,2.8,'sine',0.045);
+    this.tone(272.2,2.1,'triangle',0.018,0.15);
+    this.tone(204.15,1.7,'sine',0.015,0.55);
+  },
+  start(){
+    this.init();
+    if(this.on) return;
+    this.on = true;
+    $('musicBtn').textContent = '⏸ OM';
+    this.cycle();
+    this.timer = setInterval(()=>this.cycle(),2900);
+  },
+  stop(){
+    this.on = false;
+    clearInterval(this.timer);
+    this.timer = null;
+    $('musicBtn').textContent = '▶ OM';
+  },
+  toggle(){ this.on ? this.stop() : this.start(); }
+};
+
+window.Lab = {selectAcid,selectBase,selectSalt,runReaction,record,nextMission,gotoMission,setStudent};
+window.UI = {openLearn,close:closeLearn,student:openStudent,closeStudent,toggleTable};
+window.DrAI = {toggle:toggleChat,ask};
+window.Music = Music;
+
+initResults();
+updateAll();
+setNeedle(50);
+setTimeout(openStudent, 250);
+})();
+</script>
+</body>
+</html>

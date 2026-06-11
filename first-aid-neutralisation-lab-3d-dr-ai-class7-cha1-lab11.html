@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>First Aid Neutralisation Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#101f37; --bg2:#073d50; --gold:#ffd84d; --cyan:#46e8ff; --green:#67f2a3; --red:#ff7d86;
+  --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dce9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.16),transparent 25%),
+    radial-gradient(circle at 88% 8%,rgba(70,232,255,.18),transparent 28%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1120px;margin:0 auto;padding:10px 10px 100px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(70,232,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.08rem,5vw,1.52rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.1rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.35s}
+.lab{position:relative;min-height:670px;overflow:hidden;padding:14px;border-radius:24px;background:
+radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+linear-gradient(180deg,#143062 0%,#0b173a 42%,#663e46 42%,#75425e 100%);
+border:1px solid var(--line)}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.1rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px}
+.grid{display:grid;grid-template-columns:1fr 1.2fr .95fr;gap:14px;position:absolute;left:0;right:0;bottom:16px;top:16px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+.report{position:absolute;left:14px;right:14px;top:48px;bottom:16px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:14px;display:flex;flex-direction:column;justify-content:space-between}
+.reportEmoji{font-size:4rem;line-height:1}
+.reportName{font-size:1.08rem;font-weight:900;margin-top:8px}
+.reportFact{font-size:.92rem;line-height:1.45;color:var(--muted)}
+.hint{display:inline-block;padding:8px 10px;border-radius:12px;background:rgba(255,216,77,.16);border:1px solid rgba(255,216,77,.24);font-size:.84rem}
+.clinic{position:absolute;left:18px;right:18px;top:56px;bottom:18px;border-radius:24px;background:linear-gradient(180deg,#284f73 0%,#20405f 28%,#f0b4c8 28%,#f6d0dc 100%);border:1px solid rgba(255,255,255,.12);overflow:hidden}
+.badge{position:absolute;right:16px;top:18px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-weight:900}
+.meter{position:absolute;left:16px;top:16px;width:142px;padding:10px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid var(--line);text-align:center}
+.meterBar{height:12px;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));margin:8px 0;position:relative}
+.needle{position:absolute;top:-5px;width:8px;height:22px;border-radius:4px;background:#fff;left:14%;transition:.55s}
+.person{position:absolute;left:50%;top:94px;transform:translateX(-50%);width:190px;height:206px}
+.phead{position:absolute;left:70px;top:0;width:54px;height:54px;border-radius:50%;background:#ffd3b6}
+.pbody{position:absolute;left:46px;top:48px;width:102px;height:92px;border-radius:24px;background:linear-gradient(180deg,#fff,#d8f1ff)}
+.arm{position:absolute;width:62px;height:16px;border-radius:12px;background:#ffd3b6;top:76px}
+.arm.left{left:4px;transform:rotate(18deg)}.arm.right{right:4px;transform:rotate(-18deg)}
+.leg{position:absolute;width:18px;height:74px;border-radius:14px;background:#5ab7ff;top:132px}
+.leg.left{left:72px}.leg.right{left:100px}
+.spot{position:absolute;width:18px;height:18px;border-radius:50%;background:#ff3b61;box-shadow:0 0 0 8px rgba(255,59,97,.16);opacity:0;transition:.35s}
+.spot.show{opacity:1}
+.s1{left:24px;top:72px}.s2{left:130px;top:72px}.s3{left:96px;top:176px}.s4{left:54px;top:176px}
+.bubbleZone{position:absolute;left:50%;top:72px;transform:translateX(-50%);width:220px;height:160px;pointer-events:none}
+.bub{position:absolute;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.85);opacity:0}
+.bub.go{animation:foam 1s ease forwards}
+@keyframes foam{0%{opacity:0;transform:translateY(10px) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translateY(-42px) scale(1.15)}}
+.toolWrap{position:absolute;left:14px;right:14px;top:50px;bottom:16px;display:flex;flex-direction:column;gap:10px}
+.toolBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:62px;padding:10px;text-align:left;font-weight:900}
+.toolBtn.active{outline:3px solid var(--gold)}
+.toolBtn small{display:block;color:var(--muted);font-weight:700;margin-top:4px}
+.goodBox,.badBox{padding:10px;border-radius:16px;font-size:.86rem;line-height:1.45}
+.goodBox{background:rgba(102,242,163,.14);border:1px solid rgba(102,242,163,.26)}
+.badBox{background:rgba(255,125,134,.14);border:1px solid rgba(255,125,134,.24)}
+.missionList{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.missionBtn{min-height:74px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px;text-align:left}
+.missionBtn.done{outline:3px solid var(--green)}.missionBtn.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:84px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.5}
+.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}th{background:rgba(255,255,255,.10)}td:first-child{text-align:left}
+.badgeTag{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}.pass{background:#66f2a333}.fail{background:#ff7d8633}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.headRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}.info b{display:block;color:var(--gold);margin-bottom:4px}
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}.msg.bot{background:rgba(70,232,255,.12);border:1px solid rgba(70,232,255,.18)}.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.cert{display:none;margin-top:10px;padding:16px}.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+@media(max-width:980px){.grid{grid-template-columns:1fr;gap:12px}.lab{min-height:1080px}.scene{top:176px}}
+@media(max-width:760px){.app{padding:8px 8px 98px}.top{padding:10px}.top .btn:not(.gold):not(#musicBtn){display:none}.hero{padding:12px}.dr{top:78px}.speech{left:108px;top:82px;font-size:.82rem}.lab{min-height:1100px}.scene{top:178px}.missionList{grid-template-columns:repeat(2,1fr)}.infoGrid{grid-template-columns:1fr}.bottomBar button{font-size:.74rem}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand"><div class="logo">🩺</div><div><h1>First Aid Neutralisation Lab 3D</h1><p>Class 7 • Developed by Dr AI Academy</p></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="UI.openLearn()">Learn</button><button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button><button class="btn gold" onclick="UI.student()">Name</button></div>
+  </div>
+
+  <div class="hero card">
+    <h2>Use neutralisation to solve real-life first aid situations.</h2>
+    <p>This lab shows how acid-base science helps in ant bite relief, bee sting care, wasp sting care and indigestion treatment. Students identify the problem and choose the best relief action.</p>
+  </div>
+
+  <div class="status"><div class="pill" id="stagePill">Mission 1</div><div class="track"><div class="fill" id="fill"></div></div><div class="pill" id="scorePill">Score: 0</div><div class="pill" id="donePill">0/4</div></div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Neutralisation Rescue</div>
+    <div class="missionText" id="missionText">Read the case, choose the correct relief action, and make the patient comfortable.</div>
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and start the first first-aid mission.</div>
+
+    <div class="scene">
+      <div class="grid">
+        <div class="station">
+          <div class="stationTitle">Case Report</div>
+          <div class="report">
+            <div>
+              <div class="reportEmoji" id="reportEmoji">🐜</div>
+              <div class="reportName" id="reportName">Ant Bite Relief</div>
+              <div class="reportFact" id="reportFact">An ant bite has injected formic acid into the skin and caused irritation.</div>
+            </div>
+            <div class="hint" id="hint">Need: mild base to neutralise acid</div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">3D Relief View</div>
+          <div class="clinic">
+            <div class="meter"><b>Relief Meter</b><div class="meterBar"><div class="needle" id="needle"></div></div><span id="meterText">Irritation High</span></div>
+            <div class="badge" id="badge">🐜 Ant Bite</div>
+            <div class="person">
+              <div class="phead"></div><div class="pbody"></div>
+              <div class="arm left"></div><div class="arm right"></div>
+              <div class="leg left"></div><div class="leg right"></div>
+              <div class="spot s1" id="spot1"></div>
+              <div class="spot s2" id="spot2"></div>
+              <div class="spot s3" id="spot3"></div>
+              <div class="spot s4" id="spot4"></div>
+            </div>
+            <div class="bubbleZone" id="bubbleZone"></div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Relief Shelf</div>
+          <div class="toolWrap" id="toolWrap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="missionList" id="missionList"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Select the best relief action and click Apply Relief.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard"><div class="tableWrap"><table><thead><tr><th>Mission</th><th>Best Relief</th><th>Status</th></tr></thead><tbody id="tableBody"></tbody></table></div></div>
+
+  <div class="cert card" id="certificate"><div class="certInner"><div style="font-size:52px">🩺📜🏆</div><h2>Certificate of Completion</h2><p>This certifies that</p><div class="certName" id="certName">Student Name</div><p>successfully completed <b>First Aid Neutralisation Lab 3D</b>.</p><p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p><button class="btn gold" onclick="window.print()">Print / Save Certificate</button></div></div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar"><button onclick="Lab.applyRelief()">Apply<br>Relief</button><button onclick="Lab.nextMission()">Next<br>Mission</button><button onclick="Lab.showResult()">Show<br>Result</button><button onclick="UI.toggleTable()">Show<br>Table</button><button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button></div>
+
+<div class="modalOverlay" id="modal"><div class="modal"><div class="headRow"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div><div class="infoGrid">
+<div class="info"><b>Ant or bee sting</b>Ant and bee stings may introduce acidic substances. Mild bases like baking soda or calamine can help.</div>
+<div class="info"><b>Wasp sting</b>Wasp sting is generally basic, so mild acids like vinegar or lemon juice may help.</div>
+<div class="info"><b>Indigestion</b>Extra acid in the stomach can be relieved by antacids such as milk of magnesia.</div>
+<div class="info"><b>Real-life chemistry</b>Neutralisation is not only theory. It helps in daily life, health and first aid situations.</div>
+</div></div></div>
+
+<div class="modalOverlay" id="studentModal"><div class="modal" style="width:min(94vw,520px)"><div class="headRow"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div><div class="info"><b>Enter your name</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px"><button class="btn gold" onclick="Lab.setStudent()">Save</button></div></div></div></div>
+
+<div class="chat" id="chat"><div class="headRow"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div><div class="msgs" id="msgs"><div class="msg bot">Hi! I am Dr AI. Ask me about ant bite, bee sting, wasp sting, indigestion, antacid, baking soda, vinegar or neutralisation.</div></div><div class="chatInput"><input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()"><button onclick="DrAI.ask()">Send</button></div></div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey&&['u','s','c','x','a','p'].includes(k))e.preventDefault();
+  if(k==='f12')e.preventDefault();
+});
+
+const MISSIONS = [
+  {
+    id:'ant',
+    emoji:'🐜',
+    name:'Ant Bite Relief',
+    fact:'An ant bite has injected formic acid into the skin and caused irritation.',
+    hint:'Need: mild base to neutralise acid',
+    badge:'🐜 Ant Bite',
+    needle:'14%',
+    correct:'Baking Soda Paste',
+    spots:['spot1'],
+    options:[
+      {name:'Baking Soda Paste', good:true, explain:'Correct! Baking soda is a mild base and helps neutralise the acidic sting.'},
+      {name:'Vinegar', good:false, explain:'Not correct. Vinegar is acidic.'},
+      {name:'Lemon Juice', good:false, explain:'Not correct. Lemon juice is acidic.'}
+    ]
+  },
+  {
+    id:'bee',
+    emoji:'🐝',
+    name:'Bee Sting Care',
+    fact:'A bee sting has caused pain and irritation. The sting is acidic in nature.',
+    hint:'Need: mild base for relief',
+    badge:'🐝 Bee Sting',
+    needle:'18%',
+    correct:'Calamine / Baking Soda',
+    spots:['spot2'],
+    options:[
+      {name:'Calamine / Baking Soda', good:true, explain:'Correct! A mild base like calamine or baking soda may help against an acidic sting.'},
+      {name:'Orange Juice', good:false, explain:'Not correct. Orange juice is acidic.'},
+      {name:'Tamarind Water', good:false, explain:'Not correct. Tamarind water is acidic.'}
+    ]
+  },
+  {
+    id:'wasp',
+    emoji:'🪰',
+    name:'Wasp Sting Care',
+    fact:'A wasp sting is basic in nature, so a mild acidic treatment is needed.',
+    hint:'Need: mild acid to neutralise base',
+    badge:'🪰 Wasp Sting',
+    needle:'18%',
+    correct:'Vinegar',
+    spots:['spot3'],
+    options:[
+      {name:'Vinegar', good:true, explain:'Correct! Vinegar is mildly acidic and may help neutralise a basic wasp sting.'},
+      {name:'Baking Soda', good:false, explain:'Not correct. Baking soda is basic.'},
+      {name:'Milk of Magnesia', good:false, explain:'Not correct. Milk of magnesia is a base.'}
+    ]
+  },
+  {
+    id:'indigestion',
+    emoji:'🤢',
+    name:'Indigestion Relief',
+    fact:'Extra acid in the stomach is causing indigestion and discomfort.',
+    hint:'Need: antacid to reduce excess stomach acid',
+    badge:'🤢 Indigestion',
+    needle:'12%',
+    correct:'Milk of Magnesia',
+    spots:['spot4'],
+    options:[
+      {name:'Milk of Magnesia', good:true, explain:'Correct! Milk of magnesia is an antacid and helps neutralise excess acid in the stomach.'},
+      {name:'Vinegar', good:false, explain:'Not correct. Vinegar is acidic.'},
+      {name:'Lemon Soda Drink', good:false, explain:'Not correct. This is not the correct antacid treatment.'}
+    ]
+  }
+];
+
+let G = {student:'Student', current:0, selected:null, score:0, results:{}};
+const $ = id => document.getElementById(id);
+
+function initResults(){ MISSIONS.forEach(m => G.results[m.id] = false); }
+function doneCount(){ return Object.values(G.results).filter(Boolean).length; }
+function currentMission(){ return MISSIONS[G.current]; }
+
+function say(text){
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-IN';
+    u.rate = 0.97;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function feedback(html, voice){
+  $('feedback').innerHTML = html;
+  $('speech').textContent = html.replace(/<[^>]+>/g,'');
+  if(voice) say(voice);
+}
+function showSpots(activeIds, clearAll){
+  ['spot1','spot2','spot3','spot4'].forEach(id => $(id).classList.remove('show'));
+  if(clearAll) return;
+  activeIds.forEach(id => $(id).classList.add('show'));
+}
+function bubbleBurst(){
+  const zone = $('bubbleZone');
+  zone.innerHTML = '';
+  for(let i=0;i<12;i++){
+    const d = document.createElement('div');
+    d.className = 'bub go';
+    d.style.left = (10 + Math.random()*190) + 'px';
+    d.style.top = (40 + Math.random()*100) + 'px';
+    zone.appendChild(d);
+    setTimeout(()=>d.remove(), 1000);
+  }
+}
+function setRelief(success){
+  $('meterText').textContent = success ? 'Relief Success' : 'Irritation High';
+  $('needle').style.left = success ? '70%' : currentMission().needle;
+  showSpots(currentMission().spots, success);
+  if(success) bubbleBurst();
+}
+function renderMissionButtons(){
+  $('missionList').innerHTML = MISSIONS.map((m, i) =>
+    `<button class="missionBtn ${i===G.current?'active':''} ${G.results[m.id]?'done':''}" onclick="Lab.gotoMission(${i})">${m.emoji} ${m.name}</button>`
+  ).join('');
+}
+function renderTable(){
+  $('tableBody').innerHTML = MISSIONS.map(m =>
+    `<tr><td>${m.name}</td><td>${m.correct}</td><td>${G.results[m.id] ? '<span class="badgeTag pass">Completed</span>' : '<span class="badgeTag fail">Pending</span>'}</td></tr>`
+  ).join('');
+}
+function renderTools(){
+  const m = currentMission();
+  $('toolWrap').innerHTML = m.options.map(o =>
+    `<button class="toolBtn ${G.selected===o.name?'active':''}" onclick="Lab.selectTool('${o.name.replace(/'/g,"&#39;")}')">${o.name}<small>${o.good ? 'Best relief option' : 'Think carefully before choosing'}</small></button>`
+  ).join('') + `<div class="goodBox"><b>Goal:</b> Choose the correct neutralising relief.</div><div class="badBox"><b>Hint:</b> ${m.hint}</div>`;
+}
+function renderScene(){
+  const m = currentMission();
+  $('reportEmoji').textContent = m.emoji;
+  $('reportName').textContent = m.name;
+  $('reportFact').textContent = m.fact;
+  $('hint').textContent = m.hint;
+  $('badge').textContent = m.badge;
+  setRelief(G.results[m.id]);
+}
+function update(){
+  const m = currentMission();
+  $('stagePill').textContent = 'Mission ' + (G.current + 1);
+  $('scorePill').textContent = 'Score: ' + G.score;
+  $('donePill').textContent = doneCount() + '/4';
+  $('missionTitle').textContent = m.name;
+  $('missionText').textContent = 'Read the case, choose the correct relief action, and make the patient comfortable.';
+  $('fill').style.width = ((doneCount() / MISSIONS.length) * 100) + '%';
+  renderMissionButtons();
+  renderTable();
+  renderTools();
+  renderScene();
+}
+
+function selectTool(name){
+  Music.ensureStarted();
+  G.selected = name;
+  renderTools();
+  feedback(`<b>Selected:</b> ${name}. Now click Apply Relief.`, `${name} selected.`);
+}
+function applyRelief(){
+  if(!G.selected){
+    feedback('<b>Select a relief action first.</b>', 'Select a relief action first.');
+    return;
+  }
+  const m = currentMission();
+  const chosen = m.options.find(o => o.name === G.selected);
+  if(chosen.good){
+    if(!G.results[m.id]) G.score += 25;
+    G.results[m.id] = true;
+    setRelief(true);
+    feedback(`<b>Correct relief!</b> ${chosen.explain}`, 'Correct relief.');
+  }else{
+    setRelief(false);
+    feedback(`<b>Wrong action.</b> ${chosen.explain}`, 'Wrong action. Try again.');
+  }
+  update();
+  if(doneCount() === MISSIONS.length){
+    feedback(`<b>Excellent ${G.student}!</b> All first-aid missions complete. Click Show Result for certificate.`, `Excellent ${G.student}.`);
+  }
+}
+function nextMission(){
+  if(G.current < MISSIONS.length - 1){
+    G.current++;
+    G.selected = null;
+    update();
+    feedback('<b>Next mission loaded.</b> Read the case and choose the relief action.', 'Next mission loaded.');
+  } else {
+    feedback('<b>All missions visited.</b> Click Show Result after completing all missions.', 'All missions visited.');
+  }
+}
+function gotoMission(i){
+  G.current = i;
+  G.selected = null;
+  update();
+  feedback('<b>Mission changed.</b> Choose the correct relief action.', 'Mission changed.');
+}
+function showResult(){
+  if(doneCount() === MISSIONS.length){
+    $('certificate').style.display = 'block';
+    $('certName').textContent = G.student;
+    $('certificate').scrollIntoView({behavior:'smooth'});
+  } else {
+    feedback('<b>Complete all four missions first.</b>', 'Complete all four missions first.');
+  }
+}
+function setStudent(){
+  G.student = ($('studentInput').value || 'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start with the first first-aid mission.`, `Welcome ${G.student}.`);
+}
+
+function openLearn(){ $('modal').classList.add('active'); }
+function closeLearn(){ $('modal').classList.remove('active'); }
+function openStudent(){ $('studentInput').value = G.student === 'Student' ? '' : G.student; $('studentModal').classList.add('active'); }
+function closeStudent(){ $('studentModal').classList.remove('active'); }
+function toggleTable(){ $('tableCard').classList.toggle('show'); }
+
+function toggleChat(){ $('chat').classList.toggle('active'); }
+function addMsg(text, who){
+  const d = document.createElement('div');
+  d.className = 'msg ' + who;
+  d.innerHTML = text;
+  $('msgs').appendChild(d);
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+}
+function answer(q){
+  q = q.toLowerCase();
+  if(q.includes('ant')) return 'Ant bite contains formic acid, so a mild base like baking soda can help.';
+  if(q.includes('bee')) return 'Bee sting is acidic in nature, so mild basic relief like calamine or baking soda may help.';
+  if(q.includes('wasp')) return 'Wasp sting is basic, so a mild acid such as vinegar may help.';
+  if(q.includes('indigestion') || q.includes('antacid')) return 'Indigestion due to excess acid can be relieved by antacids like milk of magnesia.';
+  if(q.includes('neutralisation')) return 'Neutralisation is the reaction between an acid and a base to reduce their effect.';
+  return 'Ask me about ant bite, bee sting, wasp sting, indigestion, antacid or neutralisation.';
+}
+function ask(){
+  const q = $('chatInput').value.trim();
+  if(!q) return;
+  addMsg(q, 'user');
+  $('chatInput').value = '';
+  setTimeout(()=>addMsg(answer(q), 'bot'), 220);
+}
+
+const Music = {
+  ctx:null, master:null, on:false, timer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.05;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  ensureStarted(){ this.init(); if(!this.on) this.start(); },
+  tone(f,d,type='sine',vol=0.04,when=0){
+    if(!this.ctx || !this.master) return;
+    const t = this.ctx.currentTime + when;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + d + 0.05);
+  },
+  cycle(){
+    this.tone(136.1, 2.8, 'sine', 0.045);
+    this.tone(272.2, 2.1, 'triangle', 0.018, 0.15);
+    this.tone(204.15, 1.7, 'sine', 0.015, 0.55);
+  },
+  start(){
+    this.init();
+    if(this.on) return;
+    this.on = true;
+    $('musicBtn').textContent = '⏸ OM';
+    this.cycle();
+    this.timer = setInterval(()=>this.cycle(), 2900);
+  },
+  stop(){
+    this.on = false;
+    clearInterval(this.timer);
+    this.timer = null;
+    $('musicBtn').textContent = '▶ OM';
+  },
+  toggle(){ this.on ? this.stop() : this.start(); }
+};
+
+window.Lab = {selectTool, applyRelief, nextMission, gotoMission, showResult, setStudent};
+window.UI = {openLearn, close:closeLearn, student:openStudent, closeStudent, toggleTable};
+window.DrAI = {toggle:toggleChat, ask};
+window.Music = Music;
+
+initResults();
+update();
+setTimeout(openStudent, 250);
+})();
+</script>
+</body>
+</html>

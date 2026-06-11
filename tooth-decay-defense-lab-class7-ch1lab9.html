@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tooth Decay Defense Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#101f37; --bg2:#073d50; --gold:#ffd84d; --cyan:#46e8ff; --green:#67f2a3; --red:#ff7d86; --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dce9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.16),transparent 25%),
+    radial-gradient(circle at 88% 8%,rgba(70,232,255,.18),transparent 28%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1120px;margin:0 auto;padding:10px 10px 100px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(70,232,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.08rem,5vw,1.52rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.15rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.35s}
+.lab{position:relative;min-height:660px;overflow:hidden;padding:14px;border-radius:24px;background:
+  radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+  linear-gradient(180deg,#143062 0%,#0b173a 42%,#3f2740 42%,#5d3552 100%);
+  border:1px solid var(--line);
+}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.1rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px;perspective:1000px}
+.grid{display:grid;grid-template-columns:1fr 1.2fr .95fr;gap:14px;position:absolute;left:0;right:0;bottom:16px;top:16px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+.problemCard{position:absolute;left:14px;right:14px;top:48px;bottom:16px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:14px;display:flex;flex-direction:column;justify-content:space-between}
+.problemEmoji{font-size:4rem;line-height:1}
+.problemName{font-size:1.08rem;font-weight:900;margin-top:8px}
+.problemFact{font-size:.92rem;line-height:1.45;color:var(--muted)}
+.problemHint{display:inline-block;padding:8px 10px;border-radius:12px;background:rgba(255,216,77,.16);border:1px solid rgba(255,216,77,.24);font-size:.84rem}
+.mouthArea{position:absolute;left:18px;right:18px;top:56px;bottom:18px;border-radius:24px;background:linear-gradient(180deg,#214f72 0%,#1c3656 26%,#a54b73 26%,#db7394 100%);border:1px solid rgba(255,255,255,.12);overflow:hidden}
+.phMeter{position:absolute;left:16px;top:16px;width:138px;padding:10px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid var(--line);text-align:center}
+.meterBar{height:12px;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));margin:8px 0;position:relative}
+.meterNeedle{position:absolute;top:-5px;width:8px;height:22px;border-radius:4px;background:#fff;left:14%;transition:.55s}
+.foodBadge{position:absolute;right:16px;top:18px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.12);border:1px solid var(--line);font-weight:900}
+.faceTop{position:absolute;left:50%;top:40px;transform:translateX(-50%);width:220px;height:70px;border-radius:0 0 120px 120px;background:linear-gradient(180deg,#f9a6bf,#dc7296)}
+.faceBottom{position:absolute;left:50%;bottom:38px;transform:translateX(-50%);width:220px;height:78px;border-radius:120px 120px 0 0;background:linear-gradient(180deg,#dc7296,#f9a6bf)}
+.gumTop,.gumBottom{position:absolute;left:50%;transform:translateX(-50%);width:210px;height:24px;background:#ffb1c7;border-radius:30px}
+.gumTop{top:104px}.gumBottom{bottom:104px}
+.teethRow{position:absolute;left:50%;transform:translateX(-50%);width:220px;display:flex;justify-content:space-between}
+.teethRow.top{top:120px}.teethRow.bottom{bottom:120px}
+.tooth{width:22px;height:36px;background:linear-gradient(180deg,#fff,#f6f7ff);border-radius:8px 8px 10px 10px;box-shadow:0 4px 8px rgba(0,0,0,.12);transition:.45s}
+.tooth.decay{background:linear-gradient(180deg,#fff4ca,#be7a34)}
+.tooth.clean{background:linear-gradient(180deg,#ffffff,#ecfbff);box-shadow:0 0 14px rgba(255,255,255,.32)}
+.foam{position:absolute;left:50%;top:156px;transform:translateX(-50%);width:220px;height:96px;pointer-events:none}
+.bub{position:absolute;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.8);opacity:0}
+.bub.go{animation:foam 1s ease forwards}
+@keyframes foam{0%{opacity:0;transform:translateY(10px) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px) scale(1.15)}}
+.bacteria{position:absolute;font-size:1.6rem;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.b1{left:58px;top:210px}.b2{left:122px;top:250px;animation-delay:.5s}.b3{right:78px;top:216px;animation-delay:1s}
+.bacteria.hidden{opacity:.18}
+.toolWrap{position:absolute;left:14px;right:14px;top:50px;bottom:16px;display:flex;flex-direction:column;gap:10px}
+.toolBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:62px;padding:10px;text-align:left;font-weight:900}
+.toolBtn.active{outline:3px solid var(--gold)}
+.toolBtn small{display:block;color:var(--muted);font-weight:700;margin-top:4px}
+.goodBox,.badBox{padding:10px;border-radius:16px;font-size:.86rem;line-height:1.45}
+.goodBox{background:rgba(102,242,163,.14);border:1px solid rgba(102,242,163,.26)}
+.badBox{background:rgba(255,125,134,.14);border:1px solid rgba(255,125,134,.24)}
+.missionList{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.missionBtn{min-height:74px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px;text-align:left}
+.missionBtn.done{outline:3px solid var(--green)}.missionBtn.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:84px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.5}
+.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}
+th{background:rgba(255,255,255,.10)}td:first-child{text-align:left}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}
+.pass{background:#66f2a333}.fail{background:#ff7d8633}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}
+.info b{display:block;color:var(--gold);margin-bottom:4px}
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}
+.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}
+.msg.bot{background:rgba(70,232,255,.12);border:1px solid rgba(70,232,255,.18)}
+.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}
+.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.cert{display:none;margin-top:10px;padding:16px}
+.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+@media(max-width:980px){
+  .grid{grid-template-columns:1fr;gap:12px}
+  .lab{min-height:1080px}
+  .scene{top:176px}
+}
+@media(max-width:760px){
+  .app{padding:8px 8px 98px}
+  .top{padding:10px}
+  .top .btn:not(.gold):not(#musicBtn){display:none}
+  .hero{padding:12px}
+  .dr{top:78px}
+  .speech{left:108px;top:82px;font-size:.82rem}
+  .lab{min-height:1100px}
+  .scene{top:178px}
+  .missionList{grid-template-columns:repeat(2,1fr)}
+  .infoGrid{grid-template-columns:1fr}
+  .bottomBar button{font-size:.74rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand">
+      <div class="logo">🦷</div>
+      <div>
+        <h1>Tooth Decay Defense Lab 3D</h1>
+        <p>Class 7 • Developed by Dr AI Academy</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="UI.openLearn()">Learn</button>
+      <button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button>
+      <button class="btn gold" onclick="UI.student()">Name</button>
+    </div>
+  </div>
+
+  <div class="hero card">
+    <h2>Protect teeth using acid-base science and daily healthy habits.</h2>
+    <p>This interactive 3D lab shows how sugary food and bacteria can make the mouth acidic, which harms teeth. Students choose the right action to raise mouth pH and protect teeth from decay.</p>
+  </div>
+
+  <div class="status">
+    <div class="pill" id="stagePill">Mission 1</div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="pill" id="scorePill">Score: 0</div>
+    <div class="pill" id="donePill">0/4</div>
+  </div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Protect the teeth</div>
+    <div class="missionText" id="missionText">Read the situation, choose the best action, and restore a safe mouth pH.</div>
+
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and start the first tooth defense mission.</div>
+
+    <div class="scene">
+      <div class="grid">
+        <div class="station">
+          <div class="stationTitle">Mission Report</div>
+          <div class="problemCard">
+            <div>
+              <div class="problemEmoji" id="problemEmoji">🍬</div>
+              <div class="problemName" id="problemName">Sticky Sweet Attack</div>
+              <div class="problemFact" id="problemFact">After eating lots of sweets, mouth bacteria produce acid and the teeth become unsafe.</div>
+            </div>
+            <div class="problemHint" id="problemHint">Need: action that reduces acidity and protects teeth</div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">3D Mouth Defense View</div>
+          <div class="mouthArea">
+            <div class="phMeter">
+              <b>Mouth pH Meter</b>
+              <div class="meterBar"><div class="meterNeedle" id="needle"></div></div>
+              <span id="meterText">Acidic - Unsafe</span>
+            </div>
+            <div class="foodBadge" id="foodBadge">🍬 Sweet Zone</div>
+
+            <div class="faceTop"></div>
+            <div class="faceBottom"></div>
+            <div class="gumTop"></div>
+            <div class="gumBottom"></div>
+
+            <div class="teethRow top" id="topTeeth"></div>
+            <div class="teethRow bottom" id="bottomTeeth"></div>
+
+            <div class="foam" id="foam"></div>
+
+            <div class="bacteria b1" id="b1">🦠</div>
+            <div class="bacteria b2" id="b2">🦠</div>
+            <div class="bacteria b3" id="b3">🦠</div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Action Shelf</div>
+          <div class="toolWrap" id="toolWrap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="missionList" id="missionList"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Select the best action and click Defend Teeth.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard">
+    <div class="tableWrap">
+      <table>
+        <thead><tr><th>Mission</th><th>Best Action</th><th>Status</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="cert card" id="certificate">
+    <div class="certInner">
+      <div style="font-size:52px">🦷📜🏆</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="certName" id="certName">Student Name</div>
+      <p>successfully completed <b>Tooth Decay Defense Lab 3D</b>.</p>
+      <p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p>
+      <button class="btn gold" onclick="window.print()">Print / Save Certificate</button>
+    </div>
+  </div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar">
+  <button onclick="Lab.defend()">Defend<br>Teeth</button>
+  <button onclick="Lab.nextMission()">Next<br>Mission</button>
+  <button onclick="Lab.showResult()">Show<br>Result</button>
+  <button onclick="UI.toggleTable()">Show<br>Table</button>
+  <button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button>
+</div>
+
+<div class="modalOverlay" id="modal">
+  <div class="modal">
+    <div class="head"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div>
+    <div class="infoGrid">
+      <div class="info"><b>Tooth decay and acid</b>Bacteria act on sugar and form acids in the mouth. These acids can damage teeth.</div>
+      <div class="info"><b>Why toothpaste helps</b>Toothpaste is generally basic. It helps reduce acidity in the mouth and protects teeth.</div>
+      <div class="info"><b>Healthy habits</b>Brushing, rinsing and reducing too many sugary snacks help maintain oral hygiene.</div>
+      <div class="info"><b>Real-life science</b>This connects the chapter concept of acids and bases with everyday life and health.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modalOverlay" id="studentModal">
+  <div class="modal" style="width:min(94vw,520px)">
+    <div class="head"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div>
+    <div class="info">
+      <b>Enter your name</b>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px">
+        <button class="btn gold" onclick="Lab.setStudent()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat" id="chat">
+  <div class="head"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div>
+  <div class="msgs" id="msgs">
+    <div class="msg bot">Hi! I am Dr AI. Ask me about tooth decay, acids in the mouth, toothpaste, bacteria, sugar or oral hygiene.</div>
+  </div>
+  <div class="chatInput">
+    <input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()">
+    <button onclick="DrAI.ask()">Send</button>
+  </div>
+</div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey && ['u','s','c','x','a','p'].includes(k)) e.preventDefault();
+  if(k==='f12') e.preventDefault();
+});
+
+const MISSIONS = [
+  {
+    id:'sweet',
+    emoji:'🍬',
+    name:'Sticky Sweet Attack',
+    fact:'After eating lots of sweets, mouth bacteria produce acid and the teeth become unsafe.',
+    hint:'Need: action that reduces acidity and protects teeth',
+    badge:'🍬 Sweet Zone',
+    needle:'14%',
+    meter:'Acidic - Unsafe',
+    correct:'Brush with Toothpaste',
+    options:[
+      {name:'Brush with Toothpaste', good:true, explain:'Correct! Toothpaste helps reduce acidity and protects teeth.'},
+      {name:'Eat More Candy', good:false, explain:'Not correct. More candy gives bacteria more sugar to produce acid.'},
+      {name:'Ignore It', good:false, explain:'Not correct. Leaving acid in the mouth can harm teeth.'}
+    ]
+  },
+  {
+    id:'drink',
+    emoji:'🥤',
+    name:'Cold Drink Splash',
+    fact:'After a fizzy cold drink, the mouth becomes more acidic. A quick helpful action is needed.',
+    hint:'Need: action that helps reduce acidity',
+    badge:'🥤 Drink Zone',
+    needle:'24%',
+    meter:'Acidic - Unsafe',
+    correct:'Rinse with Water',
+    options:[
+      {name:'Rinse with Water', good:true, explain:'Correct! Rinsing helps remove some acid and sugar from the mouth.'},
+      {name:'Take Another Cold Drink', good:false, explain:'Not correct. This adds even more acidic load.'},
+      {name:'Eat Sticky Toffee', good:false, explain:'Not correct. Sticky sugary foods can worsen the problem.'}
+    ]
+  },
+  {
+    id:'night',
+    emoji:'🌙',
+    name:'Night-time Rescue',
+    fact:'A student is going to sleep after sweets. The mouth is acidic and tooth damage risk is high.',
+    hint:'Need: best night protection',
+    badge:'🌙 Night Care',
+    needle:'18%',
+    meter:'Acidic - Unsafe',
+    correct:'Brush Before Sleep',
+    options:[
+      {name:'Brush Before Sleep', good:true, explain:'Correct! Brushing before sleep is very important for tooth protection.'},
+      {name:'Sleep Without Brushing', good:false, explain:'Not correct. Acid and food particles can stay on the teeth all night.'},
+      {name:'Have More Biscuits', good:false, explain:'Not correct. More sugary food raises the decay risk.'}
+    ]
+  },
+  {
+    id:'healthy',
+    emoji:'🍎',
+    name:'Healthy Habit Mission',
+    fact:'The student wants to keep teeth safe every day and reduce acid attack.',
+    hint:'Need: a preventive healthy habit',
+    badge:'🍎 Health Zone',
+    needle:'38%',
+    meter:'Needs Better Habit',
+    correct:'Limit Sugary Snacks',
+    options:[
+      {name:'Limit Sugary Snacks', good:true, explain:'Correct! Less sugary snacking means less acid production by bacteria.'},
+      {name:'Keep Eating Candy All Day', good:false, explain:'Not correct. Frequent sugary snacks keep the mouth acidic.'},
+      {name:'Never Clean the Mouth', good:false, explain:'Not correct. Good oral hygiene is important.'}
+    ]
+  }
+];
+
+let G = {student:'Student', current:0, selected:null, score:0, results:{}};
+const $ = id => document.getElementById(id);
+
+function initResults(){ MISSIONS.forEach(m => G.results[m.id] = false); }
+function doneCount(){ return Object.values(G.results).filter(Boolean).length; }
+function say(text){
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-IN';
+    u.rate = .97;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function feedback(html, voice){
+  $('feedback').innerHTML = html;
+  $('speech').innerHTML = html.replace(/<[^>]+>/g,'');
+  if(voice) say(voice);
+}
+function mission(){ return MISSIONS[G.current]; }
+
+function renderTeeth(clean=false){
+  const cls = clean ? 'tooth clean' : 'tooth decay';
+  const teeth = Array.from({length:8}).map(()=>`<div class="${cls}"></div>`).join('');
+  $('topTeeth').innerHTML = teeth;
+  $('bottomTeeth').innerHTML = teeth;
+}
+function foamAnim(){
+  $('foam').innerHTML = '';
+  for(let i=0;i<12;i++){
+    const d = document.createElement('div');
+    d.className = 'bub go';
+    d.style.left = (10 + Math.random()*180) + 'px';
+    d.style.top = (40 + Math.random()*40) + 'px';
+    $('foam').appendChild(d);
+    setTimeout(()=>d.remove(), 1000);
+  }
+}
+function setBacteriaHidden(hidden){
+  ['b1','b2','b3'].forEach(id => $(id).classList.toggle('hidden', hidden));
+}
+function renderMissionList(){
+  $('missionList').innerHTML = MISSIONS.map((m,i)=>`
+    <button class="missionBtn ${i===G.current?'active':''} ${G.results[m.id]?'done':''}" onclick="Lab.gotoMission(${i})">
+      ${m.emoji} ${m.name}
+    </button>
+  `).join('');
+}
+function renderTable(){
+  $('tableBody').innerHTML = MISSIONS.map(m=>`
+    <tr>
+      <td>${m.name}</td>
+      <td>${m.correct}</td>
+      <td>${G.results[m.id] ? '<span class="badge pass">Completed</span>' : '<span class="badge fail">Pending</span>'}</td>
+    </tr>
+  `).join('');
+}
+function renderTools(){
+  const m = mission();
+  $('toolWrap').innerHTML = m.options.map(opt=>`
+    <button class="toolBtn ${G.selected===opt.name?'active':''}" onclick="Lab.selectTool('${opt.name.replace(/'/g,"\\'")}')">
+      ${opt.name}
+      <small>${opt.good ? 'Best defense option' : 'Think carefully before choosing'}</small>
+    </button>
+  `).join('') + `
+    <div class="goodBox"><b>Goal:</b> Make the mouth safer for teeth.</div>
+    <div class="badBox"><b>Hint:</b> ${m.hint}</div>
+  `;
+}
+function renderScene(){
+  const m = mission();
+  $('problemEmoji').textContent = m.emoji;
+  $('problemName').textContent = m.name;
+  $('problemFact').textContent = m.fact;
+  $('problemHint').textContent = m.hint;
+  $('foodBadge').textContent = m.badge;
+  $('needle').style.left = G.results[m.id] ? '72%' : m.needle;
+  $('meterText').textContent = G.results[m.id] ? 'Safe - Teeth Protected' : m.meter;
+  renderTeeth(G.results[m.id]);
+  setBacteriaHidden(G.results[m.id]);
+}
+function update(){
+  const m = mission();
+  $('stagePill').textContent = 'Mission ' + (G.current + 1);
+  $('scorePill').textContent = 'Score: ' + G.score;
+  $('donePill').textContent = doneCount() + '/4';
+  $('missionTitle').textContent = m.name;
+  $('missionText').textContent = 'Read the situation, choose the best action, and restore a safe mouth pH.';
+  $('fill').style.width = ((doneCount() / MISSIONS.length) * 100) + '%';
+  renderMissionList();
+  renderTable();
+  renderTools();
+  renderScene();
+}
+function selectTool(name){
+  Music.ensureStarted();
+  G.selected = name;
+  renderTools();
+  feedback(`<b>Selected:</b> ${name}. Now click Defend Teeth.`, `${name} selected.`);
+}
+function defend(){
+  if(!G.selected){
+    feedback('<b>Select an action first.</b>', 'Select an action first.');
+    return;
+  }
+  const m = mission();
+  const chosen = m.options.find(o => o.name === G.selected);
+  if(chosen.good){
+    if(!G.results[m.id]) G.score += 25;
+    G.results[m.id] = true;
+    $('needle').style.left = '72%';
+    $('meterText').textContent = 'Safe - Teeth Protected';
+    renderTeeth(true);
+    setBacteriaHidden(true);
+    foamAnim();
+    feedback(`<b>Correct defense!</b> ${chosen.explain}`, 'Correct defense.');
+  }else{
+    renderTeeth(false);
+    setBacteriaHidden(false);
+    feedback(`<b>Wrong action.</b> ${chosen.explain}`, 'Wrong action. Try again.');
+  }
+  update();
+  if(doneCount() === MISSIONS.length){
+    feedback(`<b>Excellent ${G.student}!</b> All tooth defense missions are complete. Click Show Result for your certificate.`, `Excellent ${G.student}.`);
+  }
+}
+function nextMission(){
+  if(G.current < MISSIONS.length - 1){
+    G.current++;
+    G.selected = null;
+    update();
+    feedback('<b>Next mission loaded.</b> Read the situation and choose the best action.', 'Next mission loaded.');
+  }else{
+    feedback('<b>All missions visited.</b> Click Show Result after completing all missions.', 'All missions visited.');
+  }
+}
+function gotoMission(i){
+  G.current = i;
+  G.selected = null;
+  update();
+  feedback('<b>Mission changed.</b> Choose the correct action.', 'Mission changed.');
+}
+function showResult(){
+  if(doneCount() === MISSIONS.length){
+    $('certificate').style.display = 'block';
+    $('certName').textContent = G.student;
+    $('certificate').scrollIntoView({behavior:'smooth'});
+  }else{
+    feedback('<b>Complete all four missions first.</b>', 'Complete all four missions first.');
+  }
+}
+function setStudent(){
+  G.student = ($('studentInput').value || 'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start with the first tooth defense mission.`, `Welcome ${G.student}.`);
+}
+
+function openLearn(){ $('modal').classList.add('active'); }
+function close(){ $('modal').classList.remove('active'); }
+function student(){ $('studentInput').value = G.student==='Student' ? '' : G.student; $('studentModal').classList.add('active'); }
+function closeStudent(){ $('studentModal').classList.remove('active'); }
+function toggleTable(){ $('tableCard').classList.toggle('show'); }
+
+function toggleChat(){ $('chat').classList.toggle('active'); }
+function addMsg(text, who){
+  const d = document.createElement('div');
+  d.className = 'msg ' + who;
+  d.innerHTML = text;
+  $('msgs').appendChild(d);
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+}
+function answer(q){
+  q = q.toLowerCase();
+  if(q.includes('tooth') || q.includes('decay')) return 'Tooth decay happens when bacteria in the mouth act on sugar and produce acids that damage teeth.';
+  if(q.includes('toothpaste')) return 'Toothpaste is generally basic and helps reduce acidity in the mouth.';
+  if(q.includes('sugar') || q.includes('sweet')) return 'Frequent sugary food gives bacteria more chance to make acids.';
+  if(q.includes('brush') || q.includes('brushing')) return 'Brushing helps remove food particles, reduces acid effect and protects teeth.';
+  if(q.includes('rinse') || q.includes('water')) return 'Rinsing with water after acidic or sugary food can help reduce harmful effect in the mouth.';
+  return 'Ask me about tooth decay, acids in the mouth, toothpaste, bacteria, sugar or oral hygiene.';
+}
+function ask(){
+  const q = $('chatInput').value.trim();
+  if(!q) return;
+  addMsg(q, 'user');
+  $('chatInput').value = '';
+  setTimeout(()=>addMsg(answer(q), 'bot'), 220);
+}
+
+const Music = {
+  ctx:null, master:null, on:false, timer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.05;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  ensureStarted(){ this.init(); if(!this.on) this.start(); },
+  tone(f, d, type='sine', vol=0.04, when=0){
+    if(!this.ctx || !this.master) return;
+    const t = this.ctx.currentTime + when;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + d + 0.05);
+  },
+  cycle(){
+    this.tone(136.1, 2.8, 'sine', 0.045);
+    this.tone(272.2, 2.1, 'triangle', 0.018, 0.15);
+    this.tone(204.15, 1.7, 'sine', 0.015, 0.55);
+  },
+  start(){
+    this.init();
+    if(this.on) return;
+    this.on = true;
+    $('musicBtn').textContent = '⏸ OM';
+    this.cycle();
+    this.timer = setInterval(()=>this.cycle(), 2900);
+  },
+  stop(){
+    this.on = false;
+    clearInterval(this.timer);
+    this.timer = null;
+    $('musicBtn').textContent = '▶ OM';
+  },
+  toggle(){ this.on ? this.stop() : this.start(); }
+};
+
+window.Lab = {selectTool, defend, nextMission, gotoMission, showResult, setStudent};
+window.UI = {openLearn, close, student, closeStudent, toggleTable};
+window.DrAI = {toggle: toggleChat, ask};
+window.Music = Music;
+
+initResults();
+update();
+setTimeout(student, 250);
+})();
+</script>
+</body>
+</html>

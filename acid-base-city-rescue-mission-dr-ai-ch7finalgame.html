@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Acid Base City: Rescue Mission | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#0c1736; --bg2:#062f47; --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16);
+  --gold:#ffd84d; --cyan:#46e8ff; --green:#67f2a3; --red:#ff7d86; --purple:#b695ff;
+  --text:#ffffff; --muted:#d8e6ff; --dark:#08111f;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.16),transparent 22%),
+    radial-gradient(circle at 88% 8%,rgba(70,232,255,.16),transparent 28%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+  position:relative;
+}
+body::before{
+  content:"Dr AI Academy   Dr AI Academy   Dr AI Academy   Dr AI Academy   Dr AI Academy";
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  color:rgba(255,255,255,.035); font-weight:900; font-size:2.2rem;
+  display:flex; align-items:center; justify-content:center; transform:rotate(-24deg);
+}
+a{color:var(--gold);text-decoration:none}
+button,input{font-family:inherit}
+.app{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:10px 10px 110px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;box-shadow:0 20px 44px rgba(0,0,0,.28);backdrop-filter:blur(12px)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;position:sticky;top:6px;z-index:50;margin-bottom:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.25),rgba(70,232,255,.25));font-size:1.45rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.brand h1{margin:0;font-size:clamp(1.05rem,5vw,1.45rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{margin:3px 0 0;color:var(--muted);font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.headerBtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900;cursor:pointer}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.btn.cyan{background:linear-gradient(135deg,var(--cyan),#7fffd4);color:#061323;border:0}
+.hero{padding:16px;position:relative;overflow:hidden;margin-bottom:10px}
+.hero h2{margin:0 0 8px;font-size:clamp(1.45rem,7vw,2.45rem);line-height:1.03;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.96rem;max-width:860px}
+.hero .wm{position:absolute;right:14px;bottom:10px;font-size:1.15rem;font-weight:900;color:rgba(255,255,255,.08)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:10px}
+.stat{padding:12px;text-align:center}
+.stat b{display:block;font-size:1.25rem}
+.stat small{color:var(--muted)}
+.progressWrap{grid-column:span 2;display:flex;align-items:center;gap:10px}
+.track{flex:1;height:12px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.4s}
+.main{display:grid;grid-template-columns:380px 1fr;gap:12px}
+.side{padding:12px;position:relative;overflow:hidden}
+.sideTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.sideTitle h3,.panel h3{margin:0}
+.cityMap{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.zoneCard{position:relative;padding:14px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.07);min-height:108px;cursor:pointer;transition:.25s;overflow:hidden}
+.zoneCard:hover{transform:translateY(-2px)}
+.zoneCard.locked{opacity:.45;cursor:not-allowed;filter:grayscale(.25)}
+.zoneCard.active{outline:3px solid var(--gold)}
+.zoneCard.done{outline:3px solid var(--green)}
+.zoneIcon{font-size:1.6rem;margin-bottom:6px}
+.zoneName{font-weight:900;font-size:.95rem}
+.zoneMeta{font-size:.76rem;color:var(--muted);margin-top:4px;line-height:1.3}
+.zoneStars{position:absolute;right:10px;top:10px;font-size:.95rem}
+.zoneWave{position:absolute;left:-20px;right:-20px;bottom:-25px;height:60px;background:radial-gradient(circle at center,rgba(255,255,255,.08),transparent 65%);animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.panel{padding:14px;position:relative;overflow:hidden;min-height:760px}
+.panelTop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.badge{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);font-weight:900;font-size:.82rem}
+.storyBanner{margin-top:12px;padding:14px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+.dr{width:76px;min-width:76px;text-align:center;padding:8px;border-radius:18px;background:rgba(255,255,255,.10);border:1px solid var(--line)}
+.dr .face{font-size:1.9rem}
+.dr small{display:block;color:var(--muted)}
+.storyText{line-height:1.55;color:var(--muted);font-size:.95rem}
+.taskWrap{margin-top:12px;display:grid;gap:12px}
+.taskCard{padding:14px;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid var(--line);position:relative;overflow:hidden}
+.taskHead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.taskTitle{font-weight:900;font-size:1rem}
+.taskSub{color:var(--muted);font-size:.84rem}
+.scene{margin-top:10px;padding:14px;border-radius:22px;border:1px solid rgba(255,255,255,.12);min-height:230px;position:relative;overflow:hidden;background:
+linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));}
+.scene.city{background:
+radial-gradient(circle at 50% 16%,rgba(255,255,255,.12),transparent 20%),
+linear-gradient(180deg,#18386b 0%,#0e204c 48%,#3f2a62 48%,#472e67 100%)}
+.sceneRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;height:100%}
+.vial,.meter,.tower,.river,.tooth,.cloudShield,.clinic,.farm{
+  border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(255,255,255,.07);position:relative;overflow:hidden
+}
+.vial{min-height:180px;padding:12px}
+.vialGlass{width:86px;height:130px;border:4px solid rgba(255,255,255,.45);border-top:0;border-radius:0 0 20px 20px;position:relative;background:rgba(255,255,255,.05);overflow:hidden;margin:6px auto}
+.vialLiquid{position:absolute;left:7px;right:7px;bottom:7px;height:64px;border-radius:14px 14px 18px 18px;transition:.35s}
+.red{background:linear-gradient(180deg,#ff9476,#ff5675)}
+.blue{background:linear-gradient(180deg,#8ae7ff,#43bfff)}
+.yellow{background:linear-gradient(180deg,#ffe88b,#ffd84d)}
+.green{background:linear-gradient(180deg,#79ffbb,#42d98a)}
+.purple{background:linear-gradient(180deg,#dbb7ff,#9d7cff)}
+.white{background:linear-gradient(180deg,#ffffff,#dbeafe)}
+.meter{min-height:180px;padding:12px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.digital{width:100px;padding:12px 0;border-radius:14px;background:#0a1020;color:#67f2a3;text-align:center;font-weight:900;font-size:1.55rem}
+.scaleTrack{width:100%;height:12px;border-radius:999px;background:linear-gradient(90deg,#ff6170,#ffd84d,#67f2a3,#45c7ff,#9987ff);position:relative;margin-top:14px}
+.scaleNeedle{position:absolute;top:-5px;width:10px;height:22px;border-radius:5px;background:#fff;left:50%;transition:.4s}
+.tower{min-height:190px;padding:12px;display:flex;justify-content:center;align-items:flex-end;gap:10px}
+.bar{width:34px;border-radius:12px 12px 6px 6px;background:rgba(255,255,255,.14);position:relative;overflow:hidden}
+.barFill{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,#46e8ff,#67f2a3)}
+.clinic,.farm,.river,.tooth,.cloudShield{min-height:190px;padding:12px}
+.person{width:150px;height:158px;position:relative;margin:0 auto}
+.phead{position:absolute;left:51px;top:0;width:48px;height:48px;border-radius:50%;background:#ffd3b6}
+.pbody{position:absolute;left:32px;top:44px;width:86px;height:82px;border-radius:24px;background:linear-gradient(180deg,#ffffff,#d9efff)}
+.arm{position:absolute;width:54px;height:14px;border-radius:999px;background:#ffd3b6;top:66px}
+.arm.l{left:0;transform:rotate(16deg)} .arm.r{right:0;transform:rotate(-16deg)}
+.leg{position:absolute;width:16px;height:56px;border-radius:12px;background:#56b6ff;top:116px}
+.leg.l{left:56px}.leg.r{left:80px}
+.sting{position:absolute;width:16px;height:16px;border-radius:50%;background:#ff3b61;box-shadow:0 0 0 8px rgba(255,59,97,.16);opacity:.35}
+.sting.show{opacity:1}
+.s1{left:10px;top:62px}.s2{right:10px;top:62px}.s3{left:67px;top:138px}
+.crystals{position:absolute;left:0;right:0;top:20px;height:80px}
+.crystal{position:absolute;width:16px;height:16px;background:rgba(255,255,255,.92);transform:rotate(45deg);opacity:0}
+.crystal.show{animation:crystal 1.1s ease forwards}
+@keyframes crystal{0%{opacity:0;transform:translateY(18px) rotate(45deg) scale(.4)}30%{opacity:1}100%{opacity:.95;transform:translateY(0) rotate(45deg) scale(1)}}
+.waveLine{position:absolute;left:-20px;right:-20px;bottom:20px;height:8px;border-radius:999px;background:linear-gradient(90deg,#46e8ff,rgba(255,255,255,.3),#46e8ff);animation:flow 2.1s linear infinite}
+@keyframes flow{0%{transform:translateX(-35%)}100%{transform:translateX(35%)}}
+.cloud{position:absolute;width:84px;height:30px;border-radius:999px;background:rgba(255,255,255,.22);top:30px;animation:cloud 6s ease-in-out infinite}
+.cloud:before,.cloud:after{content:"";position:absolute;border-radius:50%;background:inherit}
+.cloud:before{width:34px;height:34px;left:10px;top:-14px}
+.cloud:after{width:42px;height:42px;right:10px;top:-18px}
+@keyframes cloud{0%,100%{transform:translateX(0)}50%{transform:translateX(14px)}}
+.rain{position:absolute;left:10px;right:10px;bottom:18px;top:70px;overflow:hidden}
+.drop{position:absolute;width:3px;height:18px;border-radius:6px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.2));animation:rain 1.15s linear infinite}
+@keyframes rain{0%{transform:translateY(-18px)}100%{transform:translateY(150px)}}
+
+.optionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.optionBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;padding:12px;text-align:left;font-weight:900;min-height:62px;cursor:pointer}
+.optionBtn:hover{transform:translateY(-1px)}
+.optionBtn.active{outline:3px solid var(--gold)}
+.optionBtn.correct{outline:3px solid var(--green)}
+.optionBtn.wrong{outline:3px solid var(--red)}
+.optionBtn small{display:block;color:var(--muted);font-weight:700;margin-top:4px}
+.feedback{margin-top:12px;padding:12px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid var(--line);line-height:1.5;min-height:70px}
+.feedback b{color:var(--gold)}
+.actionRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.selectRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.selectBox{padding:10px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.08)}
+.selectBox b{display:block;margin-bottom:8px}
+.chipWrap{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.08);font-weight:900;font-size:.82rem;cursor:pointer}
+.chip.active{outline:3px solid var(--gold)}
+.footer{margin-top:10px;text-align:center;color:var(--muted);font-size:.86rem}
+.floatBtns{position:fixed;right:12px;bottom:86px;display:grid;gap:10px;z-index:80}
+.floatBtn{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.08));color:#fff;font-size:1.3rem;display:grid;place-items:center;cursor:pointer;box-shadow:0 16px 26px rgba(0,0,0,.2)}
+.chat{display:none;position:fixed;right:12px;bottom:154px;z-index:100;width:min(94vw,390px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}
+.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}
+.msg.bot{background:rgba(70,232,255,.12);border:1px solid rgba(70,232,255,.18)}
+.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}
+.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}
+.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.6);backdrop-filter:blur(8px);z-index:120;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,780px);max-height:86vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.headRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900;cursor:pointer}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.52}
+.info b{display:block;color:var(--gold);margin-bottom:4px}
+.cert{display:none;margin-top:12px;padding:16px}
+.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:22px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,420px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.launch{position:fixed;inset:0;z-index:140;background:
+radial-gradient(circle at 50% 18%,rgba(255,216,77,.12),transparent 30%),
+linear-gradient(135deg,#07112c,#0a2346,#07112c);
+display:grid;place-items:center;padding:16px}
+.launchCard{width:min(96vw,780px);padding:22px;text-align:center}
+.launch h2{margin:0 0 8px;font-size:clamp(1.7rem,8vw,2.7rem);background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.launch p{color:var(--muted);line-height:1.6;max-width:640px;margin:0 auto 16px}
+.nameRow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.nameRow input{width:min(100%,380px);border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:16px;padding:14px;font-size:1rem}
+.avatarRow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.avatar{width:60px;height:60px;border-radius:20px;border:1px solid var(--line);display:grid;place-items:center;font-size:1.8rem;cursor:pointer;background:rgba(255,255,255,.08)}
+.avatar.active{outline:3px solid var(--gold)}
+.launchWM{margin-top:12px;font-size:.92rem;color:rgba(255,255,255,.7)}
+.smallMuted{font-size:.8rem;color:var(--muted)}
+@media(max-width:1080px){
+  .main{grid-template-columns:1fr}
+  .panel{min-height:unset}
+}
+@media(max-width:760px){
+  .app{padding:8px 8px 106px}
+  .topbar{padding:10px}
+  .headerBtns .btn:not(.gold):not(#musicBtn){display:none}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .progressWrap{grid-column:span 2}
+  .cityMap{grid-template-columns:1fr}
+  .optionGrid{grid-template-columns:1fr}
+  .selectRow,.sceneRow{grid-template-columns:1fr}
+  .infoGrid{grid-template-columns:1fr}
+  .panel{padding:12px}
+  .storyBanner{align-items:stretch}
+}
+</style>
+</head>
+<body>
+<div class="launch" id="launch">
+  <div class="launchCard card">
+    <div style="font-size:58px">🧪🏙️⚗️</div>
+    <h2>Acid Base City: Rescue Mission</h2>
+    <p>Lord Acidon has thrown Acid Base City into chaos. Dr AI needs a young science hero to restore the city using indicators, pH, neutralisation and real-life chemistry.</p>
+    <div class="nameRow">
+      <input id="studentNameInput" placeholder="Enter your name to begin the mission">
+      <button class="btn gold" onclick="Game.start()">Start Mission</button>
+    </div>
+    <div class="avatarRow" id="avatarRow">
+      <div class="avatar active" data-emoji="🧑‍🔬">🧑‍🔬</div>
+      <div class="avatar" data-emoji="👩‍🔬">👩‍🔬</div>
+      <div class="avatar" data-emoji="🦸">🦸</div>
+      <div class="avatar" data-emoji="🛡️">🛡️</div>
+    </div>
+    <div class="smallMuted">Choose your hero. Dr AI Academy watermark and protection are active.</div>
+    <div class="launchWM">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+  </div>
+</div>
+
+<div class="app">
+  <div class="topbar card">
+    <div class="brand">
+      <div class="logo" id="topAvatar">🧑‍🔬</div>
+      <div>
+        <h1>Acid Base City: Rescue Mission</h1>
+        <p>Developed by Dr AI Academy • Chapter Master Game</p>
+      </div>
+    </div>
+    <div class="headerBtns">
+      <button class="btn" onclick="UI.openLearn()">Learn</button>
+      <button class="btn" id="musicBtn" onclick="AudioFX.toggleOm()">▶ OM</button>
+      <button class="btn gold" onclick="window.print()">Certificate</button>
+    </div>
+  </div>
+
+  <div class="hero card">
+    <h2>Save the City with the Power of Chemistry</h2>
+    <p>Travel across futuristic zones, solve science emergencies, defeat Lord Acidon and become the official Chemistry Guardian of Acid Base City. This master game covers the full chapter in one addictive adventure.</p>
+    <div class="wm">Dr AI Academy</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat card"><b id="studentNameLabel">Student</b><small>Hero Name</small></div>
+    <div class="stat card"><b id="scoreLabel">0</b><small>Science Score</small></div>
+    <div class="stat card"><b id="starsLabel">0</b><small>Stars</small></div>
+    <div class="stat card"><b id="coinsLabel">0</b><small>Lab Coins</small></div>
+    <div class="stat card progressWrap"><b style="min-width:82px">Progress</b><div class="track"><div class="fill" id="globalFill"></div></div><small id="progressText">0/9 Zones</small></div>
+  </div>
+
+  <div class="main">
+    <div class="side card">
+      <div class="sideTitle">
+        <h3>City Zones</h3>
+        <div class="badge" id="rankBadge">Rank: Rookie</div>
+      </div>
+      <div class="cityMap" id="cityMap"></div>
+      <div class="feedback" style="margin-top:12px">
+        <b>Goal:</b> Complete each zone, earn stars, unlock the next mission and finally defeat Lord Acidon in the Final Boss Lab.
+      </div>
+    </div>
+
+    <div class="panel card">
+      <div class="panelTop">
+        <div>
+          <h3 id="missionTitle">Choose a Zone</h3>
+          <div class="smallMuted" id="missionMeta">Your active chapter mission appears here.</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="badge" id="taskBadge">Task 0/0</div>
+          <div class="badge" id="zoneBadge">Zone Locked</div>
+        </div>
+      </div>
+
+      <div class="storyBanner">
+        <div class="dr"><div class="face">🤖</div><b>Dr AI</b><small>Mission Mentor</small></div>
+        <div class="storyText" id="storyText">Start the game to receive your first mission briefing.</div>
+      </div>
+
+      <div class="taskWrap">
+        <div class="taskCard">
+          <div class="taskHead">
+            <div>
+              <div class="taskTitle" id="taskTitle">Mission Console</div>
+              <div class="taskSub" id="taskSub">Interactive science action appears below.</div>
+            </div>
+            <div class="badge" id="taskTypeBadge">Ready</div>
+          </div>
+
+          <div class="scene city" id="scene"></div>
+
+          <div id="interaction"></div>
+
+          <div class="feedback" id="feedbackBox"><b>Ready:</b> Enter your name and begin your city rescue mission.</div>
+
+          <div class="actionRow" id="actionRow">
+            <button class="btn cyan" onclick="Game.submitCurrent()">Submit</button>
+            <button class="btn" onclick="Game.nextStep()">Next Step</button>
+            <button class="btn gold" onclick="Game.openNextZone()">Open Next Zone</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert card" id="certificate">
+        <div class="certInner">
+          <div style="font-size:56px">🏆📜🧪</div>
+          <h2>Certificate of Chapter Mastery</h2>
+          <p>This certifies that</p>
+          <div class="certName" id="certName">Student Name</div>
+          <p>successfully completed <b>Acid Base City: Rescue Mission</b> and mastered the chapter <b>Acids, Bases and Salts</b>.</p>
+          <p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p>
+          <button class="btn gold" onclick="window.print()">Print / Save Certificate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • Multiple watermark protection enabled • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="floatBtns">
+  <button class="floatBtn" onclick="DrAI.toggle()" title="Dr AI Help">🤖</button>
+  <button class="floatBtn" onclick="UI.openLearn()" title="About Game">ℹ️</button>
+</div>
+
+<div class="chat" id="chatBox">
+  <div class="headRow"><h3>Dr AI Help Desk</h3><button class="close" onclick="DrAI.toggle()">Close</button></div>
+  <div class="msgs" id="msgs">
+    <div class="msg bot">Hi! I am Dr AI. Ask me about indicators, pH, neutralisation, salts, soil treatment, tooth decay, acid rain or first aid examples.</div>
+  </div>
+  <div class="chatInput">
+    <input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()">
+    <button onclick="DrAI.ask()">Send</button>
+  </div>
+</div>
+
+<div class="modalOverlay" id="learnModal">
+  <div class="modal">
+    <div class="headRow"><h3>About This Game</h3><button class="close" onclick="UI.closeLearn()">Close</button></div>
+    <div class="infoGrid">
+      <div class="info"><b>What is this game?</b>This is a full chapter story game that combines all major concepts of Acids, Bases and Salts into one mission-based science adventure.</div>
+      <div class="info"><b>What students do</b>Students solve city emergencies by using indicators, pH understanding, neutralisation, salt formation and real-life reasoning.</div>
+      <div class="info"><b>What students learn</b>Indicators, natural indicators, pH scale, neutralisation, salts, soil treatment, first aid, tooth decay, pollution control and acid rain.</div>
+      <div class="info"><b>Why it is useful</b>It removes rote learning and turns science into an action-based experience. It also builds JEE/NEET/Olympiad foundation thinking.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey && ['u','s','c','x','a','p'].includes(k)) e.preventDefault();
+  if(k==='f12') e.preventDefault();
+});
+
+const missions = [
+  {
+    id:'indicator',
+    icon:'🧪',
+    title:'Indicator Street',
+    subtitle:'Decode hidden acids and bases',
+    story:'Lord Acidon has mixed unknown liquids into the market stalls. Use indicators to discover which ones are acidic or basic.',
+    learn:'Indicators show whether a substance is acidic or basic. Natural indicators also help.',
+    tasks:[
+      {type:'choice', prompt:'The lemonade stall sample is strongly sour. Which observation best proves it is acidic?', options:['Blue litmus turns red','Red litmus turns blue','Turmeric turns red-brown','pH becomes 10'], correct:0, explain:'Acids turn blue litmus red.'},
+      {type:'choice', prompt:'A soap solution is tested. Which observation shows that it is basic?', options:['Blue litmus turns red','Turmeric stays yellow','Turmeric turns red-brown','Onion smell becomes stronger in acid'], correct:2, explain:'Turmeric turns red-brown in a basic solution.'}
+    ]
+  },
+  {
+    id:'ph',
+    icon:'📟',
+    title:'pH Control Tower',
+    subtitle:'Place samples on the pH scale',
+    story:'The city pH tower has gone unstable. Reset it by placing the correct samples into the right pH zones.',
+    learn:'pH below 7 is acidic, 7 is neutral, above 7 is basic.',
+    tasks:[
+      {type:'ph', prompt:'Set the correct pH for lemon juice and classify it.', sample:'Lemon Juice', pH:2, cls:'strong acid', explain:'Lemon juice is strongly acidic and lies around pH 2.'},
+      {type:'ph', prompt:'Set the correct pH for soap solution and classify it.', sample:'Soap Solution', pH:10, cls:'weak base', explain:'Soap solution is basic and usually lies around pH 10.'}
+    ]
+  },
+  {
+    id:'clinic',
+    icon:'🏥',
+    title:'Neutralisation Clinic',
+    subtitle:'Use chemistry in first aid',
+    story:'Citizens are rushing into the clinic with bites, stings and indigestion. Neutralisation knowledge will save the day.',
+    learn:'Neutralisation is used in first aid and indigestion relief.',
+    tasks:[
+      {type:'choice', prompt:'A child has an ant bite. Which is the best relief action?', options:['Apply baking soda paste','Apply vinegar','Apply lemon juice','Use only water because no chemistry is needed'], correct:0, explain:'Ant bites contain formic acid. A mild base like baking soda helps.'},
+      {type:'choice', prompt:'A person is suffering from indigestion due to excess acid. What helps?', options:['Orange juice','Milk of magnesia antacid','More vinegar','Salt water only'], correct:1, explain:'Antacids like milk of magnesia neutralise excess stomach acid.'}
+    ]
+  },
+  {
+    id:'salt',
+    icon:'⚗️',
+    title:'Salt Reactor Lab',
+    subtitle:'Form salts from reactions',
+    story:'The reactor lab can only be restarted if you combine the correct acid and base and identify the salt product.',
+    learn:'Acid + base gives salt + water.',
+    tasks:[
+      {type:'mix', prompt:'Choose the correct combination to make sodium chloride.', acids:['Hydrochloric Acid','Sulfuric Acid','Nitric Acid'], bases:['Sodium Hydroxide','Potassium Hydroxide','Calcium Hydroxide'], salts:['Sodium Chloride','Potassium Nitrate','Sodium Sulfate'], acid:'Hydrochloric Acid', base:'Sodium Hydroxide', salt:'Sodium Chloride', explain:'Hydrochloric acid + sodium hydroxide forms sodium chloride + water.'},
+      {type:'mix', prompt:'Choose the correct combination to make potassium nitrate.', acids:['Nitric Acid','Acetic Acid','Hydrochloric Acid'], bases:['Potassium Hydroxide','Sodium Hydroxide','Calcium Hydroxide'], salts:['Potassium Nitrate','Sodium Acetate','Calcium Chloride'], acid:'Nitric Acid', base:'Potassium Hydroxide', salt:'Potassium Nitrate', explain:'Nitric acid + potassium hydroxide forms potassium nitrate + water.'}
+    ]
+  },
+  {
+    id:'farm',
+    icon:'🌾',
+    title:'Farm Rescue Zone',
+    subtitle:'Save the crops with science',
+    story:'Acidic and basic soil patches are ruining city farms. Choose the right treatment to restore healthy growth.',
+    learn:'Soil treatment uses acid-base understanding.',
+    tasks:[
+      {type:'choice', prompt:'The soil in the city farm is too acidic. What should the farmer add?', options:['Slaked lime','More acid rain water','Vinegar','Only sugar'], correct:0, explain:'Slaked lime helps neutralise acidic soil.'},
+      {type:'choice', prompt:'Soil is too basic in another farm patch. What is a useful treatment?', options:['Add organic matter/compost','Add bleaching powder','Add more lime','Add strong base'], correct:0, explain:'Organic matter helps when soil is too basic.'}
+    ]
+  },
+  {
+    id:'river',
+    icon:'🏭',
+    title:'Factory Pollution River',
+    subtitle:'Protect water from chemical waste',
+    story:'A factory has released acidic waste into the river. Prevent environmental damage by choosing the best neutralisation strategy.',
+    learn:'Neutralisation helps in waste treatment.',
+    tasks:[
+      {type:'choice', prompt:'Acidic factory wastewater enters the river. Which action is best?', options:['Treat with a suitable base such as lime','Add more acid','Ignore because water fixes it','Add cooking oil'], correct:0, explain:'Acidic waste can be neutralised with a base like lime.'},
+      {type:'choice', prompt:'Why is neutralising factory waste important?', options:['It prevents harm to living organisms and the environment','It makes the water sweeter','It always turns water into salt only','It removes all solids magically'], correct:0, explain:'Neutralisation helps reduce harmful acidic or basic effects.'}
+    ]
+  },
+  {
+    id:'tooth',
+    icon:'🦷',
+    title:'Tooth Defense Arena',
+    subtitle:'Defeat the tooth decay demon',
+    story:'The Tooth Decay Demon is weakening the city children’s teeth. Use chemistry to defend enamel.',
+    learn:'Acid produced by bacteria harms teeth; basic toothpaste helps neutralise.',
+    tasks:[
+      {type:'choice', prompt:'Why does tooth decay happen more after sugary food is left in the mouth?', options:['Bacteria make acids that attack enamel','Sugar turns into metal','Teeth become naturally basic','Water removes all decay'], correct:0, explain:'Bacteria act on food and produce acids that damage teeth.'},
+      {type:'choice', prompt:'What helps protect teeth from acid attack?', options:['Basic toothpaste and cleaning teeth properly','More cola drinks','Extra lemon juice','Never cleaning the mouth'], correct:0, explain:'Toothpaste is generally basic and helps neutralise acids.'}
+    ]
+  },
+  {
+    id:'rain',
+    icon:'☁️',
+    title:'Acid Rain Sky Shield',
+    subtitle:'Protect monuments and nature',
+    story:'Dark acid rain clouds are moving over the city. Build a chemistry shield by understanding the effect of acid rain.',
+    learn:'Acid rain damages buildings, soil and water systems.',
+    tasks:[
+      {type:'choice', prompt:'Acid rain especially damages which type of building material?', options:['Marble and limestone','Plastic toys only','Steel only because nothing else reacts','Wood because it becomes basic'], correct:0, explain:'Acid rain damages marble and limestone structures.'},
+      {type:'choice', prompt:'What is the best long-term way to reduce acid rain?', options:['Reduce air pollution from industries and vehicles','Add more acids to clouds','Paint rain with color','Pour soap in the sky'], correct:0, explain:'Acid rain reduces when harmful emissions are reduced.'}
+    ]
+  },
+  {
+    id:'boss',
+    icon:'👑',
+    title:'Final Boss: Acidon Lab',
+    subtitle:'Save Acid Base City',
+    story:'Lord Acidon has mixed all chapter concepts in one final lab. Beat the final boss by solving fast science challenges.',
+    learn:'Revision of the whole chapter.',
+    tasks:[
+      {type:'choice', prompt:'Which indicator result proves a substance is acidic?', options:['Blue litmus turns red','Red litmus turns blue','Turmeric turns red-brown in every solution','pH becomes 12'], correct:0, explain:'Acids turn blue litmus red.'},
+      {type:'choice', prompt:'A sample with pH 7 is:', options:['Neutral','Strong acid','Weak base','Always poisonous'], correct:0, explain:'pH 7 is neutral.'},
+      {type:'choice', prompt:'Which pair is a neutralisation example?', options:['Hydrochloric acid + sodium hydroxide','Sugar + water','Salt + sand','Oxygen + nitrogen'], correct:0, explain:'This is a classic acid-base neutralisation.'},
+      {type:'choice', prompt:'What should be used for acidic soil?', options:['Slaked lime','Vinegar','More acid','No treatment ever'], correct:0, explain:'Slaked lime helps acidic soil.'},
+      {type:'choice', prompt:'Which daily-life use matches neutralisation?', options:['Toothpaste helping neutralise mouth acid','Painting clouds blue','Making iron float','Turning water into plastic'], correct:0, explain:'Basic toothpaste helps neutralise acids in the mouth.'}
+    ]
+  }
+];
+
+const state = {
+  name:'Student',
+  avatar:'🧑‍🔬',
+  score:0,
+  stars:0,
+  coins:0,
+  unlocked:1,
+  completed:[],
+  activeMission:0,
+  activeTask:0,
+  currentSelection:null,
+  currentPH:null,
+  currentClass:null,
+  currentAcid:null,
+  currentBase:null,
+  currentSalt:null,
+  answered:false
+};
+
+const $ = id => document.getElementById(id);
+
+function rankFromStars(s){
+  if(s>=18) return 'City Savior';
+  if(s>=14) return 'Master Chemist';
+  if(s>=9) return 'Science Defender';
+  if(s>=5) return 'Lab Cadet';
+  return 'Rookie';
+}
+function totalTasks(){ return missions.length; }
+function completedCount(){ return state.completed.length; }
+function isDone(index){ return state.completed.includes(index); }
+function canOpen(index){ return index < state.unlocked; }
+function currentMission(){ return missions[state.activeMission]; }
+function currentTask(){ return currentMission().tasks[state.activeTask]; }
+function speak(text){
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-IN';
+    u.rate = 0.98;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function pushFeedback(html, voice){
+  $('feedbackBox').innerHTML = html;
+  $('storyText').textContent = html.replace(/<[^>]+>/g,'');
+  if(voice) speak(voice);
+}
+const AudioFX = {
+  ctx:null, master:null, omOn:false, omTimer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.06;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  tone(f,d,type='sine',v=.05,when=0){
+    if(!this.ctx) return;
+    const t=this.ctx.currentTime+when, o=this.ctx.createOscillator(), g=this.ctx.createGain();
+    o.type=type; o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(v,t+.08);
+    g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t+d+.05);
+  },
+  omCycle(){
+    this.tone(136.1,2.8,'sine',.05);
+    this.tone(272.2,2.0,'triangle',.02,.12);
+    this.tone(204.1,1.6,'sine',.018,.58);
+  },
+  toggleOm(){
+    this.init();
+    if(this.omOn){
+      this.omOn=false; clearInterval(this.omTimer); this.omTimer=null; $('musicBtn').textContent='▶ OM';
+    }else{
+      this.omOn=true; $('musicBtn').textContent='⏸ OM'; this.omCycle(); this.omTimer=setInterval(()=>this.omCycle(),2900);
+    }
+  },
+  success(){
+    this.init(); this.tone(392,.14,'triangle',.07); this.tone(523,.18,'triangle',.08,.09); this.tone(659,.2,'triangle',.08,.17);
+  },
+  wrong(){
+    this.init(); this.tone(220,.22,'sawtooth',.06); this.tone(180,.26,'sawtooth',.05,.06);
+  },
+  whoosh(){
+    this.init(); this.tone(220,.12,'triangle',.04); this.tone(520,.18,'triangle',.05,.05);
+  }
+};
+
+function renderCityMap(){
+  $('cityMap').innerHTML = missions.map((m,i)=>{
+    const locked = !canOpen(i);
+    const active = state.activeMission===i;
+    const done = isDone(i);
+    return `
+      <div class="zoneCard ${locked?'locked':''} ${active?'active':''} ${done?'done':''}" onclick="Game.openMission(${i})">
+        <div class="zoneStars">${done?'⭐ ⭐':''}${!done && i===8?'👑':''}</div>
+        <div class="zoneIcon">${m.icon}</div>
+        <div class="zoneName">${m.title}</div>
+        <div class="zoneMeta">${m.subtitle}</div>
+        <div class="zoneWave"></div>
+      </div>
+    `;
+  }).join('');
+}
+function renderStats(){
+  $('studentNameLabel').textContent = state.name;
+  $('scoreLabel').textContent = state.score;
+  $('starsLabel').textContent = state.stars;
+  $('coinsLabel').textContent = state.coins;
+  $('progressText').textContent = completedCount() + '/' + missions.length + ' Zones';
+  $('globalFill').style.width = ((completedCount()/missions.length)*100) + '%';
+  $('rankBadge').textContent = 'Rank: ' + rankFromStars(state.stars);
+  $('topAvatar').textContent = state.avatar;
+}
+function renderMissionHeader(){
+  const m = currentMission();
+  $('missionTitle').textContent = m.title;
+  $('missionMeta').textContent = m.subtitle + ' • ' + m.learn;
+  $('zoneBadge').textContent = isDone(state.activeMission) ? 'Zone Complete' : (canOpen(state.activeMission)?'Zone Active':'Zone Locked');
+  $('taskBadge').textContent = 'Task ' + (state.activeTask+1) + '/' + m.tasks.length;
+  $('storyText').textContent = m.story;
+}
+function sceneTemplate(task){
+  const mi = state.activeMission;
+  if(mi===0){
+    return `<div class="sceneRow">
+      <div class="vial"><b>Sample Tube</b><div class="vialGlass"><div class="vialLiquid yellow"></div></div><div class="smallMuted">${task.prompt.includes('soap')?'Soap Solution':'Lemon Juice Sample'}</div></div>
+      <div class="vial"><b>Indicator Result</b><div class="vialGlass"><div class="vialLiquid ${state.answered ? (task.correct===0?'red':task.correct===2?'red':'blue') : 'white'}"></div></div><div class="smallMuted">Tap an answer to investigate.</div></div>
+    </div>`;
+  }
+  if(mi===1){
+    const ph = state.currentPH || 7;
+    const left = ((ph-1)/13)*100;
+    return `<div class="sceneRow">
+      <div class="vial"><b>Sample Tube</b><div class="vialGlass"><div class="vialLiquid ${task.sample.includes('Lemon')?'yellow':'blue'}"></div></div><div class="smallMuted">${task.sample}</div></div>
+      <div class="meter">
+        <b>pH Meter</b><div class="digital">${state.currentPH || '--'}</div>
+        <div class="scaleTrack"><div class="scaleNeedle" style="left:calc(${left}% - 5px)"></div></div>
+        <div class="smallMuted" style="margin-top:8px">${state.currentClass || 'Choose class below'}</div>
+      </div>
+    </div>`;
+  }
+  if(mi===2){
+    return `<div class="clinic">
+      <div class="person">
+        <div class="phead"></div><div class="pbody"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div>
+        <div class="sting s1 ${task.prompt.includes('ant')?'show':''}"></div>
+        <div class="sting s2 ${task.prompt.includes('indigestion')?'':'show'}"></div>
+        <div class="sting s3 ${task.prompt.includes('indigestion')?'show':''}"></div>
+      </div>
+      <div class="smallMuted" style="text-align:center;margin-top:6px">Emergency Relief Mission</div>
+    </div>`;
+  }
+  if(mi===3){
+    return `<div class="sceneRow">
+      <div class="vial"><b>Acid Chamber</b><div class="vialGlass"><div class="vialLiquid red"></div></div><div class="smallMuted">${state.currentAcid || 'Select acid'}</div></div>
+      <div class="vial"><b>Base Chamber</b><div class="vialGlass"><div class="vialLiquid blue"></div></div><div class="smallMuted">${state.currentBase || 'Select base'}</div></div>
+    </div>
+    <div class="vial" style="margin-top:12px"><b>Salt Reactor</b><div class="vialGlass" style="height:120px"><div class="vialLiquid ${state.answered?'green':'white'}"></div></div><div class="smallMuted">${state.currentSalt || 'Choose final salt'}</div><div class="crystals" id="crystalArea"></div></div>`;
+  }
+  if(mi===4){
+    return `<div class="farm">
+      <div class="sceneRow">
+        <div class="vial"><b>Soil Patch</b><div class="vialGlass"><div class="vialLiquid ${task.prompt.includes('acidic')?'red':'blue'}"></div></div><div class="smallMuted">${task.prompt.includes('acidic')?'Acidic Soil':'Basic Soil'}</div></div>
+        <div class="vial"><b>Crop Meter</b><div class="tower"><div class="bar" style="height:120px"><div class="barFill" style="height:${state.answered?'88':'34'}%"></div></div></div><div class="smallMuted">Growth health</div></div>
+      </div>
+    </div>`;
+  }
+  if(mi===5){
+    const wave = state.answered ? '<div class="waveLine"></div>' : '';
+    return `<div class="river">${wave}<b>Factory Drain to River</b><div class="smallMuted" style="margin-top:8px">Choose the best water treatment action.</div><div class="vialGlass" style="margin-top:18px;width:100px;height:120px"><div class="vialLiquid ${state.answered?'green':'red'}"></div></div></div>`;
+  }
+  if(mi===6){
+    return `<div class="tooth"><b>Tooth Defense</b><div style="font-size:78px;text-align:center;margin-top:18px">${state.answered?'😁':'🦷'}</div><div class="smallMuted" style="text-align:center">Neutralise acid to protect enamel.</div></div>`;
+  }
+  if(mi===7){
+    let drops = '';
+    for(let i=0;i<14;i++) drops += `<div class="drop" style="left:${6+i*6}%;animation-delay:${(i%7)*.12}s"></div>`;
+    return `<div class="cloudShield"><div class="cloud"></div><div class="rain">${drops}</div><div style="position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:64px">${state.answered?'🛡️':'🏛️'}</div><div class="smallMuted" style="position:absolute;left:0;right:0;bottom:8px;text-align:center">Protect the city monument</div></div>`;
+  }
+  return `<div class="sceneRow">
+    <div class="vial"><b>Boss Console</b><div class="vialGlass"><div class="vialLiquid purple"></div></div><div class="smallMuted">Lord Acidon Mix System</div></div>
+    <div class="vial"><b>Shield Meter</b><div class="tower"><div class="bar" style="height:120px"><div class="barFill" style="height:${12 + state.activeTask*18}%"></div></div></div><div class="smallMuted">Clear all boss tasks</div></div>
+  </div>`;
+}
+function renderInteraction(){
+  const t = currentTask();
+  $('scene').innerHTML = sceneTemplate(t);
+  $('taskTitle').textContent = t.prompt;
+  $('taskSub').textContent = currentMission().learn;
+  $('taskTypeBadge').textContent = t.type.toUpperCase();
+  let html = '';
+  if(t.type==='choice'){
+    html = `<div class="optionGrid">` + t.options.map((opt,idx)=>`
+      <button class="optionBtn ${state.currentSelection===idx?'active':''}" onclick="Game.selectOption(${idx})">${opt}<small>Tap to choose</small></button>
+    `).join('') + `</div>`;
+  } else if(t.type==='ph'){
+    const classes = ['strong acid','weak acid','neutral','weak base','strong base'];
+    html = `
+      <div class="selectRow">
+        <div class="selectBox"><b>Pick pH Value</b><div class="chipWrap">${Array.from({length:14},(_,i)=>i+1).map(v=>`<span class="chip ${state.currentPH===v?'active':''}" onclick="Game.pickPH(${v})">${v}</span>`).join('')}</div></div>
+        <div class="selectBox"><b>Pick Class</b><div class="chipWrap">${classes.map(c=>`<span class="chip ${state.currentClass===c?'active':''}" onclick="Game.pickClass('${c}')">${c}</span>`).join('')}</div></div>
+        <div class="selectBox"><b>Sample</b><div class="smallMuted" style="line-height:1.5">${t.sample}<br>Goal: choose correct pH and class.</div></div>
+      </div>`;
+  } else if(t.type==='mix'){
+    html = `
+      <div class="selectRow">
+        <div class="selectBox"><b>Select Acid</b><div class="chipWrap">${t.acids.map(a=>`<span class="chip ${state.currentAcid===a?'active':''}" onclick="Game.pickAcid('${a}')">${a}</span>`).join('')}</div></div>
+        <div class="selectBox"><b>Select Base</b><div class="chipWrap">${t.bases.map(b=>`<span class="chip ${state.currentBase===b?'active':''}" onclick="Game.pickBase('${b}')">${b}</span>`).join('')}</div></div>
+        <div class="selectBox"><b>Select Salt</b><div class="chipWrap">${t.salts.map(s=>`<span class="chip ${state.currentSalt===s?'active':''}" onclick="Game.pickSalt('${s}')">${s}</span>`).join('')}</div></div>
+      </div>`;
+  }
+  $('interaction').innerHTML = html;
+}
+function resetTaskSelections(){
+  state.currentSelection = null;
+  state.currentPH = null;
+  state.currentClass = null;
+  state.currentAcid = null;
+  state.currentBase = null;
+  state.currentSalt = null;
+  state.answered = false;
+}
+function renderAll(){
+  renderCityMap();
+  renderStats();
+  renderMissionHeader();
+  renderInteraction();
+  updateActionButtons();
+}
+function updateActionButtons(){
+  const nextPossible = state.answered;
+  $('actionRow').innerHTML = `
+    <button class="btn cyan" onclick="Game.submitCurrent()">Submit</button>
+    <button class="btn" onclick="Game.nextStep()" ${nextPossible?'':'disabled'}>Next Step</button>
+    <button class="btn gold" onclick="Game.openNextZone()">Open Next Zone</button>
+  `;
+}
+function markMissionDone(){
+  if(!isDone(state.activeMission)){
+    state.completed.push(state.activeMission);
+    state.stars += 2;
+    state.coins += 25;
+    state.score += 20;
+    if(state.unlocked < missions.length) state.unlocked++;
+  }
+  renderStats(); renderCityMap();
+  if(completedCount()===missions.length){
+    $('certificate').style.display = 'block';
+    $('certName').textContent = state.name;
+    pushFeedback(`<b>City Saved!</b> Amazing work, ${state.name}. You completed every zone and defeated Lord Acidon. Your certificate is ready below.`, `Amazing work ${state.name}. City saved.`);
+  }
+}
+function animateCrystals(){
+  const box = $('crystalArea');
+  if(!box) return;
+  box.innerHTML = '';
+  for(let i=0;i<7;i++){
+    const c = document.createElement('div');
+    c.className = 'crystal show';
+    c.style.left = (10 + Math.random()*70) + 'px';
+    c.style.top = (8 + Math.random()*40) + 'px';
+    c.style.animationDelay = (i*0.05) + 's';
+    box.appendChild(c);
+  }
+}
+const Game = {
+  start(){
+    state.name = ($('studentNameInput').value || 'Student').trim();
+    const chosen = document.querySelector('.avatar.active');
+    state.avatar = chosen ? chosen.getAttribute('data-emoji') : '🧑‍🔬';
+    $('launch').style.display='none';
+    renderStats();
+    Game.openMission(0);
+    pushFeedback(`<b>Welcome ${state.name}!</b> Dr AI has activated your first city rescue mission. Start with Indicator Street.`, `Welcome ${state.name}. Start with indicator street.`);
+  },
+  openMission(index){
+    if(!canOpen(index)) return;
+    state.activeMission = index;
+    state.activeTask = 0;
+    resetTaskSelections();
+    renderAll();
+    AudioFX.whoosh();
+  },
+  selectOption(i){
+    state.currentSelection = i;
+    renderInteraction();
+  },
+  pickPH(v){
+    state.currentPH = v;
+    renderInteraction();
+  },
+  pickClass(c){
+    state.currentClass = c;
+    renderInteraction();
+  },
+  pickAcid(v){
+    state.currentAcid = v; renderInteraction();
+  },
+  pickBase(v){
+    state.currentBase = v; renderInteraction();
+  },
+  pickSalt(v){
+    state.currentSalt = v; renderInteraction();
+  },
+  submitCurrent(){
+    const t = currentTask();
+    let ok = false, msg = '', voice='';
+    if(t.type==='choice'){
+      if(state.currentSelection===null){ pushFeedback('<b>Select an answer first.</b>', 'Select an answer first.'); return; }
+      ok = state.currentSelection===t.correct;
+    } else if(t.type==='ph'){
+      if(state.currentPH===null || !state.currentClass){ pushFeedback('<b>Pick both pH value and class first.</b>', 'Pick both pH and class.'); return; }
+      ok = state.currentPH===t.pH && state.currentClass===t.cls;
+    } else if(t.type==='mix'){
+      if(!state.currentAcid || !state.currentBase || !state.currentSalt){ pushFeedback('<b>Choose acid, base and salt first.</b>', 'Choose acid base and salt first.'); return; }
+      ok = state.currentAcid===t.acid && state.currentBase===t.base && state.currentSalt===t.salt;
+    }
+    state.answered = ok;
+    if(ok){
+      state.score += 10;
+      state.coins += 8;
+      msg = `<b>Correct!</b> ${t.explain} <br><b>Dr AI says:</b> Excellent work, ${state.name}.`;
+      voice = `Correct. Excellent work ${state.name}.`;
+      AudioFX.success();
+      if(t.type==='mix') animateCrystals();
+    }else{
+      msg = `<b>Well tried!</b> ${t.explain} <br><b>Dr AI says:</b> Check the concept and try again.`;
+      voice = `Well tried ${state.name}. Try again.`;
+      AudioFX.wrong();
+    }
+    renderStats();
+    renderInteraction();
+    updateActionButtons();
+    pushFeedback(msg, voice);
+  },
+  nextStep(){
+    if(!state.answered){ pushFeedback('<b>First complete the current task correctly.</b>', 'Complete the current task first.'); return; }
+    if(state.activeTask < currentMission().tasks.length - 1){
+      state.activeTask++;
+      resetTaskSelections();
+      renderAll();
+      pushFeedback(`<b>Next task loaded.</b> Continue the rescue mission in ${currentMission().title}.`, 'Next task loaded.');
+    }else{
+      markMissionDone();
+      pushFeedback(`<b>Zone Complete!</b> ${currentMission().title} has been saved. Open the next zone to continue the story.`, `Zone complete. ${currentMission().title} saved.`);
+    }
+  },
+  openNextZone(){
+    const next = state.activeMission + 1;
+    if(next < state.unlocked){
+      Game.openMission(next);
+    } else if(next < missions.length){
+      pushFeedback('<b>Complete the current zone first</b> to unlock the next mission.', 'Complete the current zone first.');
+    } else {
+      pushFeedback('<b>All zones are already unlocked.</b>', 'All zones unlocked.');
+    }
+  }
+};
+
+const DrAI = {
+  toggle(){ $('chatBox').classList.toggle('active'); },
+  ask(){
+    const q = $('chatInput').value.trim();
+    if(!q) return;
+    addMsg(q,'user'); $('chatInput').value='';
+    setTimeout(()=>addMsg(answer(q),'bot'),220);
+  }
+};
+function addMsg(text, who){
+  const d = document.createElement('div');
+  d.className = 'msg ' + who;
+  d.innerHTML = text;
+  $('msgs').appendChild(d);
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+}
+function answer(q){
+  const x = q.toLowerCase();
+  if(x.includes('indicator')) return 'Indicators help identify acids and bases. Litmus, turmeric, china rose and onion are key examples from this chapter.';
+  if(x.includes('ph')) return 'pH scale runs from 1 to 14. Below 7 is acidic, 7 is neutral and above 7 is basic.';
+  if(x.includes('neutralisation')) return 'Neutralisation is the reaction of an acid with a base to form salt and water.';
+  if(x.includes('salt')) return 'Salt is formed during neutralisation. Example: hydrochloric acid + sodium hydroxide gives sodium chloride + water.';
+  if(x.includes('soil')) return 'Acidic soil can be treated with slaked lime. Basic soil can be improved with organic matter.';
+  if(x.includes('tooth')) return 'Bacteria produce acids in the mouth. Toothpaste is basic and helps neutralise those acids.';
+  if(x.includes('acid rain')) return 'Acid rain damages monuments, soil and water systems. Reducing pollution helps prevent it.';
+  if(x.includes('sting') || x.includes('ant bite')) return 'Ant bites contain formic acid. A mild base like baking soda helps. Antacids help indigestion due to excess acid.';
+  return 'Ask me about indicators, pH, neutralisation, salts, soil treatment, first aid, tooth decay or acid rain.';
+}
+const UI = {
+  openLearn(){ $('learnModal').classList.add('active'); },
+  closeLearn(){ $('learnModal').classList.remove('active'); }
+};
+
+document.querySelectorAll('.avatar').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.querySelectorAll('.avatar').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+window.Game = Game;
+window.UI = UI;
+window.DrAI = DrAI;
+window.AudioFX = AudioFX;
+
+renderStats();
+renderCityMap();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,645 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Factory Waste Water Rescue Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#0f1f3a; --bg2:#063b4a; --gold:#ffd84d; --cyan:#47e8ff; --green:#69f2a4; --red:#ff7e88; --blue:#73b6ff;
+  --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dbe9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.16),transparent 24%),
+    radial-gradient(circle at 88% 8%,rgba(71,232,255,.16),transparent 27%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1120px;margin:0 auto;padding:10px 10px 100px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(71,232,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.08rem,5vw,1.52rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.14rem);line-height:1.06;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.35s}
+.lab{position:relative;min-height:660px;overflow:hidden;padding:14px;border-radius:24px;background:
+  radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+  linear-gradient(180deg,#143062 0%,#0b173a 40%,#1f4f6a 40%,#236f88 100%);
+  border:1px solid var(--line);
+}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.1rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}
+.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px;perspective:1000px}
+.floorGlow{position:absolute;left:0;right:0;bottom:0;height:38%;background:radial-gradient(ellipse at center,rgba(255,255,255,.08),transparent 70%)}
+.grid{display:grid;grid-template-columns:1fr 1.2fr .95fr;gap:14px;position:absolute;left:0;right:0;bottom:16px;top:16px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+
+.report{position:absolute;left:14px;right:14px;top:48px;bottom:16px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:14px;display:flex;flex-direction:column;justify-content:space-between}
+.reportEmoji{font-size:4rem;line-height:1}
+.reportName{font-size:1.08rem;font-weight:900;margin-top:8px}
+.reportFact{font-size:.92rem;line-height:1.45;color:var(--muted)}
+.hint{display:inline-block;padding:8px 10px;border-radius:12px;background:rgba(255,216,77,.16);border:1px solid rgba(255,216,77,.24);font-size:.84rem}
+
+.riverArea{position:absolute;left:18px;right:18px;top:56px;bottom:18px;border-radius:24px;background:linear-gradient(180deg,#345f7d 0%,#274c68 34%,#2a8ea7 34%,#38c4de 74%,#2b6d3f 74%,#3c8049 100%);border:1px solid rgba(255,255,255,.12);overflow:hidden}
+.factory{position:absolute;left:18px;top:18px;width:130px;height:96px;background:linear-gradient(180deg,#c8d5e7,#8699b4);border-radius:14px;box-shadow:0 12px 18px rgba(0,0,0,.18)}
+.factory:before,.factory:after{content:"";position:absolute;background:#9eafc6;border-radius:8px 8px 0 0}
+.factory:before{width:24px;height:56px;right:18px;top:-44px}
+.factory:after{width:20px;height:46px;right:48px;top:-34px}
+.pipe{position:absolute;left:120px;top:64px;width:90px;height:18px;border-radius:999px;background:linear-gradient(180deg,#cfd8e4,#9eafc6)}
+.pipeDrop{position:absolute;left:202px;top:66px;width:18px;height:95px;border-radius:0 0 10px 10px;background:rgba(255,255,255,.35)}
+.flow{position:absolute;left:0;top:0;width:18px;height:0;border-radius:0 0 10px 10px;transition:.55s}
+.flow.acid{background:var(--red)} .flow.base{background:var(--blue)} .flow.neutral{background:var(--green)}
+.treatmentTank{position:absolute;right:26px;top:26px;width:108px;height:160px;border-radius:18px;border:4px solid rgba(255,255,255,.40);background:rgba(255,255,255,.06);overflow:hidden}
+.treatmentTank:before{content:"Treatment Tank";position:absolute;left:8px;right:8px;top:8px;text-align:center;font-size:.78rem;font-weight:900;color:#fff}
+.treatLiquid{position:absolute;left:8px;right:8px;bottom:8px;height:56px;border-radius:14px;background:rgba(255,255,255,.18);transition:.55s}
+.river{position:absolute;left:18px;right:18px;bottom:22px;height:150px;border-radius:28px;background:linear-gradient(180deg,#8fefff,#35cbec);overflow:hidden;border:1px solid rgba(255,255,255,.20)}
+.riverOverlay{position:absolute;inset:0;background:transparent;transition:.55s}
+.wave{position:absolute;left:-20%;width:140%;height:26px;border-radius:50%;background:rgba(255,255,255,.22);animation:wave 7s linear infinite}
+.wave.w2{top:38px;animation-duration:9s;opacity:.75}
+.wave.w3{top:76px;animation-duration:11s;opacity:.62}
+@keyframes wave{0%{transform:translateX(0)}100%{transform:translateX(-18%)}}
+.fish{position:absolute;bottom:34px;width:38px;height:22px;background:linear-gradient(90deg,#fff,#ffd84d);border-radius:50% 55% 50% 50%;transition:.45s}
+.fish:before{content:"";position:absolute;right:-10px;top:5px;border-left:12px solid #ffd84d;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.fish.dead{filter:grayscale(1) brightness(.75);transform:rotate(180deg)}
+.fish.f1{left:28px}.fish.f2{left:82px;bottom:66px}.fish.f3{left:146px;bottom:48px}
+.bubble{position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.65);opacity:0}
+.bubble.go{animation:bubble 1.15s ease forwards}
+@keyframes bubble{0%{opacity:0;transform:translateY(10px) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translateY(-80px) scale(1.1)}}
+.purityMeter{position:absolute;left:18px;top:130px;width:136px;padding:10px;border-radius:18px;background:rgba(255,255,255,.10);border:1px solid var(--line);text-align:center}
+.meterBar{height:12px;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));margin:8px 0;position:relative}
+.meterNeedle{position:absolute;top:-5px;width:8px;height:22px;border-radius:4px;background:#fff;left:12%;transition:.55s}
+
+.toolWrap{position:absolute;left:14px;right:14px;top:50px;bottom:16px;display:flex;flex-direction:column;gap:10px}
+.toolBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:62px;padding:10px;text-align:left;font-weight:900}
+.toolBtn.active{outline:3px solid var(--gold)}
+.toolBtn small{display:block;color:var(--muted);font-weight:700;margin-top:4px}
+.goodBox,.badBox{padding:10px;border-radius:16px;font-size:.86rem;line-height:1.45}
+.goodBox{background:rgba(105,242,164,.14);border:1px solid rgba(105,242,164,.26)}
+.badBox{background:rgba(255,126,136,.14);border:1px solid rgba(255,126,136,.24)}
+
+.missionList{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.missionBtn{min-height:74px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px;text-align:left}
+.missionBtn.done{outline:3px solid var(--green)}
+.missionBtn.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:84px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.5}
+.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}
+.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}
+th{background:rgba(255,255,255,.10)}
+td:first-child{text-align:left}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}
+.pass{background:#69f2a433}
+.fail{background:#ff7e8833}
+
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}
+.info b{display:block;color:var(--gold);margin-bottom:4px}
+
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}
+.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}
+.msg.bot{background:rgba(71,232,255,.12);border:1px solid rgba(71,232,255,.18)}
+.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}
+.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}
+.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+
+.cert{display:none;margin-top:10px;padding:16px}
+.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+
+@media(max-width:980px){
+  .grid{grid-template-columns:1fr;gap:12px}
+  .lab{min-height:1060px}
+  .scene{top:176px}
+}
+@media(max-width:760px){
+  .app{padding:8px 8px 98px}
+  .top{padding:10px}
+  .top .btn:not(.gold):not(#musicBtn){display:none}
+  .hero{padding:12px}
+  .dr{top:78px}
+  .speech{left:108px;top:82px;font-size:.82rem}
+  .lab{min-height:1080px}
+  .scene{top:178px}
+  .missionList{grid-template-columns:repeat(2,1fr)}
+  .infoGrid{grid-template-columns:1fr}
+  .bottomBar button{font-size:.74rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand">
+      <div class="logo">🏭</div>
+      <div>
+        <h1>Factory Waste Water Rescue Lab 3D</h1>
+        <p>Class 7 • Developed by Dr AI Academy</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="UI.openLearn()">Learn</button>
+      <button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button>
+      <button class="btn gold" onclick="UI.student()">Name</button>
+    </div>
+  </div>
+
+  <div class="hero card">
+    <h2>Rescue the river by treating factory waste water scientifically.</h2>
+    <p>In this interactive 3D lab, students identify whether waste water is acidic, basic, or already safe, then choose the right treatment before it reaches the river. It connects acid-base science with pollution control and environmental responsibility.</p>
+  </div>
+
+  <div class="status">
+    <div class="pill" id="stagePill">Mission 1</div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="pill" id="scorePill">Score: 0</div>
+    <div class="pill" id="donePill">0/4</div>
+  </div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Treat the discharge before release</div>
+    <div class="missionText" id="missionText">Read the mission report, choose the correct treatment, then rescue the river.</div>
+
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and begin the first waste water rescue mission.</div>
+
+    <div class="scene">
+      <div class="floorGlow"></div>
+      <div class="grid">
+        <div class="station">
+          <div class="stationTitle">Mission Report</div>
+          <div class="report">
+            <div>
+              <div class="reportEmoji" id="reportEmoji">🧪</div>
+              <div class="reportName" id="reportName">Acidic Textile Waste</div>
+              <div class="reportFact" id="reportFact">The factory waste water is acidic. Fish are at risk if this water enters the river directly.</div>
+            </div>
+            <div class="hint" id="reportHint">Need: base to neutralise acid</div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Treatment & River View</div>
+          <div class="riverArea">
+            <div class="factory"></div>
+            <div class="pipe"></div>
+            <div class="pipeDrop"><div class="flow acid" id="flow"></div></div>
+
+            <div class="purityMeter">
+              <b>Water Safety Meter</b>
+              <div class="meterBar"><div class="meterNeedle" id="needle"></div></div>
+              <span id="meterText">Unsafe</span>
+            </div>
+
+            <div class="treatmentTank">
+              <div class="treatLiquid" id="treatLiquid"></div>
+            </div>
+
+            <div class="river">
+              <div class="riverOverlay" id="riverOverlay"></div>
+              <div class="wave" style="top:6px"></div>
+              <div class="wave w2"></div>
+              <div class="wave w3"></div>
+              <div class="fish f1" id="fish1"></div>
+              <div class="fish f2" id="fish2"></div>
+              <div class="fish f3" id="fish3"></div>
+              <div class="bubble" id="bubble1"></div>
+              <div class="bubble" id="bubble2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Treatment Shelf</div>
+          <div class="toolWrap" id="toolWrap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="missionList" id="missionList"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Select the correct treatment and click Treat Waste Water.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard">
+    <div class="tableWrap">
+      <table>
+        <thead><tr><th>Mission</th><th>Correct Treatment</th><th>Status</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="cert card" id="certificate">
+    <div class="certInner">
+      <div style="font-size:52px">🏭🌊📜</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="certName" id="certName">Student Name</div>
+      <p>successfully completed <b>Factory Waste Water Rescue Lab 3D</b>.</p>
+      <p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p>
+      <button class="btn gold" onclick="window.print()">Print / Save Certificate</button>
+    </div>
+  </div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar">
+  <button onclick="Lab.treat()">Treat<br>Waste Water</button>
+  <button onclick="Lab.nextMission()">Next<br>Mission</button>
+  <button onclick="Lab.showResult()">Show<br>Result</button>
+  <button onclick="UI.toggleTable()">Show<br>Table</button>
+  <button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button>
+</div>
+
+<div class="modalOverlay" id="modal">
+  <div class="modal">
+    <div class="head"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div>
+    <div class="infoGrid">
+      <div class="info"><b>Neutralisation and environment</b>Industries should not release acidic or basic waste directly into water bodies.</div>
+      <div class="info"><b>Acidic waste water</b>Acidic waste water can be treated with suitable basic substances like lime.</div>
+      <div class="info"><b>Basic waste water</b>Basic waste water can be treated with mild acidic substances under safe controlled conditions.</div>
+      <div class="info"><b>Responsible science</b>This lab links chapter concepts with pollution control and environmental protection.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modalOverlay" id="studentModal">
+  <div class="modal" style="width:min(94vw,520px)">
+    <div class="head"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div>
+    <div class="info">
+      <b>Enter your name</b>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px">
+        <button class="btn gold" onclick="Lab.setStudent()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat" id="chat">
+  <div class="head"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div>
+  <div class="msgs" id="msgs">
+    <div class="msg bot">Hi! I am Dr AI. Ask me about acidic waste water, basic waste water, neutralisation, lime, safe discharge or river pollution.</div>
+  </div>
+  <div class="chatInput">
+    <input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()">
+    <button onclick="DrAI.ask()">Send</button>
+  </div>
+</div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey && ['u','s','c','x','a','p'].includes(k)) e.preventDefault();
+  if(k==='f12') e.preventDefault();
+});
+
+const MISSIONS = [
+  {
+    id:'acidic',
+    emoji:'🧪',
+    name:'Acidic Textile Waste',
+    fact:'The factory waste water is acidic. Fish are at risk if this water enters the river directly.',
+    hint:'Need: base to neutralise acid',
+    flow:'acid',
+    needle:'14%',
+    correct:'Slaked Lime Solution',
+    options:[
+      {name:'Slaked Lime Solution', good:true, explain:'Correct! A basic substance like slaked lime can neutralise acidic waste water.'},
+      {name:'Vinegar', good:false, explain:'Not correct. Vinegar is acidic, so it does not neutralise acidic waste properly.'},
+      {name:'Lemon Juice', good:false, explain:'Not correct. Lemon juice is also acidic.'}
+    ]
+  },
+  {
+    id:'basic',
+    emoji:'🫧',
+    name:'Basic Soap Factory Waste',
+    fact:'The discharge is basic because it comes from a soap-making process.',
+    hint:'Need: mild acid to neutralise base',
+    flow:'base',
+    needle:'82%',
+    correct:'Dilute Vinegar',
+    options:[
+      {name:'Dilute Vinegar', good:true, explain:'Correct! A mild acid such as dilute vinegar can help neutralise basic waste water.'},
+      {name:'Baking Soda', good:false, explain:'Not correct. Baking soda is basic and will not neutralise basic waste.'},
+      {name:'Lime Water', good:false, explain:'Not correct. Lime water is also basic.'}
+    ]
+  },
+  {
+    id:'spill',
+    emoji:'⚠️',
+    name:'Acid Spill Control',
+    fact:'An acidic lab spill has reached the drainage line. Immediate treatment is needed.',
+    hint:'Need: base for emergency neutralisation',
+    flow:'acid',
+    needle:'20%',
+    correct:'Baking Soda Treatment',
+    options:[
+      {name:'Baking Soda Treatment', good:true, explain:'Correct! Baking soda is a mild base and can help neutralise an acidic spill.'},
+      {name:'Curd Water', good:false, explain:'Not correct. Curd water is acidic.'},
+      {name:'Orange Juice', good:false, explain:'Not correct. Orange juice is acidic.'}
+    ]
+  },
+  {
+    id:'safe',
+    emoji:'✅',
+    name:'Already Safe Discharge',
+    fact:'This treated water is already close to neutral and safe for final checking.',
+    hint:'Need: no extra treatment',
+    flow:'neutral',
+    needle:'52%',
+    correct:'No Extra Treatment',
+    options:[
+      {name:'No Extra Treatment', good:true, explain:'Correct! If the water is already near neutral, unnecessary treatment should be avoided.'},
+      {name:'Strong Acid', good:false, explain:'Not correct. Strong acid would make the water unsafe.'},
+      {name:'Too Much Lime', good:false, explain:'Not correct. Excess lime could make the water too basic.'}
+    ]
+  }
+];
+
+let G = {student:'Student', current:0, selected:null, score:0, results:{}};
+const $ = id => document.getElementById(id);
+
+function initResults(){ MISSIONS.forEach(m => G.results[m.id] = false); }
+function doneCount(){ return Object.values(G.results).filter(Boolean).length; }
+function say(text){
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-IN';
+    u.rate = 0.97;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function feedback(html, voice){
+  $('feedback').innerHTML = html;
+  $('speech').innerHTML = html.replace(/<[^>]+>/g,'');
+  if(voice) say(voice);
+}
+function mission(){ return MISSIONS[G.current]; }
+
+function renderMissionList(){
+  $('missionList').innerHTML = MISSIONS.map((m,i)=>`
+    <button class="missionBtn ${i===G.current?'active':''} ${G.results[m.id]?'done':''}" onclick="Lab.gotoMission(${i})">
+      ${m.emoji} ${m.name}
+    </button>
+  `).join('');
+}
+function renderTable(){
+  $('tableBody').innerHTML = MISSIONS.map(m=>`
+    <tr>
+      <td>${m.name}</td>
+      <td>${m.correct}</td>
+      <td>${G.results[m.id] ? '<span class="badge pass">Completed</span>' : '<span class="badge fail">Pending</span>'}</td>
+    </tr>
+  `).join('');
+}
+function renderTools(){
+  const m = mission();
+  $('toolWrap').innerHTML = m.options.map(opt=>`
+    <button class="toolBtn ${G.selected===opt.name?'active':''}" onclick="Lab.selectTool('${opt.name.replace(/'/g,"\\'")}')">
+      ${opt.name}
+      <small>${opt.good ? 'Best rescue choice' : 'Think carefully before choosing'}</small>
+    </button>
+  `).join('') + `
+    <div class="goodBox"><b>Goal:</b> Make the water safe before it enters the river.</div>
+    <div class="badBox"><b>Hint:</b> ${m.hint}</div>
+  `;
+}
+function riverState(safe){
+  const fishes = ['fish1','fish2','fish3'].map(id=>$(id));
+  fishes.forEach(f=>f.classList.toggle('dead', !safe));
+  $('riverOverlay').style.background = safe ? 'rgba(105,242,164,.14)' : 'rgba(255,126,136,.18)';
+  $('meterText').textContent = safe ? 'Safe' : 'Unsafe';
+  $('needle').style.left = safe ? '52%' : mission().needle;
+}
+function animateFlow(type){
+  $('flow').className = 'flow ' + type;
+  $('flow').style.height = '92px';
+}
+function animateTreatment(success){
+  ['bubble1','bubble2'].forEach((id, idx)=>{
+    const b = $(id);
+    b.style.left = (56 + idx*46) + 'px';
+    b.style.bottom = '18px';
+    b.classList.remove('go'); void b.offsetWidth; b.classList.add('go');
+  });
+  $('treatLiquid').style.background = success ? 'var(--green)' : 'rgba(255,126,136,.45)';
+}
+function renderScene(){
+  const m = mission();
+  $('reportEmoji').textContent = m.emoji;
+  $('reportName').textContent = m.name;
+  $('reportFact').textContent = m.fact;
+  $('reportHint').textContent = m.hint;
+  animateFlow(m.flow);
+  $('needle').style.left = G.results[m.id] ? '52%' : m.needle;
+  $('treatLiquid').style.background = G.results[m.id] ? 'var(--green)' : 'rgba(255,255,255,.18)';
+  riverState(G.results[m.id] || m.flow==='neutral');
+}
+function update(){
+  const m = mission();
+  $('stagePill').textContent = 'Mission ' + (G.current + 1);
+  $('scorePill').textContent = 'Score: ' + G.score;
+  $('donePill').textContent = doneCount() + '/4';
+  $('missionTitle').textContent = m.name;
+  $('missionText').textContent = 'Read the mission report, choose the correct treatment, then rescue the river.';
+  $('fill').style.width = ((doneCount() / MISSIONS.length) * 100) + '%';
+  renderMissionList();
+  renderTable();
+  renderTools();
+  renderScene();
+}
+function selectTool(name){
+  Music.ensureStarted();
+  G.selected = name;
+  renderTools();
+  feedback(`<b>Selected:</b> ${name}. Now click Treat Waste Water.`, `${name} selected.`);
+}
+function treat(){
+  if(!G.selected){
+    feedback('<b>Select a treatment first.</b>', 'Select a treatment first.');
+    return;
+  }
+  const m = mission();
+  const chosen = m.options.find(o => o.name === G.selected);
+  animateTreatment(chosen.good);
+  if(chosen.good){
+    if(!G.results[m.id]) G.score += 25;
+    G.results[m.id] = true;
+    riverState(true);
+    $('treatLiquid').style.background = 'var(--green)';
+    feedback(`<b>Correct treatment!</b> ${chosen.explain}`, 'Correct treatment.');
+  }else{
+    riverState(false);
+    $('treatLiquid').style.background = 'rgba(255,126,136,.45)';
+    feedback(`<b>Wrong treatment.</b> ${chosen.explain}`, 'Wrong treatment. Try again.');
+  }
+  update();
+  if(doneCount() === MISSIONS.length){
+    feedback(`<b>Excellent ${G.student}!</b> All rescue missions are complete. Click Show Result for your certificate.`, `Excellent ${G.student}.`);
+  }
+}
+function nextMission(){
+  if(G.current < MISSIONS.length - 1){
+    G.current++;
+    G.selected = null;
+    update();
+    feedback('<b>Next mission loaded.</b> Read the mission report and choose treatment.', 'Next mission loaded.');
+  }else{
+    feedback('<b>All missions visited.</b> Click Show Result after completing all missions.', 'All missions visited.');
+  }
+}
+function gotoMission(i){
+  G.current = i;
+  G.selected = null;
+  update();
+  feedback('<b>Mission changed.</b> Choose the correct treatment.', 'Mission changed.');
+}
+function showResult(){
+  if(doneCount() === MISSIONS.length){
+    $('certificate').style.display = 'block';
+    $('certName').textContent = G.student;
+    $('certificate').scrollIntoView({behavior:'smooth'});
+  }else{
+    feedback('<b>Complete all four missions first.</b>', 'Complete all four missions first.');
+  }
+}
+function setStudent(){
+  G.student = ($('studentInput').value || 'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start with the first waste water rescue mission.`, `Welcome ${G.student}.`);
+}
+
+function openLearn(){ $('modal').classList.add('active'); }
+function close(){ $('modal').classList.remove('active'); }
+function student(){ $('studentInput').value = G.student==='Student' ? '' : G.student; $('studentModal').classList.add('active'); }
+function closeStudent(){ $('studentModal').classList.remove('active'); }
+function toggleTable(){ $('tableCard').classList.toggle('show'); }
+
+function toggleChat(){ $('chat').classList.toggle('active'); }
+function addMsg(text, who){
+  const d = document.createElement('div');
+  d.className = 'msg ' + who;
+  d.innerHTML = text;
+  $('msgs').appendChild(d);
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+}
+function answer(q){
+  q = q.toLowerCase();
+  if(q.includes('acidic')) return 'Acidic waste water can be treated using a suitable base such as slaked lime.';
+  if(q.includes('basic')) return 'Basic waste water can be treated with a mild acid under controlled safe conditions.';
+  if(q.includes('neutralisation')) return 'Neutralisation is the reaction between an acid and a base to form salt and water.';
+  if(q.includes('river') || q.includes('pollution')) return 'Untreated industrial discharge can harm aquatic life and pollute water bodies.';
+  if(q.includes('lime')) return 'Slaked lime is basic and is often used to treat acidic waste water.';
+  return 'Ask me about acidic waste water, basic waste water, neutralisation, lime, safe discharge or river pollution.';
+}
+function ask(){
+  const q = $('chatInput').value.trim();
+  if(!q) return;
+  addMsg(q, 'user');
+  $('chatInput').value = '';
+  setTimeout(()=>addMsg(answer(q), 'bot'), 220);
+}
+
+const Music = {
+  ctx:null, master:null, on:false, timer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.05;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  ensureStarted(){ this.init(); if(!this.on) this.start(); },
+  tone(f, d, type='sine', vol=0.04, when=0){
+    if(!this.ctx || !this.master) return;
+    const t = this.ctx.currentTime + when;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t + d + 0.05);
+  },
+  cycle(){
+    this.tone(136.1, 2.8, 'sine', 0.045);
+    this.tone(272.2, 2.1, 'triangle', 0.018, 0.15);
+    this.tone(204.15, 1.7, 'sine', 0.015, 0.55);
+  },
+  start(){
+    this.init();
+    if(this.on) return;
+    this.on = true;
+    $('musicBtn').textContent = '⏸ OM';
+    this.cycle();
+    this.timer = setInterval(()=>this.cycle(), 2900);
+  },
+  stop(){
+    this.on = false;
+    clearInterval(this.timer);
+    this.timer = null;
+    $('musicBtn').textContent = '▶ OM';
+  },
+  toggle(){ this.on ? this.stop() : this.start(); }
+};
+
+window.Lab = {selectTool, treat, nextMission, gotoMission, showResult, setStudent};
+window.UI = {openLearn, close, student, closeStudent, toggleTable};
+window.DrAI = {toggle: toggleChat, ask};
+window.Music = Music;
+
+initResults();
+update();
+setTimeout(student, 250);
+})();
+</script>
+</body>
+</html>

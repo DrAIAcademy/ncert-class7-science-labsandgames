@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>pH Scale Master Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#101f3e; --bg2:#063d52; --gold:#ffd84d; --cyan:#46e8ff; --green:#67f2a3; --red:#ff7d86; --purple:#b695ff;
+  --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dce9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.18),transparent 24%),
+    radial-gradient(circle at 88% 8%,rgba(70,232,255,.16),transparent 30%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1140px;margin:0 auto;padding:10px 10px 102px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:40}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(70,232,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.05rem,5vw,1.5rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.15rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--red),#ffa94d,var(--gold),var(--green),var(--cyan),#5595ff,var(--purple));transition:.35s}
+
+.lab{position:relative;min-height:760px;overflow:hidden;padding:14px;border-radius:24px;background:
+radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+linear-gradient(180deg,#13305e 0%,#0b173a 40%,#2e355f 40%,#49316d 100%);
+border:1px solid var(--line)}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.12rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px}
+.grid{display:grid;grid-template-columns:.92fr 1.3fr .95fr;gap:14px;position:absolute;left:0;right:0;top:16px;bottom:16px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+
+.samplePanel{position:absolute;left:14px;right:14px;top:48px;bottom:16px;display:flex;flex-direction:column;gap:10px;overflow:auto;padding-right:4px}
+.sampleBtn,.answerBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:58px;padding:10px;text-align:left;font-weight:900}
+.sampleBtn.active,.answerBtn.active{outline:3px solid var(--gold)}
+.sampleBtn small,.answerBtn small{display:block;color:var(--muted);font-weight:700;margin-top:4px}
+.infoBox{padding:10px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid var(--line);line-height:1.45;font-size:.88rem}
+
+.bench{position:absolute;left:18px;right:18px;top:56px;bottom:18px;border-radius:24px;background:linear-gradient(180deg,#27486f 0%,#1f3556 32%,#8f5d2e 32%,#a56a35 100%);border:1px solid rgba(255,255,255,.12);overflow:hidden}
+.monitor{position:absolute;left:18px;right:18px;top:18px;min-height:70px;padding:10px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid var(--line);line-height:1.35;font-size:.88rem}
+.scaleWrap{position:absolute;left:18px;right:18px;top:104px;height:116px;padding:16px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.scaleBar{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;height:36px}
+.slot{border-radius:10px;display:grid;place-items:center;font-weight:900;font-size:.82rem;color:#08101d;position:relative;cursor:pointer;user-select:none;min-height:36px}
+.slot:nth-child(1){background:#ff5b6f}.slot:nth-child(2){background:#ff6f5c}.slot:nth-child(3){background:#ff844f}.slot:nth-child(4){background:#ff9a45}
+.slot:nth-child(5){background:#ffb74a}.slot:nth-child(6){background:#ffd84d}.slot:nth-child(7){background:#f5f190}.slot:nth-child(8){background:#8aef93}
+.slot:nth-child(9){background:#68e6ac}.slot:nth-child(10){background:#4edfd2}.slot:nth-child(11){background:#44d1ff}.slot:nth-child(12){background:#61aefc}
+.slot:nth-child(13){background:#7d97ff}.slot:nth-child(14){background:#a58cff}
+.slot.active{outline:4px solid #fff;transform:translateY(-2px)}
+.markerTrack{position:relative;height:48px;margin-top:10px}
+.marker{position:absolute;top:2px;width:28px;height:28px;border-radius:50%;background:#fff;border:4px solid #0a1020;box-shadow:0 10px 16px rgba(0,0,0,.25);left:calc(0% + 2px);transition:.45s}
+.marker::after{content:"";position:absolute;left:9px;bottom:-18px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:12px solid #fff}
+.zoneLabels{display:flex;justify-content:space-between;font-size:.76rem;color:var(--muted);margin-top:8px}
+
+.flaskArea{position:absolute;left:18px;right:18px;bottom:22px;height:238px;display:flex;align-items:flex-end;justify-content:center;gap:22px}
+.beaker{width:108px;height:178px;border:5px solid rgba(255,255,255,.45);border-top:0;border-radius:0 0 24px 24px;background:rgba(255,255,255,.05);position:relative;overflow:hidden;box-shadow:0 14px 22px rgba(0,0,0,.22)}
+.liquid{position:absolute;left:8px;right:8px;bottom:8px;height:92px;border-radius:18px 18px 22px 22px;background:#dbeafe;transition:.55s}
+.sampleTag{position:absolute;left:50%;transform:translateX(-50%);bottom:-38px;white-space:nowrap;font-weight:900;font-size:.84rem;color:#fff}
+.phNeedleBox{width:96px;height:188px;border-radius:24px;background:rgba(255,255,255,.08);border:1px solid var(--line);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.meterTitle{font-size:.8rem;color:var(--muted);font-weight:900;margin-bottom:12px}
+.digital{width:68px;padding:10px 0;border-radius:12px;background:#0a1020;color:#67f2a3;text-align:center;font-weight:900;font-size:1.4rem;box-shadow:inset 0 0 0 2px rgba(103,242,163,.16)}
+.zoneTag{margin-top:10px;font-weight:900;font-size:.86rem}
+.bubbles{position:absolute;inset:0;pointer-events:none}
+.bub{position:absolute;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.7);bottom:18px;opacity:0}
+.bub.go{animation:bubble 1s ease forwards}
+@keyframes bubble{0%{opacity:.15;transform:translateY(0) scale(.5)}30%{opacity:.95}100%{opacity:0;transform:translateY(-90px) scale(1.2)}}
+
+.answerPanel{position:absolute;left:14px;right:14px;top:48px;bottom:16px;display:flex;flex-direction:column;gap:10px;overflow:auto}
+.missionList{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.missionBtn{min-height:74px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px;text-align:left}
+.missionBtn.done{outline:3px solid var(--green)} .missionBtn.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:84px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.5}
+.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}th{background:rgba(255,255,255,.10)}td:first-child{text-align:left}
+.badgeTag{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}.pass{background:#66f2a333}.fail{background:#ff7d8633}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.headRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}
+.info b{display:block;color:var(--gold);margin-bottom:4px}
+
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}
+.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}
+.msg.bot{background:rgba(70,232,255,.12);border:1px solid rgba(70,232,255,.18)}
+.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}
+.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}
+.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+
+.cert{display:none;margin-top:10px;padding:16px}
+.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+
+@media(max-width:980px){
+  .grid{grid-template-columns:1fr;gap:12px}
+  .lab{min-height:1220px}
+  .scene{top:176px}
+}
+@media(max-width:760px){
+  .app{padding:8px 8px 98px}
+  .top{padding:10px}
+  .top .btn:not(.gold):not(#musicBtn){display:none}
+  .hero{padding:12px}
+  .dr{top:78px}
+  .speech{left:108px;top:82px;font-size:.82rem}
+  .lab{min-height:1260px}
+  .scene{top:178px}
+  .missionList{grid-template-columns:repeat(2,1fr)}
+  .infoGrid{grid-template-columns:1fr}
+  .bottomBar button{font-size:.74rem}
+  .flaskArea{gap:12px}
+  .beaker{width:94px}
+  .phNeedleBox{width:82px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand">
+      <div class="logo">⚗️</div>
+      <div><h1>pH Scale Master Lab 3D</h1><p>Class 7 • Developed by Dr AI Academy</p></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="UI.openLearn()">Learn</button>
+      <button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button>
+      <button class="btn gold" onclick="UI.student()">Name</button>
+    </div>
+  </div>
+
+  <div class="hero card">
+    <h2>Master the pH scale from strong acids to strong bases.</h2>
+    <p>This 3D virtual lab helps students place real-life substances on the pH scale, understand acidic/basic strength, and connect indicator knowledge with pH values in a fun visual way.</p>
+  </div>
+
+  <div class="status">
+    <div class="pill" id="stagePill">Mission 1</div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="pill" id="scorePill">Score: 0</div>
+    <div class="pill" id="donePill">0/5</div>
+  </div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">pH Mission</div>
+    <div class="missionText" id="missionText">Select the correct sample, choose its pH number and classification, then record your answer.</div>
+
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and start the first pH mission.</div>
+
+    <div class="scene">
+      <div class="grid">
+        <div class="station">
+          <div class="stationTitle">Sample Shelf</div>
+          <div class="samplePanel" id="samplePanel"></div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">3D pH Bench</div>
+          <div class="bench">
+            <div class="monitor" id="monitor"><b>Observation:</b> Choose a sample, then tap a pH number on the scale.</div>
+
+            <div class="scaleWrap">
+              <div class="scaleBar" id="scaleBar"></div>
+              <div class="markerTrack"><div class="marker" id="marker"></div></div>
+              <div class="zoneLabels">
+                <span>Strong Acid</span><span>Weak Acid</span><span>Neutral</span><span>Weak Base</span><span>Strong Base</span>
+              </div>
+            </div>
+
+            <div class="flaskArea">
+              <div class="beaker">
+                <div class="liquid" id="liquid"></div>
+                <div class="bubbles" id="bubbles"></div>
+                <div class="sampleTag" id="sampleTag">No sample</div>
+              </div>
+
+              <div class="phNeedleBox">
+                <div class="meterTitle">Digital pH Meter</div>
+                <div class="digital" id="digitalPH">--</div>
+                <div class="zoneTag" id="zoneTag">No zone</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Answer Console</div>
+          <div class="answerPanel">
+            <div class="infoBox"><b>Step 1:</b> Choose the correct sample for this mission.</div>
+            <div class="infoBox"><b>Step 2:</b> Tap a pH number on the scale.</div>
+            <div class="infoBox"><b>Step 3:</b> Choose the correct classification.</div>
+            <button class="answerBtn" onclick="Lab.chooseClass('strong acid')">Strong Acid<small>Very acidic</small></button>
+            <button class="answerBtn" onclick="Lab.chooseClass('weak acid')">Weak Acid<small>Mild acidic</small></button>
+            <button class="answerBtn" onclick="Lab.chooseClass('neutral')">Neutral<small>Neither acid nor base</small></button>
+            <button class="answerBtn" onclick="Lab.chooseClass('weak base')">Weak Base<small>Mild basic</small></button>
+            <button class="answerBtn" onclick="Lab.chooseClass('strong base')">Strong Base<small>Very basic</small></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="missionList" id="missionList"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Select the correct sample, tap a pH value, choose the class, then record result.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard">
+    <div class="tableWrap">
+      <table>
+        <thead>
+          <tr><th>Mission</th><th>Target Sample</th><th>Correct pH</th><th>Correct Class</th><th>Status</th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="cert card" id="certificate">
+    <div class="certInner">
+      <div style="font-size:52px">⚗️📜🏆</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="certName" id="certName">Student Name</div>
+      <p>successfully completed <b>pH Scale Master Lab 3D</b>.</p>
+      <p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p>
+      <button class="btn gold" onclick="window.print()">Print / Save Certificate</button>
+    </div>
+  </div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar">
+  <button onclick="Lab.runBench()">Run<br>Bench</button>
+  <button onclick="Lab.record()">Record<br>Result</button>
+  <button onclick="Lab.nextMission()">Next<br>Mission</button>
+  <button onclick="UI.toggleTable()">Show<br>Table</button>
+  <button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button>
+</div>
+
+<div class="modalOverlay" id="modal">
+  <div class="modal">
+    <div class="headRow"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div>
+    <div class="infoGrid">
+      <div class="info"><b>pH scale</b>pH scale runs from 1 to 14. Lower values are acidic, 7 is neutral, and higher values are basic.</div>
+      <div class="info"><b>Strong vs weak acid</b>pH 1–3 are strongly acidic, while pH 4–6 are weakly acidic.</div>
+      <div class="info"><b>Strong vs weak base</b>pH 8–10 are weakly basic, while pH 11–14 are strongly basic.</div>
+      <div class="info"><b>Real-life science</b>Students connect lemon juice, vinegar, water, soap and bleach-like substances with pH values and class labels.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modalOverlay" id="studentModal">
+  <div class="modal" style="width:min(94vw,520px)">
+    <div class="headRow"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div>
+    <div class="info">
+      <b>Enter your name</b>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px" />
+        <button class="btn gold" onclick="Lab.setStudent()">Start Lab</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat" id="chat">
+  <div class="headRow"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div>
+  <div class="msgs" id="msgs">
+    <div class="msg bot">Hi! I am Dr AI. Ask me about pH scale, acids, bases, neutral substances, strong acid or weak base.</div>
+  </div>
+  <div class="chatInput">
+    <input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()" />
+    <button onclick="DrAI.ask()">Send</button>
+  </div>
+</div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey && ['u','s','c','x','a','p'].includes(k)) e.preventDefault();
+  if(k==='f12') e.preventDefault();
+});
+
+const SAMPLES = [
+  {name:'Lemon Juice', emoji:'🍋', ph:2, cls:'strong acid', color:'#ffe75e'},
+  {name:'Vinegar', emoji:'🫙', ph:3, cls:'strong acid', color:'#ffd1c1'},
+  {name:'Orange Juice', emoji:'🍊', ph:4, cls:'weak acid', color:'#ffbf66'},
+  {name:'Tap Water', emoji:'💧', ph:7, cls:'neutral', color:'#9adcff'},
+  {name:'Baking Soda Solution', emoji:'🥤', ph:8, cls:'weak base', color:'#a7f0b0'},
+  {name:'Soap Solution', emoji:'🧼', ph:10, cls:'weak base', color:'#5be2ff'},
+  {name:'Bleach Cleaner', emoji:'🧴', ph:13, cls:'strong base', color:'#9fa2ff'}
+];
+
+const MISSIONS = [
+  {id:'m1', title:'Mission Lemon', sample:'Lemon Juice', ph:2, cls:'strong acid', hint:'Very sour sample, strongly acidic.'},
+  {id:'m2', title:'Mission Water', sample:'Tap Water', ph:7, cls:'neutral', hint:'Balanced sample, neither acid nor base.'},
+  {id:'m3', title:'Mission Soap', sample:'Soap Solution', ph:10, cls:'weak base', hint:'Cleaning sample, mildly basic.'},
+  {id:'m4', title:'Mission Vinegar', sample:'Vinegar', ph:3, cls:'strong acid', hint:'Kitchen acid, stronger acid zone.'},
+  {id:'m5', title:'Mission Bleach', sample:'Bleach Cleaner', ph:13, cls:'strong base', hint:'Powerful cleaner, strongly basic.'}
+];
+
+let G = {
+  student:'Student',
+  current:0,
+  selectedSample:null,
+  selectedPH:null,
+  selectedClass:null,
+  score:0,
+  results:{}
+};
+
+const $ = id => document.getElementById(id);
+function initResults(){ MISSIONS.forEach(m => G.results[m.id] = false); }
+function doneCount(){ return Object.values(G.results).filter(Boolean).length; }
+function mission(){ return MISSIONS[G.current]; }
+
+function say(text){
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-IN';
+    u.rate = 0.97;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function feedback(html, voice){
+  $('feedback').innerHTML = html;
+  $('speech').textContent = html.replace(/<[^>]+>/g,'');
+  if(voice) say(voice);
+}
+
+function buildScale(){
+  const bar = $('scaleBar');
+  bar.innerHTML = '';
+  for(let i=1;i<=14;i++){
+    const d = document.createElement('div');
+    d.className = 'slot' + (G.selectedPH===i ? ' active' : '');
+    d.textContent = i;
+    d.onclick = () => Lab.pickPH(i);
+    bar.appendChild(d);
+  }
+}
+function placeMarker(ph){
+  const left = ((ph-1) / 13) * 100;
+  $('marker').style.left = `calc(${left}% - 10px)`;
+}
+function zoneFromPH(ph){
+  if(ph>=1 && ph<=3) return 'Strong Acid';
+  if(ph>=4 && ph<=6) return 'Weak Acid';
+  if(ph===7) return 'Neutral';
+  if(ph>=8 && ph<=10) return 'Weak Base';
+  return 'Strong Base';
+}
+function renderSamples(){
+  $('samplePanel').innerHTML = SAMPLES.map(s =>
+    `<button class="sampleBtn ${G.selectedSample===s.name?'active':''}" onclick="Lab.selectSample('${s.name.replace(/'/g,"&#39;")}')">${s.emoji} ${s.name}<small>Common science sample</small></button>`
+  ).join('') + `<div class="infoBox"><b>Mission Hint:</b> ${mission().hint}</div>`;
+}
+function renderAnswerButtons(){
+  const all = [...document.querySelectorAll('.answerPanel .answerBtn')];
+  all.forEach(btn => {
+    const label = btn.textContent.trim().split('\n')[0].trim().toLowerCase();
+    if(label === G.selectedClass) btn.classList.add('active'); else btn.classList.remove('active');
+  });
+}
+function renderMissionButtons(){
+  $('missionList').innerHTML = MISSIONS.map((m,i) =>
+    `<button class="missionBtn ${i===G.current?'active':''} ${G.results[m.id]?'done':''}" onclick="Lab.gotoMission(${i})">${m.title}<br><small>${m.sample}</small></button>`
+  ).join('');
+}
+function renderTable(){
+  $('tableBody').innerHTML = MISSIONS.map(m =>
+    `<tr><td>${m.title}</td><td>${m.sample}</td><td>${m.ph}</td><td>${m.cls}</td><td>${G.results[m.id] ? '<span class="badgeTag pass">Completed</span>' : '<span class="badgeTag fail">Pending</span>'}</td></tr>`
+  ).join('');
+}
+function updateBench(){
+  const s = SAMPLES.find(x=>x.name===G.selectedSample);
+  if(s){
+    $('sampleTag').textContent = s.name;
+    $('liquid').style.background = s.color;
+  } else {
+    $('sampleTag').textContent = 'No sample';
+    $('liquid').style.background = '#dbeafe';
+  }
+  if(G.selectedPH){
+    $('digitalPH').textContent = G.selectedPH;
+    $('zoneTag').textContent = zoneFromPH(G.selectedPH);
+    placeMarker(G.selectedPH);
+  } else {
+    $('digitalPH').textContent = '--';
+    $('zoneTag').textContent = 'No zone';
+    placeMarker(1);
+  }
+}
+function bubbleBurst(){
+  const wrap = $('bubbles');
+  wrap.innerHTML = '';
+  for(let i=0;i<12;i++){
+    const b = document.createElement('div');
+    b.className = 'bub go';
+    b.style.left = (12 + Math.random()*70) + 'px';
+    b.style.bottom = (14 + Math.random()*20) + 'px';
+    wrap.appendChild(b);
+    setTimeout(()=>b.remove(), 1000);
+  }
+}
+function updateAll(){
+  $('stagePill').textContent = 'Mission ' + (G.current+1);
+  $('scorePill').textContent = 'Score: ' + G.score;
+  $('donePill').textContent = doneCount() + '/5';
+  $('fill').style.width = ((doneCount()/MISSIONS.length)*100) + '%';
+  $('missionTitle').textContent = mission().title;
+  $('missionText').textContent = `Target: choose ${mission().sample}, set pH ${mission().ph}, and classify it as ${mission().cls}.`;
+  buildScale();
+  renderSamples();
+  renderAnswerButtons();
+  renderMissionButtons();
+  renderTable();
+  updateBench();
+}
+
+function selectSample(name){
+  Music.ensureStarted();
+  G.selectedSample = name;
+  renderSamples();
+  updateBench();
+  feedback(`<b>Sample selected:</b> ${name}. Now choose its pH value on the scale.`, `${name} selected.`);
+}
+function pickPH(value){
+  Music.ensureStarted();
+  G.selectedPH = value;
+  buildScale();
+  updateBench();
+  $('monitor').innerHTML = `<b>Observation:</b> pH pointer moved to <b>${value}</b>. Zone = <b>${zoneFromPH(value)}</b>.`;
+  feedback(`<b>pH selected:</b> ${value}. Now choose the correct class.`, `pH ${value} selected.`);
+}
+function chooseClass(cls){
+  G.selectedClass = cls;
+  renderAnswerButtons();
+  feedback(`<b>Class selected:</b> ${cls}. Now click Record Result.`, `${cls} selected.`);
+}
+function runBench(){
+  if(!G.selectedSample){
+    feedback('<b>Select a sample first.</b>', 'Select a sample first.');
+    return;
+  }
+  const s = SAMPLES.find(x=>x.name===G.selectedSample);
+  bubbleBurst();
+  $('monitor').innerHTML = `<b>Observation:</b> Sample loaded: <b>${s.name}</b>. Typical pH region depends on its acidic or basic nature.`;
+  feedback(`<b>Bench running:</b> ${s.name} loaded on the pH bench.`, 'Bench running.');
+}
+function record(){
+  const m = mission();
+  if(!G.selectedSample || G.selectedPH===null || !G.selectedClass){
+    feedback('<b>Complete all three steps first:</b> sample, pH and class.', 'Complete all three steps first.');
+    return;
+  }
+  const sampleOk = G.selectedSample === m.sample;
+  const phOk = G.selectedPH === m.ph;
+  const classOk = G.selectedClass === m.cls;
+  if(sampleOk && phOk && classOk){
+    if(!G.results[m.id]) G.score += 20;
+    G.results[m.id] = true;
+    bubbleBurst();
+    $('monitor').innerHTML = `<b>Perfect Match!</b> ${m.sample} belongs at pH <b>${m.ph}</b> and is a <b>${m.cls}</b>.`;
+    feedback(`<b>Correct!</b> ${m.sample} is placed correctly on the pH scale.`, 'Correct answer.');
+  } else {
+    let msg = 'Check again: ';
+    if(!sampleOk) msg += `sample should be ${m.sample}. `;
+    if(!phOk) msg += `pH should be ${m.ph}. `;
+    if(!classOk) msg += `class should be ${m.cls}. `;
+    $('monitor').innerHTML = `<b>Try Again:</b> ${msg}`;
+    feedback('<b>Not correct.</b> ' + msg, 'Not correct. Try again.');
+  }
+  updateAll();
+  if(doneCount()===MISSIONS.length){
+    feedback(`<b>Excellent ${G.student}!</b> You have mastered the pH scale. Click Show Table and print your certificate below.`, `Excellent ${G.student}.`);
+    $('certificate').style.display = 'block';
+    $('certName').textContent = G.student;
+  }
+}
+function nextMission(){
+  if(G.current < MISSIONS.length-1){
+    G.current++;
+    G.selectedSample = null;
+    G.selectedPH = null;
+    G.selectedClass = null;
+    $('monitor').innerHTML = '<b>Observation:</b> Choose a sample, then tap a pH number on the scale.';
+    updateAll();
+    feedback('<b>Next mission loaded.</b> Solve the next pH challenge.', 'Next mission loaded.');
+  } else {
+    feedback('<b>All missions visited.</b> Finish pending ones or print certificate.', 'All missions visited.');
+  }
+}
+function gotoMission(i){
+  G.current = i;
+  G.selectedSample = null;
+  G.selectedPH = null;
+  G.selectedClass = null;
+  $('monitor').innerHTML = '<b>Observation:</b> Choose a sample, then tap a pH number on the scale.';
+  updateAll();
+  feedback('<b>Mission changed.</b> Start this pH challenge now.', 'Mission changed.');
+}
+function setStudent(){
+  G.student = ($('studentInput').value || 'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start the first pH mission.`, `Welcome ${G.student}.`);
+}
+
+function openLearn(){ $('modal').classList.add('active'); }
+function closeLearn(){ $('modal').classList.remove('active'); }
+function openStudent(){ $('studentInput').value = G.student==='Student' ? '' : G.student; $('studentModal').classList.add('active'); }
+function closeStudent(){ $('studentModal').classList.remove('active'); }
+function toggleTable(){ $('tableCard').classList.toggle('show'); }
+
+function toggleChat(){ $('chat').classList.toggle('active'); }
+function addMsg(text, who){
+  const d = document.createElement('div');
+  d.className = 'msg ' + who;
+  d.innerHTML = text;
+  $('msgs').appendChild(d);
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+}
+function answer(q){
+  q = q.toLowerCase();
+  if(q.includes('ph')) return 'The pH scale runs from 1 to 14. Below 7 is acidic, 7 is neutral, and above 7 is basic.';
+  if(q.includes('strong acid')) return 'Strong acids are usually around pH 1 to 3.';
+  if(q.includes('weak acid')) return 'Weak acids are usually around pH 4 to 6.';
+  if(q.includes('neutral')) return 'Neutral substances are around pH 7, like pure water.';
+  if(q.includes('weak base')) return 'Weak bases usually lie around pH 8 to 10.';
+  if(q.includes('strong base')) return 'Strong bases usually lie around pH 11 to 14.';
+  if(q.includes('lemon')) return 'Lemon juice is acidic and is often shown around pH 2.';
+  if(q.includes('soap')) return 'Soap solution is basic and often lies around pH 10.';
+  return 'Ask me about pH scale, acids, bases, neutral substances, strong acid or weak base.';
+}
+function ask(){
+  const q = $('chatInput').value.trim();
+  if(!q) return;
+  addMsg(q,'user');
+  $('chatInput').value = '';
+  setTimeout(()=>addMsg(answer(q),'bot'),220);
+}
+
+const Music = {
+  ctx:null, master:null, on:false, timer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.05;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  ensureStarted(){ this.init(); if(!this.on) this.start(); },
+  tone(f,d,type='sine',vol=0.04,when=0){
+    if(!this.ctx || !this.master) return;
+    const t = this.ctx.currentTime + when;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t+d+0.05);
+  },
+  cycle(){
+    this.tone(136.1,2.8,'sine',0.045);
+    this.tone(272.2,2.1,'triangle',0.018,0.15);
+    this.tone(204.15,1.7,'sine',0.015,0.55);
+  },
+  start(){
+    this.init();
+    if(this.on) return;
+    this.on = true;
+    $('musicBtn').textContent = '⏸ OM';
+    this.cycle();
+    this.timer = setInterval(()=>this.cycle(),2900);
+  },
+  stop(){
+    this.on = false;
+    clearInterval(this.timer);
+    this.timer = null;
+    $('musicBtn').textContent = '▶ OM';
+  },
+  toggle(){ this.on ? this.stop() : this.start(); }
+};
+
+window.Lab = {selectSample,pickPH,chooseClass,runBench,record,nextMission,gotoMission,setStudent};
+window.UI = {openLearn,close:closeLearn,student:openStudent,closeStudent,toggleTable};
+window.DrAI = {toggle:toggleChat,ask};
+window.Music = Music;
+
+initResults();
+updateAll();
+setTimeout(openStudent, 250);
+})();
+</script>
+</body>
+</html>

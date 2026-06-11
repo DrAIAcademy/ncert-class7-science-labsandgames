@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Acid Rain Rescue Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#101a38; --bg2:#073650; --gold:#ffd84d; --cyan:#46e8ff; --green:#67f2a3; --red:#ff7d86; --gray:#cbd5e1;
+  --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dce9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.16),transparent 25%),
+    radial-gradient(circle at 88% 8%,rgba(70,232,255,.18),transparent 28%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1120px;margin:0 auto;padding:10px 10px 100px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(70,232,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.08rem,5vw,1.52rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.15rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.35s}
+.lab{position:relative;min-height:670px;overflow:hidden;padding:14px;border-radius:24px;background:
+  radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+  linear-gradient(180deg,#152b5d 0%,#0b173a 42%,#27374b 42%,#2d5f4d 100%);
+  border:1px solid var(--line);
+}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.1rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px;perspective:1000px}
+.grid{display:grid;grid-template-columns:1fr 1.2fr .95fr;gap:14px;position:absolute;left:0;right:0;bottom:16px;top:16px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+.report{position:absolute;left:14px;right:14px;top:48px;bottom:16px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:14px;display:flex;flex-direction:column;justify-content:space-between}
+.reportEmoji{font-size:4rem;line-height:1}.reportName{font-size:1.08rem;font-weight:900;margin-top:8px}.reportFact{font-size:.92rem;line-height:1.45;color:var(--muted)}
+.hint{display:inline-block;padding:8px 10px;border-radius:12px;background:rgba(255,216,77,.16);border:1px solid rgba(255,216,77,.24);font-size:.84rem}
+.world{position:absolute;left:18px;right:18px;top:56px;bottom:18px;border-radius:24px;background:linear-gradient(180deg,#385b7a 0%,#2d455d 36%,#2f8ca9 36%,#31c8e7 66%,#5f8d3f 66%,#3f7a39 100%);border:1px solid rgba(255,255,255,.12);overflow:hidden}
+.cloud{position:absolute;width:140px;height:42px;border-radius:999px;background:rgba(255,255,255,.34);left:28px;top:22px}
+.cloud:before,.cloud:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.34)}.cloud:before{width:52px;height:52px;left:20px;top:-24px}.cloud:after{width:62px;height:62px;right:20px;top:-30px}
+.factory{position:absolute;right:22px;top:30px;width:108px;height:74px;background:linear-gradient(180deg,#c7d3e5,#7e91ab);border-radius:12px}
+.factory:before,.factory:after{content:"";position:absolute;background:#94a4ba;border-radius:8px 8px 0 0}.factory:before{width:22px;height:50px;right:18px;top:-42px}.factory:after{width:20px;height:40px;right:48px;top:-32px}
+.smoke{position:absolute;right:38px;top:2px;width:90px;height:60px}.smoke span{position:absolute;border-radius:50%;background:rgba(255,255,255,.25);animation:smoke 3s ease-in-out infinite}.smoke span:nth-child(1){width:32px;height:32px;left:0;top:20px}.smoke span:nth-child(2){width:38px;height:38px;left:28px;top:10px;animation-delay:.4s}.smoke span:nth-child(3){width:30px;height:30px;right:0;top:18px;animation-delay:.8s}@keyframes smoke{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-12px);opacity:.7}}
+.rain{position:absolute;left:0;right:0;top:88px;height:170px;pointer-events:none}
+.drop{position:absolute;width:4px;height:20px;border-radius:999px;background:#9defff;opacity:.7;animation:rain 1s linear infinite}.drop.acid{background:#ff7d86}
+@keyframes rain{0%{transform:translateY(-30px);opacity:0}25%{opacity:1}100%{transform:translateY(170px);opacity:0}}
+.lake{position:absolute;left:22px;right:22px;bottom:94px;height:118px;border-radius:40px;background:linear-gradient(180deg,#8fefff,#34c9ec);border:1px solid rgba(255,255,255,.22);overflow:hidden;transition:.55s}
+.lake.bad{background:linear-gradient(180deg,#c6bd70,#7b8a45)}.lake.safe{background:linear-gradient(180deg,#8fefff,#34c9ec)}
+.fish{position:absolute;bottom:28px;width:34px;height:20px;background:linear-gradient(90deg,#fff,#ffd84d);border-radius:50% 55% 50% 50%;transition:.45s}.fish:after{content:"";position:absolute;right:-9px;top:5px;border-left:11px solid #ffd84d;border-top:5px solid transparent;border-bottom:5px solid transparent}.fish.dead{filter:grayscale(1) brightness(.75);transform:rotate(180deg)}
+.f1{left:42px}.f2{left:112px;bottom:58px}.f3{right:64px;bottom:46px}
+.tree{position:absolute;left:30px;bottom:30px;width:60px;height:90px}.trunk{position:absolute;left:25px;bottom:0;width:14px;height:50px;background:#714114;border-radius:8px}.leafTop{position:absolute;left:0;top:0;width:64px;height:64px;border-radius:50%;background:#45c76e;transition:.45s}.leafTop.bad{background:#8d9b47;filter:saturate(.5)}
+.statue{position:absolute;right:34px;bottom:32px;width:58px;height:108px}.statueBody{position:absolute;left:12px;bottom:0;width:34px;height:80px;border-radius:12px 12px 4px 4px;background:#d1d5db;transition:.45s}.statueHead{position:absolute;left:12px;top:0;width:34px;height:34px;border-radius:50%;background:#e5e7eb}.statue.bad .statueBody,.statue.bad .statueHead{background:#9ca3af;box-shadow:inset 0 0 0 3px rgba(80,80,80,.2)}
+.phMeter{position:absolute;left:18px;top:152px;width:130px;padding:10px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid var(--line);text-align:center}
+.meterBar{height:12px;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));margin:8px 0;position:relative}.meterNeedle{position:absolute;top:-5px;width:8px;height:22px;border-radius:4px;background:#fff;left:18%;transition:.55s}
+.toolWrap{position:absolute;left:14px;right:14px;top:50px;bottom:16px;display:flex;flex-direction:column;gap:10px}.toolBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:62px;padding:10px;text-align:left;font-weight:900}.toolBtn.active{outline:3px solid var(--gold)}.toolBtn small{display:block;color:var(--muted);font-weight:700;margin-top:4px}.goodBox,.badBox{padding:10px;border-radius:16px;font-size:.86rem;line-height:1.45}.goodBox{background:rgba(102,242,163,.14);border:1px solid rgba(102,242,163,.26)}.badBox{background:rgba(255,125,134,.14);border:1px solid rgba(255,125,134,.24)}
+.missionList{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.missionBtn{min-height:74px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px;text-align:left}.missionBtn.done{outline:3px solid var(--green)}.missionBtn.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:84px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.5}.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}.tableCard.show{display:block}.tableWrap{overflow:auto;border-radius:14px}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{border:1px solid var(--line);padding:8px;text-align:center}th{background:rgba(255,255,255,.10)}td:first-child{text-align:left}.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}.pass{background:#66f2a333}.fail{background:#ff7d8633}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}.modalOverlay.active{display:grid}.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}.info b{display:block;color:var(--gold);margin-bottom:4px}
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}.chat.active{display:block}.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}.msg.bot{background:rgba(70,232,255,.12);border:1px solid rgba(70,232,255,.18)}.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}.chatInput{display:flex;gap:8px}.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.cert{display:none;margin-top:10px;padding:16px}.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+@media(max-width:980px){.grid{grid-template-columns:1fr;gap:12px}.lab{min-height:1080px}.scene{top:176px}}
+@media(max-width:760px){.app{padding:8px 8px 98px}.top{padding:10px}.top .btn:not(.gold):not(#musicBtn){display:none}.hero{padding:12px}.dr{top:78px}.speech{left:108px;top:82px;font-size:.82rem}.lab{min-height:1100px}.scene{top:178px}.missionList{grid-template-columns:repeat(2,1fr)}.infoGrid{grid-template-columns:1fr}.bottomBar button{font-size:.74rem}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand"><div class="logo">🌧️</div><div><h1>Acid Rain Rescue Lab 3D</h1><p>Class 7 • Developed by Dr AI Academy</p></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="UI.openLearn()">Learn</button><button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button><button class="btn gold" onclick="UI.student()">Name</button></div>
+  </div>
+
+  <div class="hero card">
+    <h2>Save lakes, plants and monuments from acid rain damage.</h2>
+    <p>This 3D rescue lab connects acids, bases and neutralisation with environment. Students choose the correct action for acidified lakes, weak plants, damaged statues and pollution prevention.</p>
+  </div>
+
+  <div class="status"><div class="pill" id="stagePill">Mission 1</div><div class="track"><div class="fill" id="fill"></div></div><div class="pill" id="scorePill">Score: 0</div><div class="pill" id="donePill">0/4</div></div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Acid Rain Rescue</div>
+    <div class="missionText" id="missionText">Read the mission report, choose rescue action, then repair the environment.</div>
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and start the first acid rain rescue mission.</div>
+
+    <div class="scene">
+      <div class="grid">
+        <div class="station">
+          <div class="stationTitle">Mission Report</div>
+          <div class="report">
+            <div>
+              <div class="reportEmoji" id="reportEmoji">🐟</div>
+              <div class="reportName" id="reportName">Acidic Lake</div>
+              <div class="reportFact" id="reportFact">Acid rain has made the lake acidic. Fish and aquatic life are in danger.</div>
+            </div>
+            <div class="hint" id="hint">Need: safe basic treatment</div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">3D Environment View</div>
+          <div class="world">
+            <div class="cloud"></div>
+            <div class="factory"></div>
+            <div class="smoke"><span></span><span></span><span></span></div>
+            <div class="rain" id="rain"></div>
+
+            <div class="phMeter"><b>pH Safety Meter</b><div class="meterBar"><div class="meterNeedle" id="needle"></div></div><span id="meterText">Acidic</span></div>
+
+            <div class="lake bad" id="lake">
+              <div class="fish f1 dead" id="fish1"></div>
+              <div class="fish f2 dead" id="fish2"></div>
+              <div class="fish f3 dead" id="fish3"></div>
+            </div>
+
+            <div class="tree"><div class="trunk"></div><div class="leafTop bad" id="leafTop"></div></div>
+            <div class="statue bad" id="statue"><div class="statueHead"></div><div class="statueBody"></div></div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Rescue Shelf</div>
+          <div class="toolWrap" id="toolWrap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="missionList" id="missionList"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Select the correct rescue action and click Apply Rescue.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard"><div class="tableWrap"><table><thead><tr><th>Mission</th><th>Correct Rescue Action</th><th>Status</th></tr></thead><tbody id="tableBody"></tbody></table></div></div>
+
+  <div class="cert card" id="certificate"><div class="certInner"><div style="font-size:52px">🌧️🌿📜</div><h2>Certificate of Completion</h2><p>This certifies that</p><div class="certName" id="certName">Student Name</div><p>successfully completed <b>Acid Rain Rescue Lab 3D</b>.</p><p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p><button class="btn gold" onclick="window.print()">Print / Save Certificate</button></div></div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar"><button onclick="Lab.applyRescue()">Apply<br>Rescue</button><button onclick="Lab.nextMission()">Next<br>Mission</button><button onclick="Lab.showResult()">Show<br>Result</button><button onclick="UI.toggleTable()">Show<br>Table</button><button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button></div>
+
+<div class="modalOverlay" id="modal"><div class="modal"><div class="head"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div><div class="infoGrid"><div class="info"><b>Acid rain</b>Acidic rain can harm water bodies, plants, soil and monuments.</div><div class="info"><b>Neutralisation</b>Acidified lake or soil can sometimes be treated with suitable basic substances.</div><div class="info"><b>Prevention</b>Reducing smoke and harmful gases from factories and vehicles helps prevent acid rain.</div><div class="info"><b>Real-life science</b>This lab links acid-base learning with environment and civic responsibility.</div></div></div></div>
+
+<div class="modalOverlay" id="studentModal"><div class="modal" style="width:min(94vw,520px)"><div class="head"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div><div class="info"><b>Enter your name</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px"><button class="btn gold" onclick="Lab.setStudent()">Save</button></div></div></div></div>
+
+<div class="chat" id="chat"><div class="head"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div><div class="msgs" id="msgs"><div class="msg bot">Hi! I am Dr AI. Ask me about acid rain, acidic lake, statues, plants, neutralisation, lime or pollution control.</div></div><div class="chatInput"><input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()"><button onclick="DrAI.ask()">Send</button></div></div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(e.ctrlKey&&['u','s','c','x','a','p'].includes(k))e.preventDefault();if(k==='f12')e.preventDefault()});
+
+const MISSIONS=[
+{id:'lake',emoji:'🐟',name:'Acidic Lake Rescue',fact:'Acid rain has made the lake acidic. Fish and aquatic life are in danger.',hint:'Need: safe basic treatment',needle:'14%',correct:'Add Controlled Lime',options:[{name:'Add Controlled Lime',good:true,explain:'Correct! Lime is basic and can help neutralise an acidic lake under controlled conditions.'},{name:'Add More Acid',good:false,explain:'Not correct. More acid will increase the damage.'},{name:'Ignore the Lake',good:false,explain:'Not correct. Acidic lake can harm aquatic life.'}]},
+{id:'plant',emoji:'🌿',name:'Plant Leaf Rescue',fact:'Acid rain is damaging leaves and slowing plant growth.',hint:'Need: reduce acid effect and protect plants',needle:'22%',correct:'Wash Leaves with Clean Water',options:[{name:'Wash Leaves with Clean Water',good:true,explain:'Correct! Washing with clean water can reduce acid deposit on leaves.'},{name:'Spray Vinegar',good:false,explain:'Not correct. Vinegar is acidic.'},{name:'Add Acidic Water',good:false,explain:'Not correct. Acidic water can harm plants.'}]},
+{id:'statue',emoji:'🗿',name:'Monument Protection',fact:'Acid rain can slowly damage marble and limestone monuments.',hint:'Need: pollution control and protective care',needle:'26%',correct:'Reduce Polluting Gases',options:[{name:'Reduce Polluting Gases',good:true,explain:'Correct! Preventing acid rain by reducing harmful gases is the best long-term solution.'},{name:'Pour Acid on Statue',good:false,explain:'Not correct. Acid can damage marble and limestone.'},{name:'Leave Smoke Uncontrolled',good:false,explain:'Not correct. Smoke pollution contributes to acid rain.'}]},
+{id:'soil',emoji:'🌱',name:'Acidic Soil Recovery',fact:'Acid rain has made soil too acidic for healthy crop growth.',hint:'Need: basic soil treatment',needle:'18%',correct:'Add Slaked Lime to Soil',options:[{name:'Add Slaked Lime to Soil',good:true,explain:'Correct! Slaked lime is basic and helps neutralise acidic soil.'},{name:'Add Lemon Juice',good:false,explain:'Not correct. Lemon juice is acidic.'},{name:'Add Tamarind Water',good:false,explain:'Not correct. Tamarind water is acidic.'}]}
+];
+
+let G={student:'Student',current:0,selected:null,score:0,results:{}};
+const $=id=>document.getElementById(id);
+function initResults(){MISSIONS.forEach(m=>G.results[m.id]=false)}
+function doneCount(){return Object.values(G.results).filter(Boolean).length}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-IN';u.rate=.97;speechSynthesis.speak(u)}catch(e){}}
+function feedback(h,v){$('feedback').innerHTML=h;$('speech').innerHTML=h.replace(/<[^>]+>/g,'');if(v)say(v)}
+function m(){return MISSIONS[G.current]}
+function renderRain(acid=true){
+  const rain=$('rain'); rain.innerHTML='';
+  for(let i=0;i<24;i++){
+    const d=document.createElement('div'); d.className='drop '+(acid?'acid':'');
+    d.style.left=(Math.random()*96)+'%'; d.style.animationDelay=(Math.random()*1.2)+'s';
+    rain.appendChild(d);
+  }
+}
+function environmentSafe(safe){
+  $('lake').classList.toggle('bad',!safe); $('lake').classList.toggle('safe',safe);
+  ['fish1','fish2','fish3'].forEach(id=>$(id).classList.toggle('dead',!safe));
+  $('leafTop').classList.toggle('bad',!safe);
+  $('statue').classList.toggle('bad',!safe);
+  $('meterText').textContent=safe?'Safe / Improved':'Acidic';
+  $('needle').style.left=safe?'55%':m().needle;
+  renderRain(!safe);
+}
+function renderMissions(){
+  $('missionList').innerHTML=MISSIONS.map((x,i)=>`<button class="missionBtn ${i===G.current?'active':''} ${G.results[x.id]?'done':''}" onclick="Lab.gotoMission(${i})">${x.emoji} ${x.name}</button>`).join('');
+}
+function renderTable(){
+  $('tableBody').innerHTML=MISSIONS.map(x=>`<tr><td>${x.name}</td><td>${x.correct}</td><td>${G.results[x.id]?'<span class="badge pass">Completed</span>':'<span class="badge fail">Pending</span>'}</td></tr>`).join('');
+}
+function renderTools(){
+  const x=m();
+  $('toolWrap').innerHTML=x.options.map(o=>`<button class="toolBtn ${G.selected===o.name?'active':''}" onclick="Lab.selectTool('${o.name.replace(/'/g,"\\'")}')">${o.name}<small>${o.good?'Best rescue option':'Think carefully before choosing'}</small></button>`).join('')+`<div class="goodBox"><b>Goal:</b> Restore safety and reduce acid damage.</div><div class="badBox"><b>Hint:</b> ${x.hint}</div>`;
+}
+function renderScene(){
+  const x=m();
+  $('reportEmoji').textContent=x.emoji; $('reportName').textContent=x.name; $('reportFact').textContent=x.fact; $('hint').textContent=x.hint;
+  environmentSafe(G.results[x.id]);
+}
+function update(){
+  const x=m();
+  $('stagePill').textContent='Mission '+(G.current+1);
+  $('scorePill').textContent='Score: '+G.score;
+  $('donePill').textContent=doneCount()+'/4';
+  $('missionTitle').textContent=x.name;
+  $('missionText').textContent='Read the mission report, choose rescue action, then repair the environment.';
+  $('fill').style.width=(doneCount()/MISSIONS.length*100)+'%';
+  renderMissions(); renderTable(); renderTools(); renderScene();
+}
+function selectTool(name){Music.ensureStarted();G.selected=name;renderTools();feedback(`<b>Selected:</b> ${name}. Now click Apply Rescue.`,`${name} selected.`)}
+function applyRescue(){
+  if(!G.selected){feedback('<b>Select a rescue action first.</b>','Select a rescue action first.');return}
+  const x=m(), chosen=x.options.find(o=>o.name===G.selected);
+  if(chosen.good){
+    if(!G.results[x.id])G.score+=25;
+    G.results[x.id]=true; environmentSafe(true);
+    feedback(`<b>Correct rescue!</b> ${chosen.explain}`,'Correct rescue.');
+  }else{
+    environmentSafe(false);
+    feedback(`<b>Wrong action.</b> ${chosen.explain}`,'Wrong action. Try again.');
+  }
+  update();
+  if(doneCount()===MISSIONS.length)feedback(`<b>Excellent ${G.student}!</b> All acid rain rescue missions complete. Click Show Result for certificate.`,`Excellent ${G.student}.`);
+}
+function nextMission(){
+  if(G.current<MISSIONS.length-1){G.current++;G.selected=null;update();feedback('<b>Next mission loaded.</b> Read the report and choose rescue action.','Next mission loaded.')}
+  else feedback('<b>All missions visited.</b> Click Show Result after completing all missions.','All missions visited.')
+}
+function gotoMission(i){G.current=i;G.selected=null;update();feedback('<b>Mission changed.</b> Choose the correct rescue action.','Mission changed.')}
+function showResult(){
+  if(doneCount()===MISSIONS.length){$('certificate').style.display='block';$('certName').textContent=G.student;$('certificate').scrollIntoView({behavior:'smooth'})}
+  else feedback('<b>Complete all four missions first.</b>','Complete all four missions first.')
+}
+function setStudent(){G.student=($('studentInput').value||'Student').trim();UI.closeStudent();feedback(`<b>Welcome ${G.student}!</b> Start with the first acid rain rescue mission.`,`Welcome ${G.student}.`)}
+function openLearn(){$('modal').classList.add('active')}function close(){$('modal').classList.remove('active')}function student(){$('studentInput').value=G.student==='Student'?'':G.student;$('studentModal').classList.add('active')}function closeStudent(){$('studentModal').classList.remove('active')}function toggleTable(){$('tableCard').classList.toggle('show')}
+function toggleChat(){$('chat').classList.toggle('active')}function addMsg(t,w){const d=document.createElement('div');d.className='msg '+w;d.innerHTML=t;$('msgs').appendChild(d);$('msgs').scrollTop=$('msgs').scrollHeight}
+function answer(q){q=q.toLowerCase();if(q.includes('acid rain'))return 'Acid rain is rain that becomes acidic due to harmful gases mixing with water vapour in air.';if(q.includes('lake'))return 'Acidic lakes can harm fish and aquatic life. Controlled basic treatment can help in some cases.';if(q.includes('lime'))return 'Lime is basic, so it can help neutralise acidic soil or water under controlled conditions.';if(q.includes('statue')||q.includes('monument'))return 'Acid rain can damage marble and limestone monuments over time.';if(q.includes('pollution'))return 'Reducing harmful gases from factories and vehicles helps prevent acid rain.';return 'Ask me about acid rain, lakes, plants, monuments, lime or pollution control.'}
+function ask(){const q=$('chatInput').value.trim();if(!q)return;addMsg(q,'user');$('chatInput').value='';setTimeout(()=>addMsg(answer(q),'bot'),220)}
+const Music={ctx:null,master:null,on:false,timer:null,init(){if(!this.ctx){this.ctx=new (window.AudioContext||window.webkitAudioContext)();this.master=this.ctx.createGain();this.master.gain.value=.05;this.master.connect(this.ctx.destination)}if(this.ctx.state==='suspended')this.ctx.resume()},ensureStarted(){this.init();if(!this.on)this.start()},tone(f,d,type='sine',vol=.04,when=0){if(!this.ctx||!this.master)return;const t=this.ctx.currentTime+when,o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.12);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(this.master);o.start(t);o.stop(t+d+.05)},cycle(){this.tone(136.1,2.8,'sine',.045);this.tone(272.2,2.1,'triangle',.018,.15);this.tone(204.15,1.7,'sine',.015,.55)},start(){this.init();if(this.on)return;this.on=true;$('musicBtn').textContent='⏸ OM';this.cycle();this.timer=setInterval(()=>this.cycle(),2900)},stop(){this.on=false;clearInterval(this.timer);this.timer=null;$('musicBtn').textContent='▶ OM'},toggle(){this.on?this.stop():this.start()}};
+window.Lab={selectTool,applyRescue,nextMission,gotoMission,showResult,setStudent};
+window.UI={openLearn,close,student,closeStudent,toggleTable};
+window.DrAI={toggle:toggleChat,ask};
+window.Music=Music;
+initResults();update();setTimeout(student,250);
+})();
+</script>
+</body>
+</html>
