@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Neutralisation Rescue Lab 3D | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#160b33; --bg2:#08375f; --gold:#ffd84d; --cyan:#46e8ff; --green:#66f2a3; --red:#ff7d86; --blue:#7ab7ff;
+  --panel:rgba(255,255,255,.10); --line:rgba(255,255,255,.16); --text:#fff; --muted:#dce9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,77,.16),transparent 25%),
+    radial-gradient(circle at 88% 8%,rgba(70,232,255,.18),transparent 28%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:1120px;margin:0 auto;padding:10px 10px 98px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,216,77,.24),rgba(70,232,255,.24));font-size:1.4rem}
+.brand h1{font-size:clamp(1.08rem,5vw,1.52rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.79rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#281900;border:0}
+.hero{padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero h2{margin:0 0 8px;font-size:clamp(1.3rem,7vw,2.15rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.56;font-size:.95rem}
+.hero::after{content:"Dr AI Academy";position:absolute;right:12px;bottom:8px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.2rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.35s}
+.lab{position:relative;min-height:620px;overflow:hidden;padding:14px;border-radius:24px;background:
+  radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 22%),
+  linear-gradient(180deg,#143062 0%,#0b173a 47%,#5a3817 47%,#7b4a1d 100%);
+  border:1px solid var(--line);
+}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.1rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:760px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:64px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px;perspective:1000px}
+.floorGlow{position:absolute;left:0;right:0;bottom:0;height:38%;background:radial-gradient(ellipse at center,rgba(255,255,255,.08),transparent 70%)}
+.sceneGrid{display:grid;grid-template-columns:1.05fr 1.2fr .95fr;gap:14px;position:absolute;left:0;right:0;bottom:16px;top:16px}
+.station{position:relative;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 20px 30px rgba(0,0,0,.18);overflow:hidden}
+.stationTitle{position:absolute;left:16px;top:12px;font-weight:900;color:#fff;opacity:.92}
+.stationBase{position:absolute;left:12px;right:12px;bottom:16px;height:18px;border-radius:20px;background:linear-gradient(180deg,#c6d3e8,#93a6bf);box-shadow:0 12px 22px rgba(0,0,0,.16)}
+.problemCard{position:absolute;left:14px;right:14px;top:48px;bottom:16px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:14px;display:flex;flex-direction:column;justify-content:space-between}
+.problemEmoji{font-size:4rem;line-height:1}
+.problemName{font-size:1.1rem;font-weight:900;margin-top:8px}
+.problemFact{font-size:.92rem;line-height:1.45;color:var(--muted)}
+.badHint{display:inline-block;padding:8px 10px;border-radius:12px;background:rgba(255,125,134,.18);border:1px solid rgba(255,125,134,.26);font-size:.84rem}
+.chamber{position:absolute;left:18px;right:18px;top:56px;bottom:18px;border-radius:24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);overflow:hidden}
+.pipe{position:absolute;top:30px;width:84px;height:18px;border-radius:999px;background:#c6d3e8}
+.pipe.left{left:18px}.pipe.right{right:18px}
+.beaker{position:absolute;top:50px;width:88px;height:130px;border-radius:0 0 24px 24px;border:4px solid rgba(255,255,255,.42);border-top:0;background:rgba(255,255,255,.05);overflow:hidden}
+.beaker.left{left:18px}.beaker.right{right:18px}
+.liquid{position:absolute;left:6px;right:6px;bottom:6px;height:56px;border-radius:16px 16px 18px 18px;transition:.45s}
+.liquid.acid{background:var(--red)} .liquid.base{background:var(--blue)} .liquid.neutral{background:var(--green)}
+.flask{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);width:146px;height:180px;border-radius:0 0 46px 46px;border:5px solid rgba(255,255,255,.42);border-top:0;background:rgba(255,255,255,.05);overflow:hidden;box-shadow:0 14px 24px rgba(0,0,0,.18)}
+.flaskNeck{position:absolute;left:50%;top:18px;transform:translateX(-50%);width:50px;height:54px;border-radius:16px 16px 0 0;border:5px solid rgba(255,255,255,.42);border-bottom:0;background:rgba(255,255,255,.05)}
+.mixLiquid{position:absolute;left:8px;right:8px;bottom:8px;height:68px;border-radius:22px 22px 32px 32px;background:rgba(255,255,255,.18);transition:.55s}
+.bubble{position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.65);opacity:0}
+.bubble.go{animation:bub 1.2s ease forwards}
+@keyframes bub{0%{opacity:0;transform:translateY(10px) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translateY(-80px) scale(1.1)}}
+.spark{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;opacity:0}
+.spark.go{animation:spark .85s ease forwards}
+@keyframes spark{0%{opacity:1;transform:scale(.5)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.3)}}
+.toolWrap{position:absolute;left:14px;right:14px;top:50px;bottom:16px;display:flex;flex-direction:column;gap:10px}
+.toolBtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;min-height:62px;padding:10px;text-align:left;font-weight:900}
+.toolBtn.active{outline:3px solid var(--gold)}
+.toolBtn small{display:block;color:var(--muted);font-weight:700;margin-top:4px}
+.goodBox,.badBox{padding:10px;border-radius:16px;font-size:.86rem;line-height:1.45}
+.goodBox{background:rgba(102,242,163,.14);border:1px solid rgba(102,242,163,.26)}
+.badBox{background:rgba(255,125,134,.14);border:1px solid rgba(255,125,134,.24)}
+.missionList{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.missionBtn,.actionBtn{min-height:74px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px;text-align:left}
+.missionBtn.done{outline:3px solid var(--green)}
+.missionBtn.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:82px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.5}
+.feedback b{color:var(--gold)}
+.tableCard{display:none;margin-top:10px;padding:12px}
+.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}
+th{background:rgba(255,255,255,.10)}
+td:first-child{text-align:left}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}
+.pass{background:#66f2a333}.fail{background:#ff7d8633}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}
+.info b{display:block;color:var(--gold);margin-bottom:4px}
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}
+.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}
+.msg.bot{background:rgba(70,232,255,.12);border:1px solid rgba(70,232,255,.18)}
+.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}
+.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.cert{display:none;margin-top:10px;padding:16px}
+.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+@media(max-width:980px){
+  .sceneGrid{grid-template-columns:1fr;gap:12px}
+  .lab{min-height:960px}
+  .scene{top:176px}
+}
+@media(max-width:760px){
+  .app{padding:8px 8px 98px}
+  .top{padding:10px}
+  .top .btn:not(.gold):not(#musicBtn){display:none}
+  .hero{padding:12px}
+  .dr{top:78px}
+  .speech{left:108px;top:82px;font-size:.82rem}
+  .lab{min-height:980px}
+  .scene{top:178px}
+  .missionList{grid-template-columns:repeat(2,1fr)}
+  .infoGrid{grid-template-columns:1fr}
+  .bottomBar button{font-size:.74rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand">
+      <div class="logo">⚗️</div>
+      <div>
+        <h1>Neutralisation Rescue Lab 3D</h1>
+        <p>Class 7 • Developed by Dr AI Academy</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="UI.openLearn()">Learn</button>
+      <button class="btn" id="musicBtn" onclick="Music.toggle()">▶ OM</button>
+      <button class="btn gold" onclick="UI.student()">Name</button>
+    </div>
+  </div>
+
+  <div class="hero card">
+    <h2>Rescue real-life situations using the power of neutralisation.</h2>
+    <p>In this game-style 3D lab, students solve four everyday science missions. Choose the correct neutraliser, watch the reaction move toward neutral, and understand how neutralisation helps in life and environment.</p>
+  </div>
+
+  <div class="status">
+    <div class="pill" id="stagePill">Mission 1</div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="pill" id="scorePill">Score: 0</div>
+    <div class="pill" id="donePill">0/4</div>
+  </div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Choose the right neutraliser</div>
+    <div class="missionText" id="missionText">Read the situation, choose the correct neutraliser, then apply rescue.</div>
+
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name and start the first rescue mission.</div>
+
+    <div class="scene" id="scene">
+      <div class="floorGlow"></div>
+      <div class="sceneGrid">
+        <div class="station">
+          <div class="stationTitle">Problem Zone</div>
+          <div class="problemCard">
+            <div>
+              <div class="problemEmoji" id="problemEmoji">🐜</div>
+              <div class="problemName" id="problemName">Ant Bite</div>
+              <div class="problemFact" id="problemFact">An ant bite can inject formic acid. Choose a mild base to neutralise it.</div>
+            </div>
+            <div class="badHint" id="problemHint">Need: base to neutralise acid</div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Neutralisation Chamber</div>
+          <div class="chamber">
+            <div class="pipe left"></div>
+            <div class="pipe right"></div>
+            <div class="beaker left"><div class="liquid acid" id="liqLeft"></div></div>
+            <div class="beaker right"><div class="liquid base" id="liqRight"></div></div>
+            <div class="flaskNeck"></div>
+            <div class="flask">
+              <div class="mixLiquid" id="mixLiquid"></div>
+              <div class="bubble" id="bubble1"></div>
+              <div class="bubble" id="bubble2"></div>
+            </div>
+            <div class="spark" id="spark"></div>
+          </div>
+        </div>
+
+        <div class="station">
+          <div class="stationTitle">Tool Shelf</div>
+          <div class="toolWrap" id="toolWrap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px">
+    <div class="missionList" id="missionList"></div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Select the correct neutraliser and click Apply Rescue.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard">
+    <div class="tableWrap">
+      <table>
+        <thead><tr><th>Mission</th><th>Correct Neutraliser</th><th>Status</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="cert card" id="certificate">
+    <div class="certInner">
+      <div style="font-size:52px">⚗️📜🏆</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="certName" id="certName">Student Name</div>
+      <p>successfully completed <b>Neutralisation Rescue Lab 3D</b>.</p>
+      <p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank" rel="noopener">https://draiacademy.com</a></p>
+      <button class="btn gold" onclick="window.print()">Print / Save Certificate</button>
+    </div>
+  </div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank" rel="noopener">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar">
+  <button onclick="Lab.applyRescue()">Apply<br>Rescue</button>
+  <button onclick="Lab.nextMission()">Next<br>Mission</button>
+  <button onclick="Lab.showResult()">Show<br>Result</button>
+  <button onclick="UI.toggleTable()">Show<br>Table</button>
+  <button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button>
+</div>
+
+<div class="modalOverlay" id="modal">
+  <div class="modal">
+    <div class="head"><h3>What Students Learn</h3><button class="close" onclick="UI.close()">Close</button></div>
+    <div class="infoGrid">
+      <div class="info"><b>Neutralisation</b>An acid reacts with a base to give salt and water. This is called neutralisation.</div>
+      <div class="info"><b>Daily life</b>Ant bite, indigestion, and soil treatment use the idea of neutralisation.</div>
+      <div class="info"><b>Environment</b>Factory waste can also be treated by neutralisation to reduce harm.</div>
+      <div class="info"><b>Exam importance</b>This concept is important for school exams, Olympiad, and strong science foundation.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modalOverlay" id="studentModal">
+  <div class="modal" style="width:min(94vw,520px)">
+    <div class="head"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div>
+    <div class="info">
+      <b>Enter your name</b>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px">
+        <button class="btn gold" onclick="Lab.setStudent()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat" id="chat">
+  <div class="head"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div>
+  <div class="msgs" id="msgs">
+    <div class="msg bot">Hi! I am Dr AI. Ask me about neutralisation, acids, bases, ant bite, indigestion, soil treatment, or factory waste.</div>
+  </div>
+  <div class="chatInput">
+    <input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()">
+    <button onclick="DrAI.ask()">Send</button>
+  </div>
+</div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey && ['u','s','c','x','a','p'].includes(k)) e.preventDefault();
+  if(k==='f12') e.preventDefault();
+});
+
+const MISSIONS = [
+  {
+    id:'ant',
+    emoji:'🐜',
+    name:'Ant Bite',
+    problem:'An ant bite can inject formic acid. Choose a mild base to neutralise it.',
+    hint:'Need: base to neutralise acid',
+    side:'acid',
+    correct:'Baking Soda Paste',
+    options:[
+      {name:'Baking Soda Paste', good:true, explain:'Correct! A mild base helps neutralise the acid of the ant bite.'},
+      {name:'Lemon Juice', good:false, explain:'Not correct. Lemon juice is acidic and will not neutralise the ant acid.'},
+      {name:'Vinegar', good:false, explain:'Not correct. Vinegar is also acidic.'}
+    ]
+  },
+  {
+    id:'indigestion',
+    emoji:'🤢',
+    name:'Indigestion',
+    problem:'The stomach has excess hydrochloric acid. Choose a mild base used as an antacid.',
+    hint:'Need: base to neutralise excess stomach acid',
+    side:'acid',
+    correct:'Milk of Magnesia',
+    options:[
+      {name:'Milk of Magnesia', good:true, explain:'Correct! Milk of magnesia is a mild base used as an antacid.'},
+      {name:'Orange Juice', good:false, explain:'Not correct. Orange juice is acidic.'},
+      {name:'Soft Drink', good:false, explain:'Not correct. Many soft drinks are acidic.'}
+    ]
+  },
+  {
+    id:'soil',
+    emoji:'🌱',
+    name:'Acidic Soil',
+    problem:'A field has acidic soil and crops are not growing well. Choose the right substance.',
+    hint:'Need: base to reduce acidic soil',
+    side:'acid',
+    correct:'Slaked Lime',
+    options:[
+      {name:'Slaked Lime', good:true, explain:'Correct! Slaked lime is basic and helps neutralise acidic soil.'},
+      {name:'Curd', good:false, explain:'Not correct. Curd is acidic.'},
+      {name:'Tamarind Water', good:false, explain:'Not correct. Tamarind water is acidic.'}
+    ]
+  },
+  {
+    id:'factory',
+    emoji:'🏭',
+    name:'Basic Factory Waste',
+    problem:'A factory releases basic waste into water. Choose a mild acid to neutralise it.',
+    hint:'Need: acid to neutralise base',
+    side:'base',
+    correct:'Dilute Vinegar',
+    options:[
+      {name:'Dilute Vinegar', good:true, explain:'Correct! Vinegar is acidic and can help neutralise a mild basic waste.'},
+      {name:'Lime Water', good:false, explain:'Not correct. Lime water is basic.'},
+      {name:'Soap Solution', good:false, explain:'Not correct. Soap solution is basic.'}
+    ]
+  }
+];
+
+let G = {student:'Student', current:0, selected:null, applied:false, score:0, results:{}};
+const $ = id => document.getElementById(id);
+
+function initResults(){MISSIONS.forEach(m=>G.results[m.id]=false)}
+function doneCount(){return Object.values(G.results).filter(Boolean).length}
+function say(text){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang='en-IN'; u.rate=.97; speechSynthesis.speak(u);}catch(e){} }
+function feedback(html, voice){ $('feedback').innerHTML=html; $('speech').innerHTML=html.replace(/<[^>]+>/g,''); if(voice) say(voice); }
+
+function currentMission(){return MISSIONS[G.current]}
+function renderMissions(){
+  $('missionList').innerHTML = MISSIONS.map((m,i)=>`<button class="missionBtn ${i===G.current?'active':''} ${G.results[m.id]?'done':''}" onclick="Lab.gotoMission(${i})">${m.emoji} ${m.name}</button>`).join('');
+}
+function renderTable(){
+  $('tableBody').innerHTML = MISSIONS.map(m=>`<tr><td>${m.name}</td><td>${m.correct}</td><td>${G.results[m.id]?'<span class="badge pass">Completed</span>':'<span class="badge fail">Pending</span>'}</td></tr>`).join('');
+}
+function renderTools(){
+  const m=currentMission();
+  $('toolWrap').innerHTML = m.options.map(opt=>`
+    <button class="toolBtn ${G.selected===opt.name?'active':''}" onclick="Lab.selectTool('${opt.name.replace(/'/g,"\\'")}')">
+      ${opt.name}
+      <small>${opt.good?'One rescue option':'Check carefully before using this'}</small>
+    </button>`).join('') + `
+    <div class="goodBox"><b>Goal:</b> Move the reaction toward neutral.</div>
+    <div class="badBox"><b>Hint:</b> ${m.hint}</div>`;
+}
+function renderScene(){
+  const m=currentMission();
+  $('problemEmoji').textContent = m.emoji;
+  $('problemName').textContent = m.name;
+  $('problemFact').textContent = m.problem;
+  $('problemHint').textContent = m.hint;
+
+  const leftCls = m.side==='acid' ? 'acid' : 'base';
+  const rightCls = m.side==='acid' ? 'base' : 'acid';
+  $('liqLeft').className = 'liquid ' + leftCls;
+  $('liqRight').className = 'liquid ' + rightCls;
+  $('mixLiquid').style.background = 'rgba(255,255,255,.18)';
+}
+function update(){
+  const m=currentMission();
+  $('stagePill').textContent = 'Mission ' + (G.current+1);
+  $('scorePill').textContent = 'Score: ' + G.score;
+  $('donePill').textContent = doneCount() + '/4';
+  $('missionTitle').textContent = m.name + ' Rescue';
+  $('missionText').textContent = 'Choose the correct neutraliser, apply rescue, then move to the next mission.';
+  $('fill').style.width = ((doneCount()/MISSIONS.length)*100) + '%';
+  renderMissions(); renderTable(); renderTools(); renderScene();
+}
+function selectTool(name){
+  Music.ensureStarted();
+  G.selected = name;
+  G.applied = false;
+  renderTools();
+  feedback(`<b>Selected:</b> ${name}. Now click Apply Rescue.`, `${name} selected.`);
+}
+function animateNeutral(success){
+  $('spark').classList.remove('go');
+  $('spark').style.left='54%'; $('spark').style.top='55%';
+  $('spark').style.setProperty('--x','-100px'); $('spark').style.setProperty('--y','-40px');
+  void $('spark').offsetWidth;
+  $('spark').classList.add('go');
+
+  ['bubble1','bubble2'].forEach((id,idx)=>{
+    const b=$(id);
+    b.style.left = (65 + idx*28) + 'px';
+    b.style.bottom = '18px';
+    b.classList.remove('go'); void b.offsetWidth; b.classList.add('go');
+  });
+
+  $('mixLiquid').style.background = success ? 'var(--green)' : 'rgba(255,125,134,.50)';
+}
+function applyRescue(){
+  if(!G.selected){ feedback('<b>Select a neutraliser first.</b>', 'Select a neutraliser first.'); return; }
+  const m=currentMission();
+  const chosen = m.options.find(o=>o.name===G.selected);
+  G.applied = true;
+  animateNeutral(chosen.good);
+  if(chosen.good){
+    if(!G.results[m.id]) G.score += 25;
+    G.results[m.id] = true;
+    feedback(`<b>Correct rescue!</b> ${chosen.explain}`, 'Correct rescue.');
+  }else{
+    feedback(`<b>Wrong rescue.</b> ${chosen.explain}`, 'Wrong rescue. Try again.');
+  }
+  update();
+  if(doneCount()===MISSIONS.length){
+    feedback(`<b>Excellent ${G.student}!</b> All rescue missions complete. Click Show Result for certificate.`, `Excellent ${G.student}. All rescue missions complete.`);
+  }
+}
+function nextMission(){
+  if(G.current < MISSIONS.length-1){ G.current++; G.selected=null; G.applied=false; update(); feedback('<b>Next mission loaded.</b> Read the situation and choose the correct neutraliser.','Next mission loaded.'); }
+  else feedback('<b>All missions visited.</b> Click Show Result after completing all missions.', 'All missions visited.');
+}
+function gotoMission(i){ G.current=i; G.selected=null; G.applied=false; update(); feedback('<b>Mission changed.</b> Choose the correct neutraliser.', 'Mission changed.'); }
+function showResult(){
+  if(doneCount()===MISSIONS.length){
+    $('certificate').style.display='block';
+    $('certName').textContent = G.student;
+    $('certificate').scrollIntoView({behavior:'smooth'});
+  }else{
+    feedback('<b>Complete all four missions first.</b>', 'Complete all four missions first.');
+  }
+}
+function setStudent(){
+  G.student = ($('studentInput').value || 'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start with the first rescue mission.`, `Welcome ${G.student}.`);
+}
+
+/* UI */
+function openLearn(){ $('modal').classList.add('active'); }
+function close(){ $('modal').classList.remove('active'); }
+function student(){ $('studentInput').value = G.student==='Student' ? '' : G.student; $('studentModal').classList.add('active'); }
+function closeStudent(){ $('studentModal').classList.remove('active'); }
+function toggleTable(){ $('tableCard').classList.toggle('show'); }
+
+/* Dr AI */
+function toggleChat(){ $('chat').classList.toggle('active'); }
+function addMsg(t,w){ const d=document.createElement('div'); d.className='msg '+w; d.innerHTML=t; $('msgs').appendChild(d); $('msgs').scrollTop = $('msgs').scrollHeight; }
+function answer(q){
+  q=q.toLowerCase();
+  if(q.includes('neutralisation')) return 'Neutralisation is the reaction between an acid and a base to form salt and water.';
+  if(q.includes('ant')) return 'Ant bite can inject formic acid, so a mild base like baking soda paste helps.';
+  if(q.includes('indigestion')) return 'Indigestion due to excess stomach acid can be relieved by an antacid such as milk of magnesia.';
+  if(q.includes('soil')) return 'Acidic soil can be treated with slaked lime because it is basic.';
+  if(q.includes('factory')) return 'If the waste is basic, a mild acid like dilute vinegar can help neutralise it.';
+  return 'Ask me about neutralisation, ant bite, indigestion, acidic soil, or factory waste.';
+}
+function ask(){
+  const q = $('chatInput').value.trim();
+  if(!q) return;
+  addMsg(q,'user');
+  $('chatInput').value = '';
+  setTimeout(()=>addMsg(answer(q),'bot'),220);
+}
+
+/* OM Music */
+const Music = {
+  ctx:null, master:null, on:false, timer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext||window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = .05;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  ensureStarted(){ this.init(); if(!this.on) this.start(); },
+  tone(f,d,type='sine',vol=.04,when=0){
+    if(!this.ctx || !this.master) return;
+    const t=this.ctx.currentTime+when, o=this.ctx.createOscillator(), g=this.ctx.createGain();
+    o.type=type; o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+.12);
+    g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t+d+.05);
+  },
+  cycle(){
+    this.tone(136.1,2.8,'sine',.045);
+    this.tone(272.2,2.1,'triangle',.018,.15);
+    this.tone(204.15,1.7,'sine',.015,.55);
+  },
+  start(){
+    this.init();
+    if(this.on) return;
+    this.on = true;
+    $('musicBtn').textContent = '⏸ OM';
+    this.cycle();
+    this.timer = setInterval(()=>this.cycle(),2900);
+  },
+  stop(){
+    this.on = false;
+    clearInterval(this.timer); this.timer=null;
+    $('musicBtn').textContent = '▶ OM';
+  },
+  toggle(){ this.on ? this.stop() : this.start(); }
+};
+
+window.Lab = {selectTool,applyRescue,nextMission,gotoMission,showResult,setStudent};
+window.UI = {openLearn,close,student,closeStudent,toggleTable};
+window.DrAI = {toggle:toggleChat,ask};
+window.Music = Music;
+
+initResults();
+update();
+setTimeout(student,250);
+})();
+</script>
+</body>
+</html>
