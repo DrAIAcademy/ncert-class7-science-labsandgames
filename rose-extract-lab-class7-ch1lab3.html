@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Rose Extract Lab Mini | Dr AI Academy</title>
+<style>
+:root{
+  --bg1:#15072f;--bg2:#082b58;--pink:#ff5fcd;--cyan:#38e8ff;--gold:#ffe66b;--green:#5eff9a;
+  --panel:rgba(255,255,255,.10);--line:rgba(255,255,255,.16);--text:#fff;--muted:#dbe9ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:Arial,Segoe UI,sans-serif;color:var(--text);overflow-x:hidden}
+body{
+  background:
+    radial-gradient(circle at 15% 5%,rgba(56,232,255,.22),transparent 28%),
+    radial-gradient(circle at 90% 8%,rgba(255,95,205,.22),transparent 30%),
+    linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+button,input{font-family:inherit}
+a{color:var(--gold);text-decoration:none}
+.app{max-width:980px;margin:0 auto;padding:10px 10px 92px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 44px rgba(0,0,0,.30);backdrop-filter:blur(12px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;margin-bottom:10px;position:sticky;top:6px;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(56,232,255,.25),rgba(255,230,107,.22));font-size:1.45rem}
+.brand h1{font-size:clamp(1.05rem,5vw,1.45rem);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:.78rem;margin:3px 0 0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;min-height:40px;padding:8px 12px;font-weight:900}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#ffb84d);color:#261900;border:0}
+.btn.cyan{background:linear-gradient(135deg,var(--cyan),#82fff3);color:#061323;border:0}
+.hero{padding:14px;margin-bottom:10px}
+.hero h2{margin:0 0 8px;font-size:clamp(1.35rem,7vw,2.1rem);line-height:1.05;background:linear-gradient(90deg,#fff,var(--gold),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);line-height:1.55;font-size:.96rem}
+.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid var(--line);font-weight:900;font-size:.84rem}
+.track{flex:1;min-width:110px;height:9px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--green));transition:.35s}
+.lab{position:relative;min-height:520px;overflow:hidden;padding:14px;border-radius:24px;background:
+  radial-gradient(circle at 50% 0%,rgba(255,255,255,.12),transparent 25%),
+  linear-gradient(180deg,#12285c 0%,#0a1538 50%,#603716 50%,#7b461c 100%);
+  border:1px solid var(--line);
+}
+.watermark{position:absolute;right:14px;bottom:10px;font-weight:900;color:rgba(255,255,255,.08);font-size:1.35rem;pointer-events:none}
+.missionTitle{font-weight:900;font-size:1.1rem;margin-bottom:4px}
+.missionText{color:var(--muted);line-height:1.45;font-size:.92rem;max-width:680px}
+.dr{position:absolute;left:14px;top:84px;width:88px;text-align:center;background:rgba(255,255,255,.10);border:1px solid var(--line);border-radius:18px;padding:8px}
+.dr .face{font-size:2rem}.dr b{display:block;font-size:.85rem}
+.speech{position:absolute;left:112px;right:14px;top:88px;min-height:62px;background:rgba(255,255,255,.11);border:1px solid var(--line);border-radius:18px;padding:10px;line-height:1.43;font-size:.9rem}
+.scene{position:absolute;left:14px;right:14px;bottom:14px;top:170px}
+.rosePlant{position:absolute;left:18px;bottom:22px;width:120px;height:180px}
+.stem{position:absolute;left:58px;bottom:38px;width:10px;height:104px;border-radius:20px;background:#31c774}
+.flower{position:absolute;left:31px;bottom:128px;width:66px;height:66px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd3ec,#ff5fcd 45%,#b81470 70%);box-shadow:0 0 26px rgba(255,95,205,.35)}
+.leaf{position:absolute;width:36px;height:20px;background:#53df8b;border-radius:50% 50% 50% 0}.l1{left:25px;bottom:95px;transform:rotate(-22deg)}.l2{left:66px;bottom:76px;transform:rotate(42deg)}
+.bench{position:absolute;left:150px;right:6px;bottom:16px;height:230px;border-radius:24px;background:rgba(255,255,255,.10);border:1px solid var(--line)}
+.mortar{position:absolute;left:20px;bottom:24px;width:92px;height:42px;border-radius:0 0 42px 42px;background:linear-gradient(180deg,#e7eefb,#aab8cc)}
+.pestle{position:absolute;left:67px;bottom:62px;width:16px;height:70px;border-radius:10px;background:#e8eef8;transform:rotate(24deg);transition:.35s}
+.beaker{position:absolute;left:135px;bottom:18px;width:86px;height:122px;border-radius:0 0 24px 24px;border:4px solid rgba(255,255,255,.43);border-top:0;background:rgba(255,255,255,.06);overflow:hidden}
+.extract{position:absolute;left:7px;right:7px;bottom:7px;height:8%;border-radius:16px 16px 20px 20px;background:#dc56a7;transition:.45s}
+.tubeRack{position:absolute;left:20px;right:20px;bottom:20px;height:170px;border-radius:22px;background:rgba(255,255,255,.10);border:1px solid var(--line);display:none}
+.tubeRack.show{display:block}
+.tube{position:absolute;bottom:30px;width:74px;height:116px;border-radius:0 0 20px 20px;border:4px solid rgba(255,255,255,.43);border-top:0;overflow:hidden;background:rgba(255,255,255,.05)}
+.tube.a{left:28px}.tube.b{left:122px}.tube.c{left:216px}
+.liq{position:absolute;left:6px;right:6px;bottom:6px;height:50px;border-radius:14px 14px 18px 18px;background:#dc56a7;transition:.45s}
+.dropper{position:absolute;right:22px;top:32px;width:120px;height:18px;border-radius:999px;background:linear-gradient(90deg,#b8c9dd,#fff);transform:rotate(-18deg);display:none;transition:.35s}
+.dropper.show{display:block}
+.spark{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;opacity:0}
+.spark.go{animation:spark .8s ease forwards}
+@keyframes spark{0%{opacity:1;transform:scale(.5)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.3)}}
+.prepSteps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.step{min-height:72px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;padding:8px}
+.step.done{outline:3px solid var(--green)}
+.step.active{outline:3px solid var(--gold)}
+.samplePanel{display:none;margin-top:10px}
+.samplePanel.show{display:block}
+.samples{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sample{min-height:72px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;text-align:left;padding:8px}
+.sample.active{outline:3px solid var(--gold)}
+.feedback{margin-top:10px;min-height:76px;border-radius:16px;padding:10px;background:rgba(255,255,255,.10);border:1px solid var(--line);line-height:1.48}
+.feedback b{color:var(--gold)}
+.bottomBar{position:fixed;left:8px;right:8px;bottom:8px;z-index:80;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:rgba(6,11,37,.88);border:1px solid var(--line);border-radius:20px;padding:8px;backdrop-filter:blur(12px)}
+.bottomBar button{min-height:54px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:.8rem}
+.bottomBar button.primary{background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border:0}
+.tableCard{display:none;margin-top:10px;padding:12px}
+.tableCard.show{display:block}
+.tableWrap{overflow:auto;border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px;text-align:center}
+th{background:rgba(255,255,255,.10)}
+td:first-child{text-align:left}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:900}
+.red{background:#ff5fcd33}.green{background:#5eff9a33}.same{background:#dbe9ff33;color:#12233f}
+.modalOverlay{display:none;position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(8px);z-index:100;place-items:center;padding:16px}
+.modalOverlay.active{display:grid}
+.modal{width:min(96vw,760px);max-height:84vh;overflow:auto;background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:24px;padding:16px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 10px;font-weight:900}
+.infoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:12px;line-height:1.5}
+.info b{display:block;color:var(--gold);margin-bottom:4px}
+.chat{display:none;position:fixed;right:12px;bottom:82px;z-index:110;width:min(94vw,400px);background:linear-gradient(180deg,#151d5b,#090f35);border:1px solid var(--line);border-radius:22px;padding:12px}
+.chat.active{display:block}
+.msgs{max-height:280px;overflow:auto;display:grid;gap:8px;margin-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.94rem}
+.msg.bot{background:rgba(56,232,255,.12);border:1px solid rgba(56,232,255,.18)}
+.msg.user{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.chatInput{display:flex;gap:8px}.chatInput input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px}
+.chatInput button{border:0;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#061323;border-radius:12px;padding:0 14px;font-weight:900}
+.cert{display:none;margin-top:10px;padding:16px}
+.certInner{border:8px solid var(--gold);border-radius:26px;background:linear-gradient(180deg,#fffef5,#f7fbff);color:#0f172a;padding:20px;text-align:center}
+.certName{display:inline-block;min-width:min(92%,400px);padding:10px;border-bottom:3px solid #111;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:900;margin:8px auto}
+.footer{margin:10px 0;text-align:center;color:var(--muted);font-size:.86rem}
+
+/* clearer testing-stage layout */
+.scene.testing .rosePlant,
+.scene.testing .mortar,
+.scene.testing .pestle,
+.scene.testing .beaker{display:none}
+.scene.testing .bench{
+  left:20px;
+  right:20px;
+  bottom:14px;
+  height:248px;
+  background:rgba(255,255,255,.08);
+}
+.scene.testing .tubeRack{
+  display:block;
+  left:26px;
+  right:26px;
+  bottom:22px;
+  height:196px;
+  background:rgba(255,255,255,.08);
+}
+.scene.testing .tube{
+  width:88px;
+  height:136px;
+  bottom:26px;
+}
+.scene.testing .tube.a{left:34px}
+.scene.testing .tube.b{left:50%;transform:translateX(-50%)}
+.scene.testing .tube.c{right:34px;left:auto}
+.scene.testing .dropper{
+  display:block;
+  top:18px;
+  right:26px;
+  width:132px;
+}
+
+@media(max-width:760px){
+  .app{padding:8px 8px 92px}.top{padding:10px}.topActions .btn:not(.gold){display:none}
+  .hero{padding:12px}.prepSteps{grid-template-columns:repeat(3,1fr)}.step{min-height:62px;font-size:.78rem}
+  .samples{grid-template-columns:repeat(2,1fr)}
+  .lab{min-height:500px}.scene{top:182px}
+  .dr{top:78px}.speech{left:108px;top:82px;font-size:.82rem}
+  .rosePlant{left:4px;transform:scale(.88);transform-origin:bottom left}
+  .bench{left:118px;height:220px}.mortar{left:12px}.beaker{left:100px}.tubeRack{left:8px;right:8px}
+  .tube{width:62px}.tube.a{left:12px}.tube.b{left:86px}.tube.c{left:160px}
+  .dropper{right:8px;width:96px}
+  .scene.testing .bench{left:8px;right:8px;height:230px}
+  .scene.testing .tubeRack{left:8px;right:8px;height:184px;bottom:18px}
+  .scene.testing .tube{width:64px;height:122px;bottom:24px}
+  .scene.testing .tube.a{left:10px}
+  .scene.testing .tube.b{left:50%;transform:translateX(-50%)}
+  .scene.testing .tube.c{right:10px;left:auto}
+  .scene.testing .dropper{right:12px;top:14px;width:92px}
+  .infoGrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top card">
+    <div class="brand">
+      <div class="logo">🌹</div>
+      <div>
+        <h1>Rose Extract Chroma Lab</h1>
+        <p>Class 7 • Dr AI Academy</p>
+      </div>
+    </div>
+    <div class="topActions">
+      <button class="btn" onclick="UI.open('learn')">Learn</button>
+      <button class="btn" onclick="UI.open('table')">Table</button>
+      <button class="btn gold" onclick="UI.student()">Name</button>
+    </div>
+  </div>
+
+  <div class="hero card">
+    <h2>Make rose extract. Test samples. Watch colours change.</h2>
+    <p>Simple, clean and game-style lab: prepare the red rose indicator, then test acids, bases and neutral substances with Dr AI as your guide.</p>
+  </div>
+
+  <div class="status">
+    <div class="pill" id="stagePill">Stage 1 • Prepare Extract</div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="pill" id="scorePill">Score: 0</div>
+    <div class="pill" id="testedPill">0/8</div>
+  </div>
+
+  <div class="lab card">
+    <div class="watermark">Dr AI Academy</div>
+    <div class="missionTitle" id="missionTitle">Prepare Red Rose Extract</div>
+    <div class="missionText" id="missionText">Click the preparation steps in order.</div>
+
+    <div class="dr"><div class="face">🤖</div><b>Dr AI</b></div>
+    <div class="speech" id="speech">Welcome! Enter your name, then start the rose extract mission.</div>
+
+    <div class="scene" id="scene">
+      <div class="rosePlant" id="rosePlant">
+        <div class="stem"></div><div class="leaf l1"></div><div class="leaf l2"></div><div class="flower"></div>
+      </div>
+
+      <div class="bench" id="bench">
+        <div class="mortar" id="mortar"></div>
+        <div class="pestle" id="pestle"></div>
+        <div class="beaker" id="beaker"><div class="extract" id="extract"></div></div>
+      </div>
+
+      <div class="tubeRack" id="tubeRack">
+        <div class="tube a"><div class="liq" id="tubeA"></div></div>
+        <div class="tube b"><div class="liq" id="tubeB"></div></div>
+        <div class="tube c"><div class="liq" id="tubeC"></div></div>
+      </div>
+      <div class="dropper" id="dropper"></div>
+      <div class="spark" id="spark"></div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px;margin-top:10px">
+    <div class="prepSteps" id="steps"></div>
+    <div class="samplePanel" id="samplePanel">
+      <div class="samples" id="samples"></div>
+    </div>
+    <div class="feedback" id="feedback"><b>Ready:</b> Start with Collect Petals.</div>
+  </div>
+
+  <div class="tableCard card" id="tableCard">
+    <div class="tableWrap">
+      <table>
+        <thead><tr><th>Sample</th><th>Rose Extract Colour</th><th>Nature</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="cert card" id="certificate">
+    <div class="certInner">
+      <div style="font-size:52px">🌹📜🏆</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="certName" id="certName">Student Name</div>
+      <p>completed <b>Rose Extract Chroma Lab</b>.</p>
+      <p><b>Developed by Dr AI Academy</b><br><a href="https://draiacademy.com" target="_blank">https://draiacademy.com</a></p>
+      <button class="btn gold" onclick="window.print()">Print / Save Certificate</button>
+    </div>
+  </div>
+
+  <div class="footer">Developed by <b>Dr AI Academy</b> • <a href="https://draiacademy.com" target="_blank">AI Courses @ Dr AI Academy</a></div>
+</div>
+
+<div class="bottomBar">
+  <button onclick="Lab.nextAction()">Next<br>Action</button>
+  <button onclick="Lab.runTest()">Run<br>Test</button>
+  <button onclick="Lab.record()">Record<br>Result</button>
+  <button class="primary" onclick="DrAI.toggle()">Dr AI<br>Help</button>
+</div>
+
+<div class="modalOverlay" id="modal">
+  <div class="modal">
+    <div class="head"><h3 id="modalTitle">Learn</h3><button class="close" onclick="UI.close()">Close</button></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div class="modalOverlay" id="studentModal">
+  <div class="modal" style="width:min(94vw,520px)">
+    <div class="head"><h3>Student Name</h3><button class="close" onclick="UI.closeStudent()">Close</button></div>
+    <div class="info">
+      <b>Enter your name</b>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <input id="studentInput" placeholder="Student name" style="flex:1;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:12px">
+        <button class="btn gold" onclick="Lab.setStudent()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat" id="chat">
+  <div class="head"><h3>Dr AI Guide</h3><button class="close" onclick="DrAI.toggle()">Close</button></div>
+  <div class="msgs" id="msgs"><div class="msg bot">Hi! I am Dr AI. Ask me about rose extract, acids, bases or this lab.</div></div>
+  <div class="chatInput">
+    <input id="chatInput" placeholder="Ask Dr AI..." onkeydown="if(event.key==='Enter')DrAI.ask()">
+    <button onclick="DrAI.ask()">Send</button>
+  </div>
+</div>
+
+<script>
+(function(){
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(e.ctrlKey && ['u','s','c','x','a','p'].includes(k)) e.preventDefault();
+  if(k==='f12') e.preventDefault();
+});
+
+const STEPS=[
+  {id:'collect', name:'🌹 Collect Petals'},
+  {id:'wash', name:'💧 Wash Petals'},
+  {id:'crush', name:'🪨 Crush Petals'},
+  {id:'hot', name:'♨️ Add Hot Water'},
+  {id:'filter', name:'🧪 Filter Extract'}
+];
+
+const SAMPLES=[
+  {id:'lemon',name:'Lemon Juice',emoji:'🍋',nature:'acidic',color:'Shade of red',tube:'#ff72ac'},
+  {id:'soap',name:'Soap Solution',emoji:'🧼',nature:'basic',color:'Shade of green',tube:'#62e58c'},
+  {id:'vinegar',name:'Vinegar',emoji:'🍶',nature:'acidic',color:'Shade of red',tube:'#ff7aa2'},
+  {id:'baking',name:'Baking Soda',emoji:'🥤',nature:'basic',color:'Shade of green',tube:'#65e98f'},
+  {id:'amla',name:'Amla Juice',emoji:'🍏',nature:'acidic',color:'Shade of red',tube:'#ef78b0'},
+  {id:'lime',name:'Lime Water',emoji:'⚪',nature:'basic',color:'Shade of green',tube:'#57dd80'},
+  {id:'water',name:'Water',emoji:'💧',nature:'neutral',color:'No major change',tube:'#dc56a7'},
+  {id:'salt',name:'Salt Solution',emoji:'🧂',nature:'neutral',color:'No major change',tube:'#dc56a7'}
+];
+
+let G={student:'Student',step:0,prepared:false,score:0,selected:null,last:null,results:{}};
+const $=id=>document.getElementById(id);
+
+function initResults(){SAMPLES.forEach(s=>G.results[s.id]={color:null,nature:null})}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-IN';u.rate=.97;speechSynthesis.speak(u)}catch(e){}}
+function feedback(html,voice){$('feedback').innerHTML=html;$('speech').innerHTML=html.replace('<b>','').replace('</b>','');if(voice)say(voice)}
+function tested(){return Object.values(G.results).filter(x=>x.color).length}
+function update(){
+  const p=G.prepared ? 50+(tested()/8)*50 : (G.step/5)*50;
+  $('fill').style.width=p+'%';
+  $('scorePill').textContent='Score: '+G.score;
+  $('testedPill').textContent=tested()+'/8';
+  $('stagePill').textContent=G.prepared?'Stage 2 • Test Samples':'Stage 1 • Prepare Extract';
+  $('missionTitle').textContent=G.prepared?'Test Samples with Rose Extract':'Prepare Red Rose Extract';
+  $('missionText').textContent=G.prepared?'Select a sample, run test, then record the result.':'Click the preparation steps in correct order.';
+  $('samplePanel').classList.toggle('show',G.prepared);
+  $('tubeRack').classList.toggle('show',G.prepared);
+  $('dropper').classList.toggle('show',G.prepared);
+  $('scene').classList.toggle('testing',G.prepared);
+  renderSteps();renderSamples();renderTable();
+}
+function renderSteps(){
+  $('steps').innerHTML=STEPS.map((s,i)=>`<button class="step ${i<G.step?'done':''} ${i===G.step?'active':''}" onclick="Lab.doStep('${s.id}')">${s.name}</button>`).join('');
+}
+function renderSamples(){
+  $('samples').innerHTML=SAMPLES.map(s=>`<button class="sample ${G.selected===s.id?'active':''}" onclick="Lab.select('${s.id}')">${s.emoji} ${s.name}</button>`).join('');
+}
+function badge(color,nature){
+  if(!color)return '—';
+  const cls=color.includes('green')?'green':color.includes('red')?'red':'same';
+  return `<span class="badge ${cls}">${color}</span>`;
+}
+function renderTable(){
+  $('tableBody').innerHTML=SAMPLES.map(s=>{
+    const r=G.results[s.id];
+    return `<tr><td>${s.name}</td><td>${badge(r.color,r.nature)}</td><td>${r.nature?badge(r.nature,r.nature):'—'}</td></tr>`;
+  }).join('');
+}
+function doStep(id){
+  Music.ensureStarted();
+  const expected=STEPS[G.step]?.id;
+  if(id!==expected){feedback('<b>Wrong order:</b> Follow the steps in sequence.','Follow the steps in sequence.');return}
+  G.step++;G.score+=20;
+  if(id==='crush'){$('pestle').style.transform='rotate(-18deg)';setTimeout(()=>$('pestle').style.transform='rotate(24deg)',350)}
+  if(id==='hot'){$('extract').style.height='55%'}
+  if(id==='filter'){G.prepared=true;$('extract').style.height='78%';feedback(`<b>Excellent ${G.student}!</b> Rose extract is ready. Now select a sample.`,`Excellent ${G.student}. Rose extract is ready.`)}
+  else feedback(`<b>Good:</b> ${STEPS[G.step-1].name} complete.`, 'Good. Step complete.');
+  update();
+}
+function nextAction(){
+  if(!G.prepared){
+    const next = STEPS[G.step];
+    if(next) doStep(next.id);
+    return;
+  }
+  if(!G.selected){
+    feedback('<b>Select a sample:</b> Tap any sample card first.','Select a sample first.');
+    return;
+  }
+  runTest();
+}
+function select(id){G.selected=id;update();const s=SAMPLES.find(x=>x.id===id);feedback(`<b>Selected:</b> ${s.name}. Now run the test.`,`${s.name} selected.`);Music.ensureStarted()}
+function spark(){
+  const sp=$('spark');sp.classList.remove('go');sp.style.setProperty('--x','-120px');sp.style.setProperty('--y','90px');void sp.offsetWidth;sp.classList.add('go');
+}
+function setTubes(color){
+  $('tubeA').style.background='#dc56a7';
+  $('tubeB').style.background=color;
+  $('tubeC').style.background=color;
+}
+function runTest(){
+  if(!G.prepared){feedback('<b>Prepare extract first.</b>','Prepare extract first.');return}
+  if(!G.selected){feedback('<b>Select a sample first.</b>','Select a sample first.');return}
+  const s=SAMPLES.find(x=>x.id===G.selected);
+  $('dropper').style.transform='rotate(-4deg)';
+  setTimeout(()=>$('dropper').style.transform='rotate(-18deg)',500);
+  setTubes(s.tube);spark();
+  G.last=s.id;
+  feedback(`<b>Observation:</b> ${s.name} gives <b>${s.color}</b>. Now record result.`,`${s.name} gives ${s.color}.`);
+}
+function record(){
+  if(!G.last){feedback('<b>Run test first.</b>','Run test first.');return}
+  const s=SAMPLES.find(x=>x.id===G.last);
+  G.results[s.id]={color:s.color,nature:s.nature};
+  G.score+=25;G.last=null;update();
+  feedback(`<b>Recorded:</b> ${s.name} is <b>${s.nature}</b>.`,`${s.name} recorded.`);
+  if(tested()===8){feedback(`<b>Congratulations ${G.student}!</b> All samples tested. Certificate is ready.`,`Congratulations ${G.student}. Certificate is ready.`);finish()}
+}
+function finish(){
+  if(!G.prepared||tested()<8){feedback('<b>Complete all tests first.</b>','Complete all tests first.');return}
+  $('certificate').style.display='block';
+  $('certName').textContent=G.student;
+  $('certificate').scrollIntoView({behavior:'smooth'});
+}
+function setStudent(){
+  G.student=($('studentInput').value||'Student').trim();
+  UI.closeStudent();
+  feedback(`<b>Welcome ${G.student}!</b> Start with Collect Petals.`,`Welcome ${G.student}.`);
+}
+
+/* UI */
+function open(kind){
+  if(kind==='table'){$('tableCard').classList.toggle('show');return}
+  const body={
+    learn:`<div class="infoGrid">
+      <div class="info"><b>Rose extract</b>It is a natural indicator made from red rose petals.</div>
+      <div class="info"><b>Acids</b>Rose extract becomes red or pink in acidic samples.</div>
+      <div class="info"><b>Bases</b>Rose extract becomes green in basic samples.</div>
+      <div class="info"><b>Neutral</b>Neutral samples show no major colour change.</div>
+    </div>`
+  };
+  $('modalTitle').textContent='Learn';
+  $('modalBody').innerHTML=body.learn;
+  $('modal').classList.add('active');
+}
+function close(){$('modal').classList.remove('active')}
+function student(){$('studentInput').value=G.student==='Student'?'':G.student;$('studentModal').classList.add('active')}
+function closeStudent(){$('studentModal').classList.remove('active')}
+
+/* Dr AI */
+function toggleChat(){$('chat').classList.toggle('active')}
+function addMsg(t,w){const d=document.createElement('div');d.className='msg '+w;d.innerHTML=t;$('msgs').appendChild(d);$('msgs').scrollTop=$('msgs').scrollHeight}
+function answer(q){
+  q=q.toLowerCase();
+  if(q.includes('prepare'))return 'Collect petals, wash, crush, add hot water, then filter the extract.';
+  if(q.includes('acid'))return 'Acids make rose extract red or pink.';
+  if(q.includes('base'))return 'Bases make rose extract green.';
+  if(q.includes('neutral'))return 'Neutral samples show no major colour change.';
+  return 'Ask me about preparation, acids, bases, neutral substances, or how to complete the lab.';
+}
+function ask(){const q=$('chatInput').value.trim();if(!q)return;addMsg(q,'user');$('chatInput').value='';setTimeout(()=>addMsg(answer(q),'bot'),220)}
+
+/* OM Music */
+const Music={
+  ctx:null,master:null,on:false,timer:null,
+  init(){
+    if(!this.ctx){
+      this.ctx=new (window.AudioContext||window.webkitAudioContext)();
+      this.master=this.ctx.createGain();
+      this.master.gain.value=.05;
+      this.master.connect(this.ctx.destination);
+    }
+    if(this.ctx.state==='suspended') this.ctx.resume();
+  },
+  ensureStarted(){
+    this.init();
+    if(!this.on) this.start();
+  },
+  setVolume(v){
+    this.init();
+    if(this.master) this.master.gain.value=(Number(v)/100)*.10;
+  },
+  tone(f,d,type='sine',vol=.04,when=0){
+    if(!this.ctx || !this.master) return;
+    const t=this.ctx.currentTime+when,o=this.ctx.createOscillator(),g=this.ctx.createGain();
+    o.type=type;
+    o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+.12);
+    g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g);g.connect(this.master);
+    o.start(t);o.stop(t+d+.05);
+  },
+  cycle(){
+    this.tone(136.1,2.8,'sine',.045);
+    this.tone(272.2,2.1,'triangle',.018,.15);
+    this.tone(204.15,1.7,'sine',.015,.55);
+  },
+  start(){
+    this.init();
+    if(this.on) return;
+    this.on=true;
+    const mb=document.getElementById('musicBtn');
+    if(mb) mb.textContent='⏸ OM';
+    this.cycle();
+    this.timer=setInterval(()=>this.cycle(),2900);
+  },
+  stop(){
+    this.on=false;
+    clearInterval(this.timer);
+    this.timer=null;
+    const mb=document.getElementById('musicBtn');
+    if(mb) mb.textContent='▶ OM';
+  },
+  toggle(){
+    if(this.on) this.stop();
+    else this.start();
+  }
+};
+
+window.Lab={doStep,nextAction,select,runTest,record,finish,setStudent};
+window.UI={open,close,student,closeStudent};
+window.DrAI={toggle:toggleChat,ask};
+window.Music=Music;
+
+initResults();update();setTimeout(student,250);
+})();
+</script>
+</body>
+</html>
